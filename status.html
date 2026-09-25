@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass Status & Digital Pass | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
+    <meta name="description"
+        content="Check your GRAVITON 2026 Symposium delegate pass verification status and download your official digital pass.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Canvas for Cosmic Particles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="college-badge">
+                    <i class="fa-solid fa-award text-glow"></i> NAAC 'A'
+                </div>
+                <div class="brand-text">
+                    <span class="college-title">JAYA SAKTHI</span>
+                    <span class="college-sub">ENGINEERING COLLEGE</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="index.html#home" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="index.html#events" class="nav-link"><i class="fa-solid fa-trophy"></i> Events</a>
+                <a href="register.html" class="nav-link"><i class="fa-solid fa-ticket"></i> Register</a>
+                <a href="status.html" class="nav-link active"><i class="fa-solid fa-magnifying-glass"></i> Check Status</a>
+                <a href="admin.html" class="nav-link organizer-pill"><i class="fa-solid fa-user-shield"></i> Organizer Portal</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-page">
+        <div class="portal-container">
+            <!-- Header -->
+            <div class="portal-header">
+                <span class="section-tag"><i class="fa-solid fa-magnifying-glass"></i> LIVE PASS TRACKER</span>
+                <h1 class="section-title">REGISTRATION & PASS STATUS</h1>
+                <p class="section-desc">Enter your unique Registration ID (GRAV-2026-XXXX) to track your verification status or download your digital pass.</p>
+            </div>
+
+            <!-- Just Submitted Alert Notice (if redirected from payment) -->
+            <div id="just-submitted-alert" class="payment-notice" style="display:none; background:rgba(0, 240, 255, 0.08); border-left-color:var(--tech-cyan); color:#e0f9ff;">
+                <i class="fa-solid fa-circle-check text-cyan"></i> <strong>Payment Details Submitted Successfully!</strong><br>
+                Your payment is currently under review by our student organizers. Once verified, your Official Delegate Pass below will be activated with a verified holographic seal.
+            </div>
+
+            <!-- Registration Search Form -->
+            <div class="glass-panel status-search-card">
+                <form id="status-search-form" style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <div class="input-with-icon" style="flex:1; min-width:240px;">
+                        <i class="fa-solid fa-ticket"></i>
+                        <input type="text" id="status-regid-input" placeholder="Enter Registration ID (e.g. GRAV-2026-8942)" required>
+                    </div>
+                    <button type="submit" id="search-status-btn" class="btn btn-primary-glow">
+                        <i class="fa-solid fa-magnifying-glass"></i> Check Status
+                    </button>
+                </form>
+            </div>
+
+            <!-- Status Result Container (Loaded via JS) -->
+            <div id="status-result-container" style="display:none;">
+                <!-- Card content injected dynamically by status.js -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 GRAVITON - Jaya Sakthi Engineering College. All Rights Reserved.</p>
+            <p class="sub-footer">Code • Create • Compete • Conquer</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="status.js"></script>
+</body>
+
+</html>

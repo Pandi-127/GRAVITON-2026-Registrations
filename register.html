@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delegate Registration | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
+    <meta name="description"
+        content="Register for GRAVITON 2026 National Level Technical Symposium. Department of Computer Science & Engineering & Cyber Security, Jaya Sakthi Engineering College.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Canvas for Cosmic Particles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="college-badge">
+                    <i class="fa-solid fa-award text-glow"></i> NAAC 'A'
+                </div>
+                <div class="brand-text">
+                    <span class="college-title">JAYA SAKTHI</span>
+                    <span class="college-sub">ENGINEERING COLLEGE</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="index.html#home" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="index.html#about" class="nav-link"><i class="fa-solid fa-circle-info"></i> About</a>
+                <a href="index.html#events" class="nav-link"><i class="fa-solid fa-trophy"></i> Events</a>
+                <a href="index.html#schedule" class="nav-link"><i class="fa-solid fa-calendar-days"></i> Schedule</a>
+                <a href="index.html#venue" class="nav-link"><i class="fa-solid fa-location-dot"></i> Venue</a>
+                <a href="index.html#contact" class="nav-link"><i class="fa-solid fa-phone"></i> Contact</a>
+                <a href="status.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Check Status</a>
+                <a href="admin.html" class="nav-link organizer-pill"><i class="fa-solid fa-user-shield"></i> Organizer Portal</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-page">
+        <div class="portal-container">
+            <!-- Header -->
+            <div class="portal-header">
+                <span class="section-tag"><i class="fa-solid fa-ticket"></i> OFFICIAL DELEGATE PORTAL</span>
+                <h1 class="section-title">GRAVITON 2026 REGISTRATION</h1>
+                <p class="section-desc">Register once to access both Technical Arenas and Non-Technical Showcases.</p>
+            </div>
+
+            <!-- Step Progress Indicator -->
+            <div class="steps-progress">
+                <div class="step-node active">
+                    <div class="node-circle"><i class="fa-solid fa-id-card"></i></div>
+                    <span>1. Delegate Details</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-node">
+                    <div class="node-circle"><i class="fa-solid fa-qrcode"></i></div>
+                    <span>2. UPI Payment</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-node">
+                    <div class="node-circle"><i class="fa-solid fa-certificate"></i></div>
+                    <span>3. Verified Pass</span>
+                </div>
+            </div>
+
+            <!-- Demo Mode Warning Alert (Only visible if API_URL not configured) -->
+            <div id="demo-banner" class="payment-notice" style="display:none; margin-bottom: 24px;">
+                <i class="fa-solid fa-circle-info"></i> <strong>Offline / Demo Mode:</strong> Google Sheets API is not yet configured in <code>config.js</code>. Registrations will be processed in local preview mode.
+            </div>
+
+            <!-- Registration Form Card -->
+            <div class="glass-panel form-card">
+                <form id="registration-form" novalidate>
+                    <!-- Fee Summary Banner -->
+                    <div class="fee-summary-card">
+                        <div class="fee-info">
+                            <strong>Official Delegate Pass</strong>
+                            <span>Includes Event Entry, Merit Certificates, Lunch & Tech Kit</span>
+                        </div>
+                        <div class="fee-amount" id="display-fee">₹100</div>
+                    </div>
+
+                    <!-- Participant Full Name -->
+                    <div class="form-group">
+                        <label for="fullname">Full Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+
+                    <!-- Email & Mobile -->
+                    <div class="grid-2-form">
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" id="email" name="email" placeholder="name@domain.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Mobile Number (WhatsApp) <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-phone"></i>
+                                <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- College Name -->
+                    <div class="form-group">
+                        <label for="college">College / Institution Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <input type="text" id="college" name="college" placeholder="e.g. Jaya Sakthi Engineering College" required>
+                        </div>
+                    </div>
+
+                    <!-- Department & Year -->
+                    <div class="grid-2-form">
+                        <div class="form-group">
+                            <label for="dept">Department <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <select id="dept" name="dept" required>
+                                    <option value="">Select Department</option>
+                                    <option value="CSE">Computer Science & Engg (CSE)</option>
+                                    <option value="Cyber Security">Cyber Security</option>
+                                    <option value="IT">Information Technology (IT)</option>
+                                    <option value="AI & DS">AI & Data Science (AI & DS)</option>
+                                    <option value="ECE">Electronics & Comm (ECE)</option>
+                                    <option value="EEE">Electrical & Electronics (EEE)</option>
+                                    <option value="Mechanical">Mechanical Engineering</option>
+                                    <option value="Civil">Civil Engineering</option>
+                                    <option value="Other">Other Department</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year of Study <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-calendar"></i>
+                                <select id="year" name="year" required>
+                                    <option value="">Select Year</option>
+                                    <option value="I Year">I Year</option>
+                                    <option value="II Year">II Year</option>
+                                    <option value="III Year">III Year</option>
+                                    <option value="IV Year">IV Year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Event Selector Checkboxes -->
+                    <div class="form-group">
+                        <label>Select Events to Participate <span class="required">*</span></label>
+                        <p class="helper-text">You can select multiple events across Technical and Non-Technical arenas under your pass.</p>
+
+                        <div class="event-checkbox-sections">
+                            <!-- Technical Events -->
+                            <div class="event-category-title">
+                                <i class="fa-solid fa-laptop-code text-cyan"></i> Technical Events
+                            </div>
+                            <div class="checkbox-grid">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="PPT Presentation">
+                                    <span class="checkmark"></span>
+                                    PPT Presentation
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Tech Quiz">
+                                    <span class="checkmark"></span>
+                                    Tech Quiz
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="AI Prompt Battle">
+                                    <span class="checkmark"></span>
+                                    AI Prompt Battle
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Reverse Coding">
+                                    <span class="checkmark"></span>
+                                    Reverse Coding
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="CTF (Capture The Flag)">
+                                    <span class="checkmark"></span>
+                                    CTF (Capture Flag)
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Website Creation Without Using AI">
+                                    <span class="checkmark"></span>
+                                    Web Creation (No AI)
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Data Grid">
+                                    <span class="checkmark"></span>
+                                    Data Grid
+                                </label>
+                            </div>
+
+                            <!-- Non-Technical Events -->
+                            <div class="event-category-title" style="margin-top: 20px;">
+                                <i class="fa-solid fa-dice-d20 text-amber"></i> Non-Technical Events
+                            </div>
+                            <div class="checkbox-grid">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Meme Marketing">
+                                    <span class="checkmark"></span>
+                                    Meme Marketing
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Number Logic Battle">
+                                    <span class="checkmark"></span>
+                                    Number Logic Battle
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="E Sports">
+                                    <span class="checkmark"></span>
+                                    E Sports Battle
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Squid Game">
+                                    <span class="checkmark"></span>
+                                    Squid Game
+                                </label>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="selected_events" value="Treasure Hunt">
+                                    <span class="checkmark"></span>
+                                    Treasure Hunt
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Alert Box -->
+                    <div id="form-error" class="payment-notice" style="display:none; background:rgba(255, 51, 75, 0.1); border-left-color:var(--status-rejected); color:#ff8093;"></div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-btn" class="btn btn-primary-glow btn-block btn-lg" style="margin-top: 10px;">
+                        <i class="fa-solid fa-arrow-right"></i> Proceed to UPI Payment (Step 2)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 GRAVITON - Jaya Sakthi Engineering College. All Rights Reserved.</p>
+            <p class="sub-footer">Code • Create • Compete • Conquer</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="register.js"></script>
+</body>
+
+</html>

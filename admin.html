@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Portal | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
+    <meta name="description" content="Organizer Portal for GRAVITON 2026 - View, verify, and manage delegate registrations.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Cosmic Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="college-badge">
+                    <i class="fa-solid fa-award text-glow"></i> NAAC 'A'
+                </div>
+                <div class="brand-text">
+                    <span class="college-title">JAYA SAKTHI</span>
+                    <span class="college-sub">ENGINEERING COLLEGE</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="index.html#home" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="index.html#events" class="nav-link"><i class="fa-solid fa-trophy"></i> Events</a>
+                <a href="register.html" class="nav-link"><i class="fa-solid fa-ticket"></i> Register</a>
+                <a href="status.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Check Status</a>
+                <a href="admin.html" class="nav-link organizer-pill active"><i class="fa-solid fa-user-shield"></i> Organizer Portal</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button id="admin-logout-btn" class="btn btn-outline-glow btn-sm" style="display:none;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Lock Portal
+                </button>
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-page">
+        <div class="portal-container wide">
+            <!-- Header -->
+            <div class="portal-header">
+                <span class="section-tag"><i class="fa-solid fa-shield-halved"></i> DEPT OF CSE & CYBER SECURITY</span>
+                <h1 class="section-title">ORGANIZER ADMIN DASHBOARD</h1>
+                <p class="section-desc">Manage registrations, verify incoming UPI payments against bank transactions, and export Excel sheets.</p>
+            </div>
+
+            <!-- Login PIN Card (Shown if not authenticated) -->
+            <div id="login-container" style="max-width:440px; margin:40px auto 0;">
+                <div class="glass-panel form-card text-center highlight-border">
+                    <i class="fa-solid fa-lock-hashtag text-crimson text-glow" style="font-size:2.8rem; margin-bottom:14px; display:inline-block;"></i>
+                    <h2 style="font-family:var(--font-heading); color:#fff; font-size:1.4rem; margin-bottom:8px;">ORGANIZER ACCESS</h2>
+                    <p style="color:var(--text-secondary); font-size:0.84rem; margin-bottom:24px;">Enter the Security PIN to access the participant registry.</p>
+
+                    <form id="admin-login-form">
+                        <div class="form-group" style="text-align:left;">
+                            <label for="admin-pin">Security PIN / Password <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-key"></i>
+                                <input type="password" id="admin-pin" placeholder="Enter Security PIN (e.g. 2026)" required autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div id="login-error" class="payment-notice" style="display:none; background:rgba(255, 51, 75, 0.1); border-left-color:var(--status-rejected); color:#ff8093; margin-bottom:18px;">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Incorrect Security PIN! Access Denied.
+                        </div>
+
+                        <button type="submit" id="login-btn" class="btn btn-primary-glow btn-block">
+                            <i class="fa-solid fa-unlock"></i> Unlock Dashboard
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Authenticated Dashboard View (Hidden until PIN entered) -->
+            <div id="dashboard-container" style="display:none;">
+                <!-- Statistics Row -->
+                <div class="admin-stats-row">
+                    <div class="glass-panel admin-stat-card">
+                        <div class="admin-stat-num" id="stat-total">0</div>
+                        <div class="admin-stat-label">Total Registrations</div>
+                    </div>
+                    <div class="glass-panel admin-stat-card" style="border-color:rgba(0, 240, 255, 0.3);">
+                        <div class="admin-stat-num text-cyan" id="stat-pending">0</div>
+                        <div class="admin-stat-label">Pending Verification</div>
+                    </div>
+                    <div class="glass-panel admin-stat-card" style="border-color:rgba(0, 230, 118, 0.3);">
+                        <div class="admin-stat-num text-success" id="stat-verified">0</div>
+                        <div class="admin-stat-label">Verified Passes</div>
+                    </div>
+                    <div class="glass-panel admin-stat-card" style="border-color:rgba(255, 51, 75, 0.3);">
+                        <div class="admin-stat-num text-crimson" id="stat-rejected">0</div>
+                        <div class="admin-stat-label">Rejected / Unpaid</div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Toolbar -->
+                <div class="admin-toolbar">
+                    <!-- Filter Tabs -->
+                    <div class="tab-group" id="status-filter-tabs">
+                        <button class="tab-btn active" data-status="ALL">All <span class="badge" id="badge-all">0</span></button>
+                        <button class="tab-btn" data-status="UNDER_VERIFICATION">Under Review <span class="badge" id="badge-pending">0</span></button>
+                        <button class="tab-btn" data-status="VERIFIED">Verified <span class="badge" id="badge-verified">0</span></button>
+                        <button class="tab-btn" data-status="REJECTED">Rejected <span class="badge" id="badge-rejected">0</span></button>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="search-box" style="flex:1; max-width:380px;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="admin-search-input" placeholder="Search by name, college, email, ID, or UTR...">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-outline-glow btn-sm" id="btn-refresh-data" title="Refresh Data">
+                            <i class="fa-solid fa-rotate"></i> Refresh
+                        </button>
+                        <button class="btn btn-primary-glow btn-sm" id="btn-export-excel">
+                            <i class="fa-solid fa-file-excel"></i> Export Excel (.csv)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Registration Table -->
+                <div class="table-wrapper glass-panel">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Reg ID</th>
+                                <th>Participant Name</th>
+                                <th>Contact Details</th>
+                                <th>College & Dept</th>
+                                <th>Selected Events</th>
+                                <th>Amount</th>
+                                <th>UTR Number</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-tbody">
+                            <!-- Dynamic rows injected by admin.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Participant Details Modal -->
+    <div class="modal-overlay" id="participant-modal" aria-hidden="true">
+        <div class="modal-card glass-panel" style="max-width:580px;">
+            <button class="modal-close" id="p-modal-close">&times;</button>
+            <div class="modal-header">
+                <span class="modal-badge text-cyan" id="p-regid">GRAV-2026-XXXX</span>
+                <h2 id="p-name">Participant Name</h2>
+            </div>
+            <div class="modal-body" id="p-body-content">
+                <!-- Dynamically loaded details -->
+            </div>
+            <div class="modal-footer" id="p-modal-footer">
+                <button class="btn btn-outline-glow" id="p-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 GRAVITON - Jaya Sakthi Engineering College. All Rights Reserved.</p>
+            <p class="sub-footer">Code • Create • Compete • Conquer</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

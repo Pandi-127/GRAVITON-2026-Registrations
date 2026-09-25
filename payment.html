@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
+    <meta name="description"
+        content="Complete UPI Payment for GRAVITON 2026 National Level Technical Symposium delegate registration.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Cosmic Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="college-badge">
+                    <i class="fa-solid fa-award text-glow"></i> NAAC 'A'
+                </div>
+                <div class="brand-text">
+                    <span class="college-title">JAYA SAKTHI</span>
+                    <span class="college-sub">ENGINEERING COLLEGE</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="index.html#home" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="index.html#events" class="nav-link"><i class="fa-solid fa-trophy"></i> Events</a>
+                <a href="register.html" class="nav-link"><i class="fa-solid fa-ticket"></i> Register</a>
+                <a href="status.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Check Status</a>
+                <a href="admin.html" class="nav-link organizer-pill"><i class="fa-solid fa-user-shield"></i> Organizer Portal</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-page">
+        <div class="portal-container">
+            <!-- Header -->
+            <div class="portal-header">
+                <span class="section-tag"><i class="fa-solid fa-shield-halved"></i> SECURE UPI GATEWAY</span>
+                <h1 class="section-title">DELEGATE PASS PAYMENT</h1>
+                <p class="section-desc">Scan the UPI QR code or pay via any UPI app (GPay, PhonePe, Paytm), then submit your UTR number.</p>
+            </div>
+
+            <!-- Step Progress Indicator -->
+            <div class="steps-progress">
+                <div class="step-node completed">
+                    <div class="node-circle"><i class="fa-solid fa-check"></i></div>
+                    <span>1. Delegate Details</span>
+                </div>
+                <div class="step-line" style="background:var(--status-verified);"></div>
+                <div class="step-node active">
+                    <div class="node-circle"><i class="fa-solid fa-qrcode"></i></div>
+                    <span>2. UPI Payment</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-node">
+                    <div class="node-circle"><i class="fa-solid fa-certificate"></i></div>
+                    <span>3. Verified Pass</span>
+                </div>
+            </div>
+
+            <!-- Payment Layout Grid -->
+            <div class="payment-grid">
+                <!-- Left: UPI QR Code & Instructions -->
+                <div class="glass-panel qr-card">
+                    <span class="section-tag" style="margin-bottom:8px;"><i class="fa-solid fa-qrcode"></i> SCAN & PAY</span>
+                    <h3 style="font-family:var(--font-heading); color:#fff; font-size:1.3rem;">GRAVITON 2026</h3>
+                    <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">Supported: GPay, PhonePe, Paytm, BHIM</p>
+
+                    <!-- Dynamically Generated QR Canvas Frame -->
+                    <div class="qr-frame" id="qr-wrapper">
+                        <!-- Canvas / SVG rendered by payment.js -->
+                    </div>
+
+                    <!-- UPI ID Display & Copy -->
+                    <div class="upi-id-box">
+                        <div>
+                            <span style="font-size:0.7rem; color:var(--text-muted); display:block; text-align:left;">ORGANIZER UPI ID:</span>
+                            <code id="display-upi-id">9003252177@okaxis</code>
+                        </div>
+                        <button type="button" class="copy-btn" id="copy-upi-btn" title="Copy UPI ID">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <!-- Deep Link Pay via UPI Button for Mobile -->
+                    <a href="#" id="upi-deeplink-btn" class="btn btn-primary-glow btn-block" style="margin-bottom:12px;">
+                        <i class="fa-solid fa-mobile-screen"></i> Pay Using UPI App
+                    </a>
+
+                    <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.4;">
+                        <i class="fa-solid fa-lock text-crimson"></i> 100% Direct Peer-to-Peer UPI Payment. No third-party gateway fees.
+                    </div>
+                </div>
+
+                <!-- Right: Participant Summary & UTR Submission Form -->
+                <div class="glass-panel form-card">
+                    <!-- Participant Summary Box -->
+                    <div class="fee-summary-card" style="margin-bottom:20px;">
+                        <div class="fee-info">
+                            <span style="color:var(--primary-crimson); font-family:var(--font-heading); font-size:0.75rem; letter-spacing:1px; display:block;">REGISTRATION PASS</span>
+                            <strong id="display-regid" style="font-size:1.15rem; color:#fff;">GRAV-2026-XXXX</strong>
+                            <span id="display-name" style="font-size:0.85rem; color:var(--text-secondary);">Participant Name</span>
+                        </div>
+                        <div class="fee-amount" id="display-amount">₹100</div>
+                    </div>
+
+                    <!-- Explicit Verification Note -->
+                    <div class="payment-notice">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <strong>Payment Verification Notice:</strong><br>
+                        Payments are <strong>manually verified by student organizers</strong> by cross-checking your 12-digit UTR against bank receipts. Verification typically completes within <strong>2 to 4 hours</strong>. After verification, your Official Digital Delegate Pass will be unlocked automatically!
+                    </div>
+
+                    <!-- UTR Form -->
+                    <form id="payment-form">
+                        <!-- Registration ID (Read-only / Editable if needed) -->
+                        <div class="form-group">
+                            <label for="regId">Registration ID <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-hashtag"></i>
+                                <input type="text" id="regId" name="regId" placeholder="e.g. GRAV-2026-8942" required>
+                            </div>
+                        </div>
+
+                        <!-- 12-digit UTR / Transaction ID -->
+                        <div class="form-group">
+                            <label for="utr">UPI Transaction ID / UTR Number <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-receipt"></i>
+                                <input type="text" id="utr" name="utr" placeholder="12-digit UTR (e.g. 426819204918)" required maxlength="25">
+                            </div>
+                            <span class="helper-text">Find the 12-digit UTR / Ref No in your GPay / PhonePe / Paytm payment receipt.</span>
+                        </div>
+
+                        <!-- Optional Screenshot Upload -->
+                        <div class="form-group">
+                            <label for="screenshot">Payment Screenshot <span style="font-size:0.75rem; color:var(--text-muted);">(Optional for faster approval)</span></label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-image"></i>
+                                <input type="file" id="screenshot" accept="image/*">
+                            </div>
+                            <span class="helper-text" id="screenshot-feedback">Upload JPG / PNG receipt screenshot.</span>
+                        </div>
+
+                        <!-- Form Error Alert -->
+                        <div id="payment-error" class="payment-notice" style="display:none; background:rgba(255, 51, 75, 0.1); border-left-color:var(--status-rejected); color:#ff8093;"></div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="submit-payment-btn" class="btn btn-primary-glow btn-block btn-lg" style="margin-top:14px;">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Payment for Verification
+                        </button>
+
+                        <div style="text-align:center; margin-top:16px;">
+                            <a href="status.html" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">
+                                Already submitted? <span class="text-crimson" style="text-decoration:underline;">Check Pass Status</span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 GRAVITON - Jaya Sakthi Engineering College. All Rights Reserved.</p>
+            <p class="sub-footer">Code • Create • Compete • Conquer</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="payment.js"></script>
+</body>
+
+</html>

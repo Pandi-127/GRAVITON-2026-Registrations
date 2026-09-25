@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAVITON 2026 | National Level Technical Symposium - Jaya Sakthi Engineering College</title>
+    <meta name="description"
+        content="GRAVITON 2026 - Flagship National Level Technical Symposium organized by Dept. of Computer Science & Engineering & Cyber Security, Jaya Sakthi Engineering College (NAAC 'A' Grade), Chennai. 12+ Technical and Non-Technical Battles with Cash Prizes!">
+    <meta name="keywords" content="GRAVITON 2026, Jaya Sakthi Engineering College, Symposium, Chennai, CSE, Cyber Security, CTF, PPT, AI Prompt Battle, Coding, Esports">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Canvas for Cosmic Particles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Top Announcement Ticker -->
+    <div class="ticker-wrapper">
+        <div class="ticker-content">
+            <span>⚡ NATIONAL LEVEL TECHNICAL SYMPOSIUM</span>
+            <span>🚀 GRAVITON 2026 - IDEAS BEYOND LIMITS</span>
+            <span>🔥 DEPARTMENT OF CSE & CYBER SECURITY</span>
+            <span>🏆 JAYA SAKTHI ENGINEERING COLLEGE (NAAC 'A' GRADE)</span>
+            <span>🎫 ONLINE REGISTRATION & DELEGATE PASSES NOW OPEN!</span>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="college-badge">
+                    <i class="fa-solid fa-award text-glow"></i> NAAC 'A'
+                </div>
+                <div class="brand-text">
+                    <span class="college-title">JAYA SAKTHI</span>
+                    <span class="college-sub">ENGINEERING COLLEGE</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="#home" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="#about" class="nav-link"><i class="fa-solid fa-circle-info"></i> About</a>
+                <a href="#events" class="nav-link"><i class="fa-solid fa-trophy"></i> Events</a>
+                <a href="#schedule" class="nav-link"><i class="fa-solid fa-calendar-days"></i> Schedule</a>
+                <a href="#venue" class="nav-link"><i class="fa-solid fa-location-dot"></i> Venue</a>
+                <a href="#contact" class="nav-link"><i class="fa-solid fa-phone"></i> Contact</a>
+                <a href="status.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Check Status</a>
+                <a href="admin.html" class="nav-link organizer-pill"><i class="fa-solid fa-user-shield"></i> Organizer Portal</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="register.html" class="btn btn-primary-glow btn-sm">
+                    <i class="fa-solid fa-ticket"></i> Register Pass
+                </a>
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="header-stamps">
+                        <span class="stamp-pill"><i class="fa-solid fa-graduation-cap"></i> AICTE Approved & Anna Univ. Affiliated</span>
+                        <span class="stamp-pill highlight"><i class="fa-solid fa-rocket"></i> Some Ideas Don't Stay On Earth</span>
+                    </div>
+
+                    <h3 class="symposium-label">NATIONAL LEVEL TECHNICAL SYMPOSIUM</h3>
+
+                    <h1 class="hero-title">GRAVITON</h1>
+
+                    <p class="hero-subtitle">IDEAS BEYOND LIMITS</p>
+
+                    <div class="dept-banner">
+                        <span class="dept-label">Organized By</span>
+                        <h2 class="dept-name">Department of Computer Science & Engineering <br>& Cyber Security</h2>
+                    </div>
+
+                    <div class="motto-pills">
+                        <span class="motto-item"><i class="fa-solid fa-bolt text-crimson"></i> Learn</span>
+                        <span class="motto-item"><i class="fa-solid fa-seedling text-fire"></i> Grow</span>
+                        <span class="motto-item"><i class="fa-solid fa-hammer text-cyan"></i> Build</span>
+                        <span class="motto-item"><i class="fa-solid fa-shield-halved text-crimson"></i> Belong</span>
+                    </div>
+
+                    <!-- Countdown Timer -->
+                    <div class="countdown-card glass-panel">
+                        <div class="countdown-header">
+                            <i class="fa-solid fa-clock-rotate-left"></i> SYMPOSIUM COUNTDOWN
+                        </div>
+                        <div class="countdown-timer" id="countdown">
+                            <div class="time-box">
+                                <span id="days">14</span>
+                                <label>Days</label>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-box">
+                                <span id="hours">08</span>
+                                <label>Hours</label>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-box">
+                                <span id="minutes">45</span>
+                                <label>Mins</label>
+                            </div>
+                            <div class="time-separator">:</div>
+                            <div class="time-box">
+                                <span id="seconds">20</span>
+                                <label>Secs</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-cta">
+                        <a href="#events" class="btn btn-primary-glow btn-lg">
+                            <i class="fa-solid fa-fire"></i> Explore 12+ Events
+                        </a>
+                        <a href="register.html" class="btn btn-outline-glow btn-lg">
+                            <i class="fa-solid fa-id-card"></i> Get Delegate Pass
+                        </a>
+                    </div>
+
+                    <!-- Hero Stats -->
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-value stat-count" data-target="12" data-suffix="+">12+</span>
+                            <span class="stat-label">Total Events</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value stat-count" data-target="7" data-suffix="">7</span>
+                            <span class="stat-label">Technical Arenas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value stat-count" data-target="5" data-suffix="">5</span>
+                            <span class="stat-label">Non-Tech Showcases</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">NATIONAL</span>
+                            <span class="stat-label">College Level</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual with Futuristic Warrior -->
+                <div class="hero-visual">
+                    <div class="visual-wrapper">
+                        <div class="glow-orb"></div>
+                        <div class="hud-ring-outer"></div>
+                        <div class="hud-ring-inner"></div>
+                        <img src="assets/hero_warrior.png" alt="GRAVITON Sci-Fi Hero Warrior" class="hero-warrior-img">
+                        <div class="floating-badge badge-1 glass-panel">
+                            <i class="fa-solid fa-code text-crimson"></i>
+                            <div>
+                                <strong>Code & Conquer</strong>
+                                <span>12 Thrilling Battles</span>
+                            </div>
+                        </div>
+                        <div class="floating-badge badge-2 glass-panel">
+                            <i class="fa-solid fa-trophy text-amber"></i>
+                            <div>
+                                <strong>Cash Prizes</strong>
+                                <span>& Merit Certificates</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="section-container">
+                <div class="grid-2">
+                    <div class="about-card glass-panel">
+                        <div class="card-icon"><i class="fa-solid fa-building-columns"></i></div>
+                        <h3>Jaya Sakthi Engineering College</h3>
+                        <p>
+                            Accredited with <strong>NAAC 'A' Grade</strong>, approved by AICTE New Delhi, and affiliated to Anna University Chennai. Located in Thiruninravur, Chennai, Jaya Sakthi Engineering College stands as a beacon of academic excellence and technical innovation.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fa-solid fa-check text-crimson"></i> State-of-the-art AI & Cyber Security Research Labs</li>
+                            <li><i class="fa-solid fa-check text-crimson"></i> Industry-aligned Technical Curriculum & Training</li>
+                            <li><i class="fa-solid fa-check text-crimson"></i> Vibrant Student Innovation & Hackathon Culture</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card glass-panel highlight-border">
+                        <div class="card-icon"><i class="fa-solid fa-meteor"></i></div>
+                        <h3>About GRAVITON 2026</h3>
+                        <p>
+                            GRAVITON is the flagship National Level Technical Symposium hosted by the Department of Computer Science & Engineering and Cyber Security. It provides a high-octane battleground for visionaries, coders, prompt engineers, and gamers across the nation.
+                        </p>
+                        <div class="pillars-grid">
+                            <div class="pillar-box">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span>A Platform to Learn</span>
+                            </div>
+                            <div class="pillar-box">
+                                <i class="fa-solid fa-gamepad"></i>
+                                <span>A Stage to Compete</span>
+                            </div>
+                            <div class="pillar-box">
+                                <i class="fa-solid fa-atom"></i>
+                                <span>A Space to Innovate</span>
+                            </div>
+                            <div class="pillar-box">
+                                <i class="fa-solid fa-users-gear"></i>
+                                <span>A Community to Belong</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="events-section">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <span class="section-tag"><i class="fa-solid fa-bolt"></i> SKILLS BEYOND LIMITS</span>
+                    <h2 class="section-title">CHOOSE YOUR BATTLEGROUND</h2>
+                    <p class="section-desc">12 flagship challenges categorized into Technical Arena and Non-Technical Showcase. Participate in multiple events under a single pass!</p>
+                </div>
+
+                <!-- Event Category Filter Tabs & Search -->
+                <div class="filter-controls">
+                    <div class="tab-group">
+                        <button class="tab-btn active" data-filter="all">
+                            <i class="fa-solid fa-layer-group"></i> All Events <span class="badge">12</span>
+                        </button>
+                        <button class="tab-btn" data-filter="technical">
+                            <i class="fa-solid fa-laptop-code"></i> Technical <span class="badge">7</span>
+                        </button>
+                        <button class="tab-btn" data-filter="non-technical">
+                            <i class="fa-solid fa-dice-d20"></i> Non-Technical <span class="badge">5</span>
+                        </button>
+                    </div>
+
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="event-search" placeholder="Search event (e.g. CTF, Quiz, AI Prompt)...">
+                    </div>
+                </div>
+
+                <!-- Events Grid Container -->
+                <div class="events-grid" id="events-grid">
+                    <!-- Technical Event 1 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="ppt presentation">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-display"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-file-powerpoint"></i></div>
+                        <h3>PPT Presentation</h3>
+                        <p>Present groundbreaking ideas, research findings, or innovative tech concepts before an expert panel.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-users"></i> Team (1-3)</span>
+                            <span><i class="fa-solid fa-clock"></i> 10+10 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="ppt">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=PPT%20Presentation" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Event 2 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="tech quiz">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-microchip"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <h3>Tech Quiz</h3>
+                        <p>Test your knowledge on latest tech trends, computer science fundamentals, cyber security, and emerging AI.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Solo / Duo</span>
+                            <span><i class="fa-solid fa-bolt"></i> 3 Rounds</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="tech-quiz">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Tech%20Quiz" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Event 3 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="ai prompt battle">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-brain"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-robot"></i></div>
+                        <h3>AI Prompt Battle</h3>
+                        <p>Craft precise generative prompts under pressure to reproduce target images, code snippets, or blueprints.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Individual</span>
+                            <span><i class="fa-solid fa-wand-magic-sparkles"></i> 30 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="ai-prompt">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=AI%20Prompt%20Battle" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Event 4 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="reverse coding">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-code"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-code-compare"></i></div>
+                        <h3>Reverse Coding</h3>
+                        <p>Analyze input-output blackboxes and deduce the hidden algorithmic logic to reconstruct the original code.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Individual</span>
+                            <span><i class="fa-solid fa-terminal"></i> 45 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="reverse-coding">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Reverse%20Coding" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Event 5 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="ctf capture the flag cyber security">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-shield-halved"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-flag"></i></div>
+                        <h3>CTF (Capture The Flag)</h3>
+                        <p>Immerse in ethical hacking challenges covering Web Exploitation, Cryptography, Steganography & Forensics.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-users"></i> Team (1-2)</span>
+                            <span><i class="fa-solid fa-key"></i> 90 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="ctf">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=CTF%20(Capture%20The%20Flag)" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Event 6 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="website creation without using ai">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-globe"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                        <h3>Web Creation (No AI)</h3>
+                        <p>Build a responsive, stunning website from scratch using pure raw HTML, CSS, and JS without using AI generators.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Individual</span>
+                            <span><i class="fa-solid fa-clock"></i> 60 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="web-creation">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Website%20Creation%20Without%20Using%20AI" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Event 7 -->
+                    <div class="event-card glass-panel" data-category="technical" data-title="data grid analytics sql">
+                        <div class="event-type-badge tech"><i class="fa-solid fa-database"></i> Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-table-cells"></i></div>
+                        <h3>Data Grid</h3>
+                        <p>Solve complex SQL queries, uncover hidden insights from messy datasets, and perform data wrangling challenges.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Individual</span>
+                            <span><i class="fa-solid fa-chart-column"></i> 45 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="data-grid">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Data%20Grid" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Non-Technical Event 1 -->
+                    <div class="event-card glass-panel" data-category="non-technical" data-title="meme marketing">
+                        <div class="event-type-badge non-tech"><i class="fa-solid fa-face-laugh-squint"></i> Non-Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-icons"></i></div>
+                        <h3>Meme Marketing</h3>
+                        <p>Channel your humor and marketing genius to craft viral tech memes for branded product campaigns.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Solo / Duo</span>
+                            <span><i class="fa-solid fa-share-nodes"></i> 40 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="meme-marketing">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Meme%20Marketing" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Non-Technical Event 2 -->
+                    <div class="event-card glass-panel" data-category="non-technical" data-title="number logic battle">
+                        <div class="event-type-badge non-tech"><i class="fa-solid fa-calculator"></i> Non-Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-arrow-down-1-9"></i></div>
+                        <h3>Number Logic Battle</h3>
+                        <p>Compete in high-speed rapid mental math, sequence decoding, and numerical logic face-offs.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Individual</span>
+                            <span><i class="fa-solid fa-brain"></i> 30 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="number-logic">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Number%20Logic%20Battle" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Non-Technical Event 3 -->
+                    <div class="event-card glass-panel" data-category="non-technical" data-title="e sports competitive gaming bgmi valorant free fire">
+                        <div class="event-type-badge non-tech"><i class="fa-solid fa-gamepad"></i> Non-Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-headset"></i></div>
+                        <h3>E Sports Battle</h3>
+                        <p>Gear up for the ultimate esports tournament! Tactical gaming showdown with custom rooms & knockout rounds.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-users"></i> Squad (4)</span>
+                            <span><i class="fa-solid fa-crosshair"></i> Matches</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="esports">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=E%20Sports" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Non-Technical Event 4 -->
+                    <div class="event-card glass-panel" data-category="non-technical" data-title="squid game elimination">
+                        <div class="event-type-badge non-tech"><i class="fa-solid fa-shapes"></i> Non-Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-triangle"></i></div>
+                        <h3>Squid Game</h3>
+                        <p>High-tension survival rounds featuring physical agility, memory tests, red-light green-light tactics, and elimination.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-user"></i> Individual</span>
+                            <span><i class="fa-solid fa-skull"></i> 4 Rounds</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="squid-game">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Squid%20Game" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Non-Technical Event 5 -->
+                    <div class="event-card glass-panel" data-category="non-technical" data-title="treasure hunt mystery campus">
+                        <div class="event-type-badge non-tech"><i class="fa-solid fa-compass"></i> Non-Technical</div>
+                        <div class="event-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <h3>Treasure Hunt</h3>
+                        <p>Decode cryptic clues hidden across campus to uncover the final hidden treasure chest before rival teams.</p>
+                        <div class="event-meta">
+                            <span><i class="fa-solid fa-users"></i> Team (2-3)</span>
+                            <span><i class="fa-solid fa-shoe-prints"></i> 60 Mins</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-glow btn-sm btn-details" data-id="treasure-hunt">
+                                <i class="fa-solid fa-circle-info"></i> Rules & Details
+                            </button>
+                            <a href="register.html?event=Treasure%20Hunt" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-plus"></i> Select
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schedule Section -->
+        <section id="schedule" class="schedule-section">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <span class="section-tag"><i class="fa-regular fa-clock"></i> SYMPOSIUM DAY TIMELINE</span>
+                    <h2 class="section-title">EVENT SCHEDULE</h2>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-dot"><i class="fa-solid fa-clipboard-check"></i></div>
+                        <div class="timeline-content glass-panel">
+                            <span class="time-badge"><i class="fa-regular fa-clock"></i> 08:30 AM - 09:30 AM</span>
+                            <h3>Registration & Kit Distribution</h3>
+                            <p>On-spot check-in, desk verification, distribution of badge passes, refreshment tokens & tech kits.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="timeline-dot"><i class="fa-solid fa-ribbon"></i></div>
+                        <div class="timeline-content glass-panel">
+                            <span class="time-badge"><i class="fa-regular fa-clock"></i> 09:30 AM - 10:15 AM</span>
+                            <h3>Grand Inauguration Ceremony</h3>
+                            <p>Lighting of Kuthuvilakku, Welcome Address by Dept. HoD, Presidential Address by Principal & Chief Guest Keynote.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item left">
+                        <div class="timeline-dot"><i class="fa-solid fa-code"></i></div>
+                        <div class="timeline-content glass-panel highlight-border">
+                            <span class="time-badge"><i class="fa-regular fa-clock"></i> 10:30 AM - 01:00 PM</span>
+                            <h3>Technical Arena Battles</h3>
+                            <p>PPT Presentations, CTF Hacking, AI Prompt Battles, Reverse Coding, Web Creation & Data Grid competitions across labs.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="timeline-dot"><i class="fa-solid fa-utensils"></i></div>
+                        <div class="timeline-content glass-panel">
+                            <span class="time-badge"><i class="fa-regular fa-clock"></i> 01:00 PM - 01:45 PM</span>
+                            <h3>Grand Lunch & Networking Break</h3>
+                            <p>Complimentary delicious lunch for all registered delegates in the main college dining hall.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item left">
+                        <div class="timeline-dot"><i class="fa-solid fa-gamepad"></i></div>
+                        <div class="timeline-content glass-panel highlight-border">
+                            <span class="time-badge"><i class="fa-regular fa-clock"></i> 01:45 PM - 03:30 PM</span>
+                            <h3>Non-Technical Showcase</h3>
+                            <p>Esports finals, Squid Game survival, Treasure Hunt campus race, Meme Marketing & Number Logic battles.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="timeline-dot"><i class="fa-solid fa-trophy"></i></div>
+                        <div class="timeline-content glass-panel">
+                            <span class="time-badge"><i class="fa-regular fa-clock"></i> 03:30 PM - 04:30 PM</span>
+                            <h3>Valedictory & Prize Distribution</h3>
+                            <p>Declaration of winners, awarding trophies, cash prizes, merit certificates, and vote of thanks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Venue & Transport Section -->
+        <section id="venue" class="venue-section">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <span class="section-tag"><i class="fa-solid fa-map-pin"></i> DESTINATION</span>
+                    <h2 class="section-title">VENUE LOCATION</h2>
+                </div>
+
+                <div class="grid-2 venue-grid">
+                    <div class="venue-info glass-panel">
+                        <div class="location-icon-header">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <h3>JAYA SAKTHI ENGINEERING COLLEGE</h3>
+                                <span>Thiruninravur, Chennai - 602024</span>
+                            </div>
+                        </div>
+
+                        <div class="venue-details-list">
+                            <div class="v-detail">
+                                <i class="fa-solid fa-bus"></i>
+                                <div>
+                                    <strong>Bus Route & Connectivity</strong>
+                                    <p>Frequent MTC buses available from Avadi, Poonamallee, Thiruvallur & Pattabiram.</p>
+                                </div>
+                            </div>
+                            <div class="v-detail">
+                                <i class="fa-solid fa-train"></i>
+                                <div>
+                                    <strong>Suburban Railway</strong>
+                                    <p>Nearest Railway Station: <strong>Nemilichery / Thiruninravur Railway Station</strong> (5 mins distance).</p>
+                                </div>
+                            </div>
+                            <div class="v-detail">
+                                <i class="fa-solid fa-landmark"></i>
+                                <div>
+                                    <strong>Campus Landmarks</strong>
+                                    <p>Located on Poonamallee - High Road stretch, Thiruninravur campus.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="https://maps.google.com/?q=Jaya+Sakthi+Engineering+College+Thiruninravur"
+                            target="_blank" rel="noopener noreferrer" class="btn btn-outline-glow btn-block">
+                            <i class="fa-solid fa-map-location-dot"></i> Open in Google Maps
+                        </a>
+                    </div>
+
+                    <div class="venue-map-wrapper glass-panel">
+                        <div class="map-placeholder">
+                            <div class="map-grid-overlay"></div>
+                            <i class="fa-solid fa-building-columns map-pin-icon"></i>
+                            <h4>Jaya Sakthi Engineering College</h4>
+                            <p>Thiruninravur, Chennai - 602 024</p>
+                            <span class="map-tag"><i class="fa-solid fa-shield-halved"></i> CSE & Cyber Security Dept.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact & Chairpersons Section -->
+        <section id="contact" class="contact-section">
+            <div class="section-container">
+                <div class="section-header text-center">
+                    <span class="section-tag"><i class="fa-solid fa-headset"></i> GET IN TOUCH</span>
+                    <h2 class="section-title">CHAIR PERSONS & ORGANIZERS</h2>
+                    <p class="section-desc">Have questions regarding event rules, schedule, or transportation? Reach out directly!</p>
+                </div>
+
+                <div class="grid-2 chairpersons-grid">
+                    <!-- Chair Person 1 -->
+                    <div class="chair-card glass-panel highlight-border">
+                        <div class="chair-avatar"><i class="fa-solid fa-user-gear"></i></div>
+                        <h3>HARINI</h3>
+                        <span class="chair-title">Student Chair Person</span>
+                        <div class="chair-phone">
+                            <i class="fa-solid fa-phone"></i> +91 90032 52177
+                        </div>
+                        <div class="chair-actions">
+                            <a href="tel:+919003252177" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-phone"></i> Call Now
+                            </a>
+                            <a href="https://wa.me/919003252177?text=Hi%20Harini,%20I%20have%20a%20query%20regarding%20GRAVITON%20Symposium"
+                                target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Chair Person 2 -->
+                    <div class="chair-card glass-panel highlight-border">
+                        <div class="chair-avatar"><i class="fa-solid fa-user-shield"></i></div>
+                        <h3>BALAGURUBARAN</h3>
+                        <span class="chair-title">Student Chair Person</span>
+                        <div class="chair-phone">
+                            <i class="fa-solid fa-phone"></i> +91 90436 39975
+                        </div>
+                        <div class="chair-actions">
+                            <a href="tel:+919043639975" class="btn btn-primary-glow btn-sm">
+                                <i class="fa-solid fa-phone"></i> Call Now
+                            </a>
+                            <a href="https://wa.me/919043639975?text=Hi%20Balagurubaran,%20I%20have%20a%20query%20regarding%20GRAVITON%20Symposium"
+                                target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Organizers Banner -->
+                <div class="organized-banner glass-panel">
+                    <span>Organized By</span>
+                    <h3>DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING & CYBER SECURITY</h3>
+                    <p class="tagline-footer">IDEAS TODAY | INNOVATIONS TOMORROW • YOUR SUCCESS IS OUR SERVICE</p>
+                    <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <a href="status.html" class="btn btn-outline-glow btn-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i> Check Pass Status
+                        </a>
+                        <a href="admin.html" class="btn btn-primary-glow btn-sm">
+                            <i class="fa-solid fa-user-shield"></i> Open Organizer Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 GRAVITON - Jaya Sakthi Engineering College. All Rights Reserved.</p>
+            <p class="sub-footer">Code • Create • Compete • Conquer</p>
+            <p style="margin-top: 14px;">
+                <a href="admin.html" class="text-crimson" style="text-decoration:none; font-size:0.85rem; font-weight:600;">
+                    <i class="fa-solid fa-lock"></i> Organizer Portal Access
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Event Details Modal Dialog -->
+    <div class="modal-overlay" id="event-modal" aria-hidden="true">
+        <div class="modal-card glass-panel">
+            <button class="modal-close" id="modal-close" aria-label="Close modal">&times;</button>
+            <div class="modal-header">
+                <span class="modal-badge" id="m-category">Technical</span>
+                <h2 id="m-title">Event Title</h2>
+            </div>
+            <div class="modal-body">
+                <p id="m-desc">Description text...</p>
+
+                <div class="modal-info-grid">
+                    <div class="info-item">
+                        <i class="fa-solid fa-users"></i>
+                        <div>
+                            <strong>Team Size</strong>
+                            <span id="m-teamsize">1 - 3 Members</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <div>
+                            <strong>Duration</strong>
+                            <span id="m-duration">45 Mins</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4><i class="fa-solid fa-gavel text-crimson"></i> Rules & Guidelines</h4>
+                <ul class="rules-list" id="m-rules">
+                    <!-- Dynamic rules list inserted via JS -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-glow" id="m-close-btn">Close</button>
+                <button class="btn btn-primary-glow" id="m-register-btn"><i class="fa-solid fa-plus"></i> Select Event & Register</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
