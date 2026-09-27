@@ -165,21 +165,52 @@ document.addEventListener('DOMContentLoaded', () => {
 /* --------------------------------------------------------------------------
    1. Atmospheric Cosmic Background Particles Canvas
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   1. Atmospheric Cosmic Background Particles Canvas (Device Adaptive & High-DPI)
+   -------------------------------------------------------------------------- */
 function initParticleCanvas() {
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+    // Check prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    let isMobile = window.innerWidth <= 768;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        isMobile = width <= 768;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+    }
+
+    resizeCanvas();
+
+    // Prevent resize flashing on mobile scroll when address bar toggles
+    let lastWidth = window.innerWidth;
     window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-    });
+        if (Math.abs(window.innerWidth - lastWidth) > 30 || Math.abs(window.innerHeight - height) > 150) {
+            lastWidth = window.innerWidth;
+            resizeCanvas();
+        }
+    }, { passive: true });
 
+    // Adaptive particle count based on device capability
+    const maxParticles = isMobile ? 26 : Math.min(Math.floor((width * height) / 22000), 75);
     const particles = [];
-    const count = Math.min(Math.floor((width * height) / 22000), 80);
 
     class CosmicParticle {
         constructor() {
@@ -188,10 +219,10 @@ function initParticleCanvas() {
         reset() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.radius = Math.random() * 2 + 0.6;
-            this.vx = (Math.random() - 0.5) * 0.35;
-            this.vy = (Math.random() - 0.5) * 0.35 - 0.15;
-            this.alpha = Math.random() * 0.7 + 0.2;
+            this.radius = Math.random() * (isMobile ? 1.5 : 2.2) + 0.5;
+            this.vx = (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35);
+            this.vy = (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35) - 0.1;
+            this.alpha = Math.random() * 0.65 + 0.2;
             const rand = Math.random();
             if (rand < 0.6) {
                 this.color = '#ff1e42'; // Crimson
@@ -215,7 +246,8 @@ function initParticleCanvas() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
-            if (this.color === '#ff1e42' || this.color === '#00f0ff') {
+            // Skip expensive shadowBlur on mobile devices to preserve battery and 60fps smoothness
+            if (!isMobile && (this.color === '#ff1e42' || this.color === '#00f0ff')) {
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
             }
@@ -223,18 +255,41 @@ function initParticleCanvas() {
         }
     }
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < maxParticles; i++) {
         particles.push(new CosmicParticle());
     }
 
-    function animate() {
+    if (prefersReducedMotion) {
+        // Draw static starfield once for users requesting reduced motion
         ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-        requestAnimationFrame(animate);
+        particles.forEach(p => p.draw());
+        return;
     }
+
+    let animationFrameId;
+    let isTabVisible = true;
+
+    function animate() {
+        if (!isTabVisible) return;
+        ctx.clearRect(0, 0, width, height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        animationFrameId = requestAnimationFrame(animate);
+    }
+
+    // Energy saving: Pause animation when tab is not visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            isTabVisible = false;
+            cancelAnimationFrame(animationFrameId);
+        } else {
+            isTabVisible = true;
+            animationFrameId = requestAnimationFrame(animate);
+        }
+    });
+
     animate();
 }
 
@@ -246,54 +301,77 @@ function initStickyNavbar() {
     const mobileToggle = document.getElementById('mobile-toggle');
     const navLinks = document.getElementById('nav-links');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 40) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, { passive: true });
+    }
 
-    if (mobileToggle && navLinks) {
-        mobileToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('mobile-active');
+    if (mobileToggle && navLinks && !mobileToggle.dataset.navBound) {
+        mobileToggle.dataset.navBound = 'true';
+
+        function closeNav() {
+            navLinks.classList.remove('mobile-active');
             const icon = mobileToggle.querySelector('i');
             if (icon) {
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-xmark');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-xmark');
+            }
+        }
+
+        mobileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navLinks.classList.toggle('mobile-active');
+            const icon = mobileToggle.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars', !isOpen);
+                icon.classList.toggle('fa-xmark', isOpen);
             }
         });
 
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('mobile-active');
-                const icon = mobileToggle.querySelector('i');
-                if (icon) {
-                    icon.classList.add('fa-bars');
-                    icon.classList.remove('fa-xmark');
-                }
-            });
+            link.addEventListener('click', closeNav);
+        });
+
+        // Close on tap outside
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('mobile-active') && !navbar.contains(e.target)) {
+                closeNav();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('mobile-active')) {
+                closeNav();
+            }
         });
     }
 
     // Highlight active link on scroll
     const sections = document.querySelectorAll('section[id]');
-    window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
-        sections.forEach(current => {
-            const sectionHeight = current.offsetHeight;
-            const sectionTop = current.offsetTop - 120;
-            const sectionId = current.getAttribute('id');
-            const link = document.querySelector(`.nav-links a[href*="${sectionId}"]`);
-            if (link) {
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
+    if (sections.length && navLinks) {
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            sections.forEach(current => {
+                const sectionHeight = current.offsetHeight;
+                const sectionTop = current.offsetTop - 140;
+                const sectionId = current.getAttribute('id');
+                const link = navLinks.querySelector(`a[href*="#${sectionId}"]`);
+                if (link) {
+                    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
                 }
-            }
-        });
-    });
+            });
+        }, { passive: true });
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -383,6 +461,8 @@ function initEventFilters() {
     const tabBtns = document.querySelectorAll('.tab-btn');
     const searchInput = document.getElementById('event-search');
     const eventCards = document.querySelectorAll('.event-card');
+
+    if (!eventCards.length && !searchInput) return;
 
     let currentCategory = 'all';
     let searchQuery = '';

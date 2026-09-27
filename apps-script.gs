@@ -173,6 +173,14 @@ function handleRegister(data) {
     const year = (data.year || "").trim();
     const events = Array.isArray(data.events) ? data.events.join(", ") : (data.events || "").toString();
     const amount = Number(data.amount) || 100;
+    const teamName = (data.teamName || "").trim();
+    const teamMembers = Array.isArray(data.teamMembers) ? data.teamMembers.join(", ") : (data.teamMembers || "").toString();
+    const participationType = (data.participationType || (teamName ? "Team" : "Solo")).trim();
+
+    let eventsDisplay = events;
+    if (teamName) {
+      eventsDisplay += " [Team: " + teamName + (teamMembers ? " (" + fullname + ", " + teamMembers + ")" : "") + "]";
+    }
 
     if (!fullname || !email || !phone || !college || !dept || !year) {
       return jsonResponse({ success: false, error: "All required fields must be filled." });
@@ -209,7 +217,7 @@ function handleRegister(data) {
       college,
       dept,
       year,
-      events,
+      eventsDisplay,
       amount,
       paymentStatus,
       utr,
@@ -226,6 +234,9 @@ function handleRegister(data) {
       fullname: fullname,
       amount: amount,
       paymentStatus: paymentStatus,
+      participationType: participationType,
+      teamName: teamName,
+      teamMembers: teamMembers,
       message: "Registration recorded successfully! Please proceed to payment."
     });
   } finally {

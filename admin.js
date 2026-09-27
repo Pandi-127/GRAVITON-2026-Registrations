@@ -27,7 +27,8 @@ function initAdminPage() {
     const mobileToggle = document.getElementById('mobile-toggle');
     const navLinks = document.getElementById('nav-links');
 
-    if (mobileToggle && navLinks) {
+    if (mobileToggle && navLinks && !mobileToggle.dataset.navBound) {
+        mobileToggle.dataset.navBound = 'true';
         mobileToggle.addEventListener('click', () => {
             navLinks.classList.toggle('mobile-active');
         });
@@ -266,7 +267,10 @@ function initAdminPage() {
             return `
                 <tr>
                     <td><strong class="text-crimson">${escapeHTML(r.regId)}</strong></td>
-                    <td><strong>${escapeHTML(r.fullname)}</strong></td>
+                    <td>
+                        <strong>${escapeHTML(r.fullname)}</strong>
+                        ${r.teamName ? `<br><span class="badge" style="background:rgba(0, 240, 255, 0.12); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.3); font-size:0.72rem; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:3px;"><i class="fa-solid fa-users"></i> Team: ${escapeHTML(r.teamName)}</span>` : ''}
+                    </td>
                     <td>
                         <a href="mailto:${escapeHTML(r.email)}" style="color:var(--text-secondary); text-decoration:none;">${escapeHTML(r.email)}</a><br>
                         <a href="tel:${escapeHTML(r.phone)}" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;"><i class="fa-solid fa-phone"></i> ${escapeHTML(r.phone)}</a>
@@ -361,6 +365,15 @@ function initAdminPage() {
                     </div>
                 </div>
             </div>
+
+            ${record.teamName ? `
+            <div style="margin:16px 0; background:rgba(0, 240, 255, 0.06); border:1px solid rgba(0, 240, 255, 0.25); padding:14px; border-radius:8px;">
+                <strong style="font-family:var(--font-heading); font-size:0.75rem; color:var(--tech-cyan); display:block; text-transform:uppercase;">
+                    <i class="fa-solid fa-users"></i> TEAM PARTICIPATION (${escapeHTML(record.teamName)})
+                </strong>
+                <p style="color:#fff; font-size:0.88rem; margin-top:4px;"><strong>Team Leader:</strong> ${escapeHTML(record.fullname)}</p>
+                ${record.teamMembers ? `<p style="color:var(--text-secondary); font-size:0.84rem; margin-top:2px;"><strong>Teammates:</strong> ${escapeHTML(Array.isArray(record.teamMembers) ? record.teamMembers.join(', ') : record.teamMembers)}</p>` : ''}
+            </div>` : ''}
 
             <div style="margin:16px 0; background:rgba(255,255,255,0.03); padding:14px; border-radius:8px;">
                 <strong style="font-family:var(--font-heading); font-size:0.75rem; color:var(--text-muted); display:block; text-transform:uppercase;">REGISTERED EVENTS</strong>
@@ -513,10 +526,11 @@ function initAdminPage() {
         }
 
         let csv = '\uFEFF'; // UTF-8 BOM
-        csv += 'Registration ID,Timestamp,Full Name,Email,Phone,College,Department,Year,Selected Events,Amount,Payment Status,UTR,Verification Time,Verified By\n';
+        csv += 'Registration ID,Timestamp,Full Name,Email,Phone,College,Department,Year,Selected Events,Participation Type,Team Name,Team Members,Amount,Payment Status,UTR,Verification Time,Verified By\n';
 
         allRegistrations.forEach(r => {
             const events = Array.isArray(r.events) ? r.events.join('; ') : (r.events || '');
+            const teamMembersStr = Array.isArray(r.teamMembers) ? r.teamMembers.join('; ') : (r.teamMembers || '');
             const row = [
                 r.regId,
                 r.timestamp || '',
@@ -527,6 +541,9 @@ function initAdminPage() {
                 escapeCSV(r.dept),
                 escapeCSV(r.year),
                 escapeCSV(events),
+                escapeCSV(r.participationType || (r.teamName ? 'Team' : 'Solo')),
+                escapeCSV(r.teamName || ''),
+                escapeCSV(teamMembersStr),
                 r.amount || 100,
                 r.paymentStatus || 'PENDING',
                 escapeCSV(r.utr),

@@ -13,6 +13,10 @@ function initPaymentPage() {
     let regId = urlParams.get('regId') || '';
     let name = urlParams.get('name') || '';
     let amount = urlParams.get('amount') || '';
+    let events = urlParams.get('events') || '';
+    let team = urlParams.get('team') || '';
+    let type = urlParams.get('type') || '';
+    let members = urlParams.get('members') || '';
 
     if (!regId) {
         try {
@@ -21,6 +25,10 @@ function initPaymentPage() {
                 regId = saved.regId;
                 name = saved.fullname || saved.name || '';
                 amount = saved.amount || '';
+                events = events || (Array.isArray(saved.events) ? saved.events.join(', ') : saved.events) || '';
+                team = team || saved.teamName || '';
+                type = type || saved.participationType || '';
+                members = members || (Array.isArray(saved.teamMembers) ? saved.teamMembers.join(', ') : (saved.teamMembers || '')) || '';
             }
         } catch (e) {}
     }
@@ -33,6 +41,10 @@ function initPaymentPage() {
     const displayRegId = document.getElementById('display-regid');
     const displayName = document.getElementById('display-name');
     const displayAmount = document.getElementById('display-amount');
+    const displayEvent = document.getElementById('display-event');
+    const displayTeamBox = document.getElementById('display-team-box');
+    const displayTeamName = document.getElementById('display-team-name');
+    const displayTeamMembers = document.getElementById('display-team-members');
     const displayUpiId = document.getElementById('display-upi-id');
     const regIdInput = document.getElementById('regId');
     const deeplinkBtn = document.getElementById('upi-deeplink-btn');
@@ -45,7 +57,8 @@ function initPaymentPage() {
     const mobileToggle = document.getElementById('mobile-toggle');
     const navLinks = document.getElementById('nav-links');
 
-    if (mobileToggle && navLinks) {
+    if (mobileToggle && navLinks && !mobileToggle.dataset.navBound) {
+        mobileToggle.dataset.navBound = 'true';
         mobileToggle.addEventListener('click', () => {
             navLinks.classList.toggle('mobile-active');
         });
@@ -56,6 +69,41 @@ function initPaymentPage() {
     if (displayAmount) displayAmount.textContent = `₹${finalAmount}`;
     if (displayUpiId) displayUpiId.textContent = upiId;
     if (regIdInput && regId) regIdInput.value = regId;
+
+    if (displayEvent && events) {
+        displayEvent.innerHTML = `<i class="fa-solid fa-trophy text-crimson"></i> Event: <strong>${events}</strong> ${type ? `(${type})` : ''}`;
+    }
+    if (team && displayTeamBox) {
+        displayTeamBox.style.display = 'block';
+        if (displayTeamName) displayTeamName.textContent = team;
+        if (displayTeamMembers && members) {
+            displayTeamMembers.textContent = `Members: ${name} (Leader), ${members}`;
+        }
+    }
+
+    const displayRateNote = document.getElementById('display-rate-note');
+    if (displayRateNote) {
+        if (team || type === 'Team') {
+            const memberCount = members ? (1 + members.split(',').filter(m => m.trim().length > 0).length) : Math.max(1, Math.round(Number(finalAmount) / 100));
+            displayRateNote.textContent = `₹100/HEAD × ${memberCount} MEMBERS`;
+        } else {
+            displayRateNote.textContent = `₹100 / SOLO DELEGATE`;
+        }
+    }
+
+    // Cashfree Gateway Link Box
+    const cashfreeBox = document.getElementById('cashfree-box');
+    const cashfreePayBtn = document.getElementById('cashfree-pay-btn');
+    const cfAmountEls = document.querySelectorAll('.cf-amount');
+    const cashfreeLink = (typeof CONFIG !== 'undefined' && CONFIG.CASHFREE_PAYMENT_LINK) ? CONFIG.CASHFREE_PAYMENT_LINK.trim() : '';
+
+    if (cashfreeLink && cashfreeBox) {
+        cashfreeBox.style.display = 'block';
+        cfAmountEls.forEach(el => el.textContent = `₹${finalAmount}`);
+        if (cashfreePayBtn) {
+            cashfreePayBtn.setAttribute('href', cashfreeLink);
+        }
+    }
 
     // 2. Generate UPI Deep Link URI
     // Format: upi://pay?pa={UPI_ID}&pn={NAME}&am={AMOUNT}&cu=INR&tn={REG_ID}

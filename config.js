@@ -18,12 +18,20 @@ const CONFIG = {
     API_URL: "https://script.google.com/macros/s/AKfycbzT9CjwAQpImUTnSUAMgkIjwa_JkR-fbhozcDHBi-FX7GHkz-RIqpl_wXCaDaaGDCNwMA/exec",
 
     // =========================================================================
-    // 2. UPI PAYMENT CONFIGURATION
+    // 2. CASHFREE PAYMENT LINK CONFIGURATION
     // =========================================================================
-    // This UPI ID will receive registration payments.
-    // The payment page dynamically generates a UPI QR code with this ID.
+    // Create a payment link in your Cashfree Merchant Dashboard:
+    // (Payment Gateway -> Payment Links -> Create Link for Rs. 100)
+    // Example: "https://payments.cashfree.com/links/..."
     // =========================================================================
-    UPI_ID: "9003252177@okaxis", // CONFIGURE THIS: Enter organizer UPI ID (e.g. yourname@okaxis / phone@upi)
+    CASHFREE_PAYMENT_LINK: "", // CONFIGURE THIS: Paste your Cashfree Payment Link URL here
+
+    // =========================================================================
+    // 3. DIRECT UPI PAYMENT CONFIGURATION
+    // =========================================================================
+    // Fallback direct UPI handle for scanning and paying
+    // =========================================================================
+    UPI_ID: "9003252177@okaxis", // CONFIGURE THIS: Organizer UPI ID
     UPI_NAME: "GRAVITON 2026",    // Display name on UPI payment apps
     REGISTRATION_FEE: 100,        // Registration fee in Indian Rupees (INR)
 

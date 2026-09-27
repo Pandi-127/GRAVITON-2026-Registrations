@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050608">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Delegate Registration | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
     <meta name="description"
         content="Register for GRAVITON 2026 National Level Technical Symposium. Department of Computer Science & Engineering & Cyber Security, Jaya Sakthi Engineering College.">
@@ -64,7 +67,7 @@
             <div class="portal-header">
                 <span class="section-tag"><i class="fa-solid fa-ticket"></i> OFFICIAL DELEGATE PORTAL</span>
                 <h1 class="section-title">GRAVITON 2026 REGISTRATION</h1>
-                <p class="section-desc">Register once to access both Technical Arenas and Non-Technical Showcases.</p>
+                <p class="section-desc">Register to participate in your chosen Technical or Non-Technical event.</p>
             </div>
 
             <!-- Step Progress Indicator -->
@@ -98,8 +101,14 @@
                         <div class="fee-info">
                             <strong>Official Delegate Pass</strong>
                             <span>Includes Event Entry, Merit Certificates, Lunch & Tech Kit</span>
+                            <span id="fee-breakdown" style="font-size:0.78rem; color:var(--tech-cyan); display:block; margin-top:4px;">
+                                <i class="fa-solid fa-calculator"></i> ₹100 per head (1 Delegate)
+                            </span>
                         </div>
-                        <div class="fee-amount" id="display-fee">₹100</div>
+                        <div style="text-align: right;">
+                            <div class="fee-amount" id="display-fee">₹100</div>
+                            <span style="font-size:0.7rem; color:var(--text-muted); display:block; letter-spacing:0.5px;">₹100 / HEAD</span>
+                        </div>
                     </div>
 
                     <!-- Participant Full Name -->
@@ -173,10 +182,10 @@
                         </div>
                     </div>
 
-                    <!-- Multi-Event Selector Checkboxes -->
+                    <!-- Single-Event Selector Radio Buttons -->
                     <div class="form-group">
-                        <label>Select Events to Participate <span class="required">*</span></label>
-                        <p class="helper-text">You can select multiple events across Technical and Non-Technical arenas under your pass.</p>
+                        <label>Select Event to Participate <span class="required">*</span></label>
+                        <p class="helper-text">Select one event to participate in under your delegate pass (1 event per registration).</p>
 
                         <div class="event-checkbox-sections">
                             <!-- Technical Events -->
@@ -184,39 +193,39 @@
                                 <i class="fa-solid fa-laptop-code text-cyan"></i> Technical Events
                             </div>
                             <div class="checkbox-grid">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="PPT Presentation">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="PPT Presentation">
+                                    <span class="radiomark"></span>
                                     PPT Presentation
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Tech Quiz">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Tech Quiz">
+                                    <span class="radiomark"></span>
                                     Tech Quiz
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="AI Prompt Battle">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="AI Prompt Battle">
+                                    <span class="radiomark"></span>
                                     AI Prompt Battle
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Reverse Coding">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Reverse Coding">
+                                    <span class="radiomark"></span>
                                     Reverse Coding
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="CTF (Capture The Flag)">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="CTF (Capture The Flag)">
+                                    <span class="radiomark"></span>
                                     CTF (Capture Flag)
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Website Creation Without Using AI">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Website Creation Without Using AI">
+                                    <span class="radiomark"></span>
                                     Web Creation (No AI)
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Data Grid">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Data Grid">
+                                    <span class="radiomark"></span>
                                     Data Grid
                                 </label>
                             </div>
@@ -226,31 +235,122 @@
                                 <i class="fa-solid fa-dice-d20 text-amber"></i> Non-Technical Events
                             </div>
                             <div class="checkbox-grid">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Meme Marketing">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Meme Marketing">
+                                    <span class="radiomark"></span>
                                     Meme Marketing
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Number Logic Battle">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Number Logic Battle">
+                                    <span class="radiomark"></span>
                                     Number Logic Battle
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="E Sports">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="E Sports">
+                                    <span class="radiomark"></span>
                                     E Sports Battle
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Squid Game">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Squid Game">
+                                    <span class="radiomark"></span>
                                     Squid Game
                                 </label>
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="selected_events" value="Treasure Hunt">
-                                    <span class="checkmark"></span>
+                                <label class="custom-radio">
+                                    <input type="radio" name="selected_events" value="Treasure Hunt">
+                                    <span class="radiomark"></span>
                                     Treasure Hunt
                                 </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Participation Format (Solo vs Team) -->
+                    <div id="participation-section" class="form-group participation-section" style="display:none;">
+                        <label>Participation Format <span class="required">*</span></label>
+                        <p class="helper-text" id="participation-helper">Select whether you are participating as an individual or with a team.</p>
+
+                        <!-- Solo Only Notice Card (for purely individual events) -->
+                        <div id="solo-only-card" class="solo-badge-card" style="display:none;">
+                            <div class="solo-badge-icon">
+                                <i class="fa-solid fa-user-astronaut"></i>
+                            </div>
+                            <div class="solo-badge-text">
+                                <strong>Individual / Solo Event</strong>
+                                <span>This event is contested individually. No team registration is required.</span>
+                            </div>
+                        </div>
+
+                        <!-- Team Choice Radio Grid (for team-capable events) -->
+                        <div id="team-choice-container" style="display:none;">
+                            <div class="participation-choice-grid">
+                                <label class="custom-radio choice-card" id="choice-solo-card">
+                                    <input type="radio" name="participation_type" value="Solo" checked>
+                                    <span class="radiomark"></span>
+                                    <div class="choice-content">
+                                        <strong><i class="fa-solid fa-user"></i> Solo / Individual</strong>
+                                        <span class="choice-sub">Compete as an individual delegate</span>
+                                    </div>
+                                </label>
+                                <label class="custom-radio choice-card" id="choice-team-card">
+                                    <input type="radio" name="participation_type" value="Team">
+                                    <span class="radiomark"></span>
+                                    <div class="choice-content">
+                                        <strong><i class="fa-solid fa-users"></i> Team Participation</strong>
+                                        <span class="choice-sub" id="team-size-note">Register with your teammates</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Team Details Form Card -->
+                            <div id="team-details-card" class="team-details-card glass-panel" style="display:none;">
+                                <div class="team-details-header">
+                                    <div class="team-header-title">
+                                        <i class="fa-solid fa-people-group text-crimson"></i>
+                                        <div>
+                                            <strong>Team Credentials & Members</strong>
+                                            <span id="team-rule-note">Enter your team details below</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge team-badge" id="team-size-badge"><i class="fa-solid fa-user-group"></i> Team</span>
+                                </div>
+
+                                <!-- Team Name -->
+                                <div class="form-group" style="margin-top:16px;">
+                                    <label for="team_name">Team Name <span class="required">*</span></label>
+                                    <div class="input-with-icon">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                        <input type="text" id="team_name" name="team_name" placeholder="e.g. Cyber Titans, Matrix Hackers">
+                                    </div>
+                                </div>
+
+                                <!-- Team Leader (Member 1) Banner -->
+                                <div class="team-leader-info">
+                                    <div class="leader-avatar">
+                                        <i class="fa-solid fa-crown text-amber"></i>
+                                    </div>
+                                    <div class="leader-details">
+                                        <span class="leader-tag">TEAM LEADER (MEMBER 1)</span>
+                                        <strong id="leader-name-display">Primary Delegate</strong>
+                                        <small>(Your registered details above serve as Team Leader)</small>
+                                    </div>
+                                </div>
+
+                                <!-- Team Members Dynamic Inputs -->
+                                <div class="form-group" style="margin-top:16px;">
+                                    <label>Teammate Full Names <span class="required">*</span></label>
+                                    <p class="helper-text" id="members-helper-text">Enter the full names of other members in your team.</p>
+                                    
+                                    <div id="team-members-container" class="team-members-container">
+                                        <!-- Dynamically generated member slots -->
+                                    </div>
+
+                                    <div id="add-member-wrapper" style="margin-top:12px; display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
+                                        <button type="button" id="add-member-btn" class="btn btn-outline-glow btn-sm">
+                                            <i class="fa-solid fa-user-plus"></i> Add Another Member
+                                        </button>
+                                        <span id="member-limit-msg" style="font-size:0.78rem; color:var(--text-muted);"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -276,6 +376,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="script.js"></script>
     <script src="config.js"></script>
     <script src="register.js"></script>
 </body>

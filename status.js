@@ -16,7 +16,8 @@ function initStatusPage() {
     const mobileToggle = document.getElementById('mobile-toggle');
     const navLinks = document.getElementById('nav-links');
 
-    if (mobileToggle && navLinks) {
+    if (mobileToggle && navLinks && !mobileToggle.dataset.navBound) {
+        mobileToggle.dataset.navBound = 'true';
         mobileToggle.addEventListener('click', () => {
             navLinks.classList.toggle('mobile-active');
         });
@@ -202,6 +203,15 @@ function initStatusPage() {
                             <span>${escapeHTML(utr)}</span>
                         </div>
                     </div>
+                    ${rec.teamName ? `
+                    <div class="info-item" style="grid-column: 1 / -1;">
+                        <i class="fa-solid fa-users text-cyan"></i>
+                        <div>
+                            <strong>Team Registration</strong>
+                            <span>Team: <strong>${escapeHTML(rec.teamName)}</strong></span>
+                            ${rec.teamMembers ? `<small style="display:block; color:var(--text-muted); font-size:0.75rem; margin-top:2px;">Teammates: ${escapeHTML(Array.isArray(rec.teamMembers) ? rec.teamMembers.join(', ') : rec.teamMembers)}</small>` : ''}
+                        </div>
+                    </div>` : ''}
                 </div>
 
                 <!-- Status Explanatory Box -->
@@ -253,6 +263,12 @@ function initStatusPage() {
                             <span class="label">PARTICIPANT NAME</span>
                             <strong>${escapeHTML(rec.fullname || 'Participant')}</strong>
                         </div>
+                        ${rec.teamName ? `
+                        <div class="t-row">
+                            <span class="label">TEAM</span>
+                            <span style="color:var(--tech-cyan); font-weight:600;"><i class="fa-solid fa-users"></i> ${escapeHTML(rec.teamName)}</span>
+                            ${rec.teamMembers ? `<small style="display:block; color:rgba(255,255,255,0.7); font-size:0.75rem;">Members: ${escapeHTML(rec.fullname)} (Leader), ${escapeHTML(Array.isArray(rec.teamMembers) ? rec.teamMembers.join(', ') : rec.teamMembers)}</small>` : ''}
+                        </div>` : ''}
                         <div class="t-row">
                             <span class="label">INSTITUTION</span>
                             <span>${escapeHTML(rec.college || 'JSEC')}</span>

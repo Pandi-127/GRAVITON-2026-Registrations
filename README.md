@@ -11,7 +11,7 @@
 **GRAVITON 2026** is a premium, futuristic, dark cosmic symposium web platform engineered with vanilla HTML5, CSS3, and JavaScript. It provides a complete end-to-end digital experience for college symposiums:
 
 - **Cinematic Landing Page:** Atmospheric cosmic particle canvas, futuristic hero section with integrated animated warrior artwork, countdown timer, interactive 12+ event cards with category filtering, rules & guidelines modals, and symposium schedule.
-- **Dedicated Registration Portal (`/register.html`):** Multi-step registration allowing delegates to select multiple events across Technical and Non-Technical categories under a single pass.
+- **Dedicated Registration Portal (`/register.html`):** Multi-step registration allowing delegates to select their event across Technical and Non-Technical categories under their pass.
 - **Dynamic UPI Payment Gateway (`/payment.html`):** Dynamic peer-to-peer UPI QR code generation, deep link button to open mobile UPI apps (GPay, PhonePe, Paytm), and 12-digit UTR/transaction ID submission with optional screenshot upload.
 - **Real-Time Status Tracker & Digital Pass (`/status.html`):** Live verification tracking with automatic unlocks for official **Digital Delegate Passes** complete with verified QR codes, college affiliations, and print/PDF support.
 - **Organizer Admin Dashboard (`/admin.html`):** Secure PIN-protected organizer dashboard to view delegate lists, verify/reject payments, contact participants directly via WhatsApp, and export full registries to Excel (.csv).
@@ -120,23 +120,31 @@ Open [`config.js`](config.js) in your code editor and update the fields:
 
 ```javascript
 const CONFIG = {
-    // Paste your Google Apps Script Web App URL from Step 5:
-    API_URL: "https://script.google.com/macros/s/AKfycbx.../exec",
+    // 1. Google Apps Script Web App URL:
+    API_URL: "https://script.google.com/macros/s/AKfycb.../exec",
 
-    // Configure your receiving UPI ID:
-    UPI_ID: "9003252177@okaxis", // Student Chair Harini's UPI or your symposium UPI
+    // 2. Cashfree Payment Link (Optional but Recommended):
+    CASHFREE_PAYMENT_LINK: "https://payments.cashfree.com/links/...", // Your Cashfree Payment Link
 
-    // Display Name shown on UPI payment apps (GPay / PhonePe / Paytm):
+    // 3. Direct UPI ID (Fallback peer-to-peer):
+    UPI_ID: "9003252177@okaxis", // Student Chair Harini's UPI or symposium UPI
     UPI_NAME: "GRAVITON 2026",
-
-    // Registration fee per delegate pass in INR:
-    REGISTRATION_FEE: 100,
-
-    // ... (Symposium metadata and contacts)
+    REGISTRATION_FEE: 100, // INR
+    // ...
 };
 ```
 
-> **Note:** If `API_URL` is left empty `""`, the website operates in **Local Demo / Offline Mode**, allowing you to test the full flow (Registration → Payment → Admin Verification → Pass Generation) immediately using `localStorage`!
+### 💳 Creating a Cashfree Payment Link (Step-by-Step)
+1. Log into your [Cashfree Merchant Dashboard](https://merchant.cashfree.com).
+2. Go to **Payment Gateway** → **Payment Links**.
+3. Click **Create Payment Link**.
+4. Fill in:
+   - **Title / Purpose:** `GRAVITON 2026 Delegate Pass`
+   - **Amount:** `100` (or your registration fee)
+   - **Customer Details:** Can be left open or ask for Name/Email/Phone.
+5. Click **Create Link**.
+6. Copy the generated payment link (e.g. `https://payments.cashfree.com/links/...`).
+7. Paste it into `CASHFREE_PAYMENT_LINK` in `config.js`. When set, participants can click **"Pay via Cashfree"** to checkout via Credit/Debit Cards, UPI, NetBanking, and Wallets!
 
 ---
 
