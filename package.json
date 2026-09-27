@@ -1,0 +1,29 @@
+﻿{
+    "name":  "graviton26-main",
+    "version":  "1.0.0",
+    "description":  "\u003e **Department of Computer Science \u0026 Engineering \u0026 Cyber Security**   \u003e **Jaya Sakthi Engineering College (NAAC \u0027A\u0027 Grade | AICTE Approved | Anna Univ. Affiliated)**   \u003e *Thiruninravur, Chennai - 602 024, Tamil Nadu*   \u003e **Theme:** *IDEAS BEYOND LIMITS*",
+    "main":  "admin.js",
+    "scripts":  {
+                    "test":  "echo \"Error: no test specified\" \u0026\u0026 exit 1",
+                    "start":  "node server.js"
+                },
+    "repository":  {
+                       "type":  "git",
+                       "url":  "git+https://github.com/nithish-2005/GRAVITON-2026-Registrations.git"
+                   },
+    "keywords":  [
+
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "bugs":  {
+                 "url":  "https://github.com/nithish-2005/GRAVITON-2026-Registrations/issues"
+             },
+    "homepage":  "https://github.com/nithish-2005/GRAVITON-2026-Registrations#readme",
+    "dependencies":  {
+                         "cors":  "^2.8.6",
+                         "express":  "^5.2.1",
+                         "nodemailer":  "^10.0.11"
+                     }
+}

@@ -134,20 +134,150 @@ function initRegisterPage() {
             leaderNameDisplay.textContent = val ? `${val} (You)` : 'Primary Delegate';
         });
     }
+    // Event Code Mapping
+    const EVENT_CODE_MAP = {
+        "PPT Presentation": "PPT",
+        "Tech Quiz": "QUIZ",
+        "AI Prompt Battle": "AIP",
+        "Reverse Coding": "REV",
+        "CTF (Capture The Flag)": "CTF",
+        "Website Creation Without Using AI": "WEB",
+        "Data Grid": "DATA",
+        "Meme Marketing": "MEME",
+        "Number Logic Battle": "NUM",
+        "E Sports": "ESPORTS",
+        "Squid Game": "SQUID",
+        "Treasure Hunt": "TH"
+    };
+
+    function getCheckedEvents() {
+        return Array.from(document.querySelectorAll('input[name="selected_events"]:checked')).map(cb => cb.value);
+    }
+
+    // Payment Screenshot Handling with Compression & Live Preview
+    const screenshotInput = document.getElementById('reg-screenshot');
+    const screenshotDropzone = document.getElementById('screenshot-dropzone');
+    const previewCard = document.getElementById('screenshot-preview-card');
+    const previewImg = document.getElementById('screenshot-preview-img');
+    const fileNameEl = document.getElementById('screenshot-file-name');
+    const fileSizeEl = document.getElementById('screenshot-file-size');
+    const removeBtn = document.getElementById('screenshot-remove-btn');
+    const utrInput = document.getElementById('reg-utr');
+    let selectedScreenshotFile = null;
+    let screenshotBlob = null;
+    let screenshotBase64 = '';
+
+    function handleScreenshotFile(file) {
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            showError('Please upload a valid image file (JPG, PNG, WebP).');
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            showError('Payment screenshot size must be less than 10MB.');
+            return;
+        }
+
+        selectedScreenshotFile = file;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                // Compress image adaptively for live preview and upload
+                const canvas = document.createElement('canvas');
+                const maxDim = 1200;
+                let w = img.width;
+                let h = img.height;
+                if (w > maxDim || h > maxDim) {
+                    if (w > h) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                    } else {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                    }
+                }
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                screenshotBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+                canvas.toBlob((blob) => {
+                    screenshotBlob = blob;
+                }, 'image/jpeg', 0.85);
+
+                // Update Preview UI
+                if (previewImg) previewImg.src = screenshotBase64;
+                if (fileNameEl) fileNameEl.textContent = file.name;
+                if (fileSizeEl) fileSizeEl.textContent = `${Math.round(file.size / 1024)} KB`;
+                if (previewCard) previewCard.style.display = 'flex';
+                if (screenshotDropzone) screenshotDropzone.style.display = 'none';
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    if (screenshotInput) {
+        screenshotInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                handleScreenshotFile(e.target.files[0]);
+            }
+        });
+    }
+
+    if (screenshotDropzone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            screenshotDropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                screenshotDropzone.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            screenshotDropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                screenshotDropzone.classList.remove('dragover');
+            });
+        });
+
+        screenshotDropzone.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleScreenshotFile(e.dataTransfer.files[0]);
+            }
+        });
+    }
+
+    if (removeBtn) {
+        removeBtn.addEventListener('click', () => {
+            screenshotBase64 = '';
+            screenshotBlob = null;
+            selectedScreenshotFile = null;
+            if (screenshotInput) screenshotInput.value = '';
+            if (previewCard) previewCard.style.display = 'none';
+            if (screenshotDropzone) screenshotDropzone.style.display = 'block';
+        });
+    }
 
     // Dynamic Fee Calculation (₹100 per head)
     function getParticipantHeadCount() {
-        const selectedRadio = document.querySelector('input[name="selected_events"]:checked');
-        if (!selectedRadio) return 1;
+        const checkedEvents = getCheckedEvents();
+        if (checkedEvents.length === 0) return 1;
 
-        const eventName = selectedRadio.value;
-        const config = EVENT_TEAM_CONFIG[eventName] || { allowsTeam: false };
+        const selectedEvent = checkedEvents[0];
+        const cfg = EVENT_TEAM_CONFIG[selectedEvent];
+        const allowsTeam = Boolean(cfg && cfg.allowsTeam);
         const participationTypeRadio = document.querySelector('input[name="participation_type"]:checked');
-        const isTeam = Boolean(config.allowsTeam && participationTypeRadio && participationTypeRadio.value === 'Team');
+        const isTeam = Boolean(allowsTeam && participationTypeRadio && participationTypeRadio.value === 'Team');
 
         if (!isTeam) return 1;
 
-        // 1 (Leader) + number of teammate rows in form
         const teammateRows = teamMembersContainer ? teamMembersContainer.querySelectorAll('.member-row').length : 0;
         return Math.max(1, 1 + teammateRows);
     }
@@ -172,19 +302,19 @@ function initRegisterPage() {
         }
 
         if (submitBtnEl && !submitBtnEl.disabled) {
-            submitBtnEl.innerHTML = `<i class="fa-solid fa-arrow-right"></i> Proceed to UPI Payment (Step 2) • ₹${totalAmount}`;
+            submitBtnEl.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Registration & Payment Proof • ₹${totalAmount}`;
         }
 
         return totalAmount;
     }
 
-    // Radio buttons highlight handler for events
-    const eventRadios = document.querySelectorAll('input[name="selected_events"]');
-    function syncRadioCards() {
-        eventRadios.forEach(radio => {
-            const card = radio.closest('.custom-radio');
+    // Radio cards highlight handler for single-event selection
+    function syncCheckboxCards() {
+        const eventInputs = document.querySelectorAll('input[name="selected_events"]');
+        eventInputs.forEach(cb => {
+            const card = cb.closest('.custom-checkbox') || cb.closest('.custom-radio');
             if (card) {
-                if (radio.checked) {
+                if (cb.checked) {
                     card.classList.add('is-selected');
                 } else {
                     card.classList.remove('is-selected');
@@ -247,69 +377,107 @@ function initRegisterPage() {
         });
     }
 
-    // Toggle Participation Format Card based on selected event
-    function handleEventChange(eventName) {
-        if (!eventName) return;
-        const config = EVENT_TEAM_CONFIG[eventName] || { allowsTeam: false, ruleNote: 'Individual Event' };
-        currentEventConfig = config;
+    function showTeamDetails(config) {
+        if (!config || !teamDetailsCard) return;
+        teamDetailsCard.style.display = 'block';
+
+        if (teamMembersContainer) {
+            teamMembersContainer.innerHTML = '';
+            const requiredTeammates = Math.max(1, (config.minMembers || 2) - 1);
+            for (let i = 1; i <= requiredTeammates; i++) {
+                renderMemberSlot(i + 1, true);
+            }
+            updateMemberAddState();
+            updateFeeDisplay();
+        }
+    }
+
+    // Toggle Participation Format Card based on selected event (strictly 1 event at a time)
+    function handleEventsSelectionChange() {
+        syncCheckboxCards();
+        const selected = getCheckedEvents();
+
+        if (selected.length === 0) {
+            if (participationSection) participationSection.style.display = 'none';
+            currentEventConfig = null;
+            updateFeeDisplay();
+            return;
+        }
 
         if (participationSection) participationSection.style.display = 'block';
 
-        if (!config.allowsTeam) {
-            // Strictly Individual Event
-            if (soloOnlyCard) soloOnlyCard.style.display = 'flex';
+        const selectedEvent = selected[0];
+        const cfg = EVENT_TEAM_CONFIG[selectedEvent] || {
+            allowsTeam: false,
+            allowsSolo: true,
+            ruleNote: 'Individual Event (Solo Only)'
+        };
+
+        const allowsTeam = Boolean(cfg.allowsTeam);
+        const allowsSolo = Boolean(cfg.allowsSolo !== false);
+        const minMembers = cfg.minMembers || (allowsTeam ? 2 : 1);
+        const maxMembers = cfg.maxMembers || (allowsTeam ? 2 : 1);
+
+        currentEventConfig = {
+            eventName: selectedEvent,
+            allowsTeam: allowsTeam,
+            allowsSolo: allowsSolo,
+            minMembers: minMembers,
+            maxMembers: maxMembers,
+            ruleNote: cfg.ruleNote || (allowsTeam ? 'Team Participation' : 'Individual Event (Solo Only)')
+        };
+
+        const soloRadio = document.querySelector('input[name="participation_type"][value="Solo"]');
+        const teamRadio = document.querySelector('input[name="participation_type"][value="Team"]');
+
+        if (!allowsTeam) {
+            // Strictly Solo only (e.g. AI Prompt Battle, Reverse Coding, Website Creation, Data Grid, Number Logic, Squid Game)
+            if (soloOnlyCard) {
+                soloOnlyCard.style.display = 'flex';
+                const noteSpan = soloOnlyCard.querySelector('.solo-badge-text span');
+                if (noteSpan) noteSpan.textContent = currentEventConfig.ruleNote;
+            }
             if (teamChoiceContainer) teamChoiceContainer.style.display = 'none';
             if (teamDetailsCard) teamDetailsCard.style.display = 'none';
-            const soloRadio = document.querySelector('input[name="participation_type"][value="Solo"]');
             if (soloRadio) soloRadio.checked = true;
-        } else {
-            // Event Allows Teams
+        } else if (allowsTeam && !allowsSolo) {
+            // Strictly Team only (e.g. E-Sports Squad of 4, Treasure Hunt 2-3)
             if (soloOnlyCard) soloOnlyCard.style.display = 'none';
             if (teamChoiceContainer) teamChoiceContainer.style.display = 'block';
+            if (choiceSoloCard) choiceSoloCard.style.display = 'none';
+            if (teamRadio) teamRadio.checked = true;
 
-            if (teamRuleNote) teamRuleNote.textContent = config.ruleNote || '';
-            if (teamSizeBadge) teamSizeBadge.innerHTML = `<i class="fa-solid fa-users"></i> ${config.ruleNote || 'Team'}`;
-            if (teamSizeNote) teamSizeNote.textContent = config.ruleNote || 'Register with team';
+            if (teamRuleNote) teamRuleNote.textContent = currentEventConfig.ruleNote;
+            if (teamSizeBadge) teamSizeBadge.innerHTML = `<i class="fa-solid fa-users"></i> Team (${minMembers === maxMembers ? minMembers : minMembers + '-' + maxMembers} Members)`;
+            if (teamSizeNote) teamSizeNote.textContent = `Register with team (${minMembers === maxMembers ? minMembers + ' members required' : minMembers + '-' + maxMembers + ' members'})`;
 
-            const soloRadio = document.querySelector('input[name="participation_type"][value="Solo"]');
-            const teamRadio = document.querySelector('input[name="participation_type"][value="Team"]');
+            showTeamDetails(currentEventConfig);
+        } else {
+            // Flexible: allows both Solo and Team (e.g. PPT Presentation 1-3, Tech Quiz 1-2, CTF 1-2, Meme Marketing 1-2)
+            if (soloOnlyCard) soloOnlyCard.style.display = 'none';
+            if (teamChoiceContainer) teamChoiceContainer.style.display = 'block';
+            if (choiceSoloCard) choiceSoloCard.style.display = 'flex';
 
-            if (config.allowsSolo === false) {
-                // Strictly Team Event (e.g. E Sports or Treasure Hunt)
-                if (choiceSoloCard) choiceSoloCard.style.display = 'none';
-                if (teamRadio) teamRadio.checked = true;
-                showTeamDetails(config);
+            if (teamRuleNote) teamRuleNote.textContent = currentEventConfig.ruleNote;
+            if (teamSizeBadge) teamSizeBadge.innerHTML = `<i class="fa-solid fa-users"></i> Team (Max ${maxMembers})`;
+            if (teamSizeNote) teamSizeNote.textContent = `Register with team (${minMembers}-${maxMembers} members)`;
+
+            if (teamRadio && teamRadio.checked) {
+                showTeamDetails(currentEventConfig);
+            } else if (soloRadio && soloRadio.checked) {
+                if (teamDetailsCard) teamDetailsCard.style.display = 'none';
             } else {
-                // Solo or Team Allowed
-                if (choiceSoloCard) choiceSoloCard.style.display = 'flex';
-                if (config.defaultType === 'Team') {
+                if (cfg.defaultType === 'Team') {
                     if (teamRadio) teamRadio.checked = true;
-                    showTeamDetails(config);
+                    showTeamDetails(currentEventConfig);
                 } else {
                     if (soloRadio) soloRadio.checked = true;
                     if (teamDetailsCard) teamDetailsCard.style.display = 'none';
                 }
             }
-            syncParticipationCards();
         }
+        syncParticipationCards();
         updateFeeDisplay();
-    }
-
-    function showTeamDetails(config) {
-        if (!config || !teamDetailsCard) return;
-        teamDetailsCard.style.display = 'block';
-
-        // Clear existing member rows
-        if (teamMembersContainer) {
-            teamMembersContainer.innerHTML = '';
-            // Required teammates count = (minMembers - 1)
-            const requiredTeammates = Math.max(1, (config.minMembers || 2) - 1);
-            for (let i = 1; i <= requiredTeammates; i++) {
-                renderMemberSlot(i + 1, true); // Member 2, Member 3, etc.
-            }
-            updateMemberAddState();
-            updateFeeDisplay();
-        }
     }
 
     // Participation radio buttons handler
@@ -339,11 +507,9 @@ function initRegisterPage() {
         });
     });
 
-    eventRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            syncRadioCards();
-            handleEventChange(radio.value);
-        });
+    const eventRadios = document.querySelectorAll('input[name="selected_events"]');
+    eventRadios.forEach(cb => {
+        cb.addEventListener('change', handleEventsSelectionChange);
     });
 
     // Pre-select event from URL query param if present
@@ -353,8 +519,7 @@ function initRegisterPage() {
         const radio = document.querySelector(`input[name="selected_events"][value="${preselectedEvent}"]`);
         if (radio) {
             radio.checked = true;
-            syncRadioCards();
-            handleEventChange(radio.value);
+            handleEventsSelectionChange();
         }
     }
 
@@ -375,8 +540,8 @@ function initRegisterPage() {
             const dept = document.getElementById('dept').value;
             const year = document.getElementById('year').value;
 
-            // Selected event
-            const selectedRadio = document.querySelector('input[name="selected_events"]:checked');
+            // Selected events (strictly 1 event at a time)
+            const checkedEvents = getCheckedEvents();
 
             // Validation
             if (!fullname) {
@@ -403,15 +568,20 @@ function initRegisterPage() {
                 showError('Please select your year of study.');
                 return;
             }
-            if (!selectedRadio) {
+            if (checkedEvents.length === 0) {
                 showError('Please select an event to participate in.');
                 return;
             }
+            if (checkedEvents.length > 1) {
+                showError('Please select only one event at a time.');
+                return;
+            }
 
-            const eventName = selectedRadio.value;
-            const config = EVENT_TEAM_CONFIG[eventName] || { allowsTeam: false };
+            const selectedEvent = checkedEvents[0];
+            const cfg = EVENT_TEAM_CONFIG[selectedEvent];
+            const allowsTeam = Boolean(cfg && cfg.allowsTeam);
             const participationTypeRadio = document.querySelector('input[name="participation_type"]:checked');
-            const isTeam = Boolean(config.allowsTeam && participationTypeRadio && participationTypeRadio.value === 'Team');
+            const isTeam = Boolean(allowsTeam && participationTypeRadio && participationTypeRadio.value === 'Team');
 
             let teamName = '';
             let teamMembers = [];
@@ -445,15 +615,47 @@ function initRegisterPage() {
                 }
             }
 
+            // Validate Transaction ID & Payment Screenshot
+            const utrVal = utrInput ? utrInput.value.trim() : '';
+            if (!utrVal || utrVal.length < 4) {
+                showError('Please enter your payment Transaction ID / UTR / Reference Number.');
+                if (utrInput) {
+                    utrInput.focus();
+                    utrInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+                return;
+            }
+
+            if (!screenshotBase64) {
+                showError('Please upload your payment screenshot/receipt.');
+                if (screenshotDropzone) {
+                    screenshotDropzone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+                return;
+            }
+
             // Calculate dynamic total amount (₹100 per head)
             const totalAmount = updateFeeDisplay();
 
-            const checkedEvents = [eventName];
-            const eventSummary = isTeam
-                ? `${eventName} [Team: ${teamName} (${fullname}, ${teamMembers.join(', ')})]`
-                : `${eventName} [Solo]`;
+            setLoading(true, 'Uploading payment proof to Vercel Blob CDN...');
 
-            // Submit Payload
+            // Upload payment screenshot to Vercel Blob and retrieve permanent public CDN URL
+            let finalScreenshotUrl = screenshotBase64;
+            try {
+                const cleanEvent = (checkedEvents[0] || 'event').replace(/[^a-zA-Z0-9]/g, '_');
+                const cleanName = `${fullname}_${cleanEvent}_${Date.now()}.jpg`.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const uploadSource = screenshotBlob || selectedScreenshotFile || screenshotBase64;
+                const blobUrl = await uploadToVercelBlob(uploadSource, cleanName);
+                if (blobUrl) {
+                    finalScreenshotUrl = blobUrl;
+                }
+            } catch (blobErr) {
+                console.warn('Vercel Blob upload fallback to base64:', blobErr);
+            }
+
+            setLoading(true, 'Recording registration in symposium database...');
+
+            // Submit Payload with Vercel Blob permanent link
             const payload = {
                 action: 'register',
                 fullname: fullname,
@@ -462,14 +664,16 @@ function initRegisterPage() {
                 college: college,
                 dept: dept,
                 year: year,
-                events: [eventName],
+                events: checkedEvents,
                 participationType: isTeam ? 'Team' : 'Solo',
                 teamName: isTeam ? teamName : '',
                 teamMembers: isTeam ? teamMembers : [],
-                amount: totalAmount
+                amount: totalAmount,
+                utr: utrVal,
+                screenshot: finalScreenshotUrl,
+                paymentScreenshot: finalScreenshotUrl,
+                paymentStatus: 'UNDER_VERIFICATION'
             };
-
-            setLoading(true);
 
             try {
                 if (hasAPI) {
@@ -483,23 +687,67 @@ function initRegisterPage() {
                     const data = await response.json();
 
                     if (data && data.success) {
-                        sessionStorage.setItem('graviton_current_reg', JSON.stringify({
+                        const masterId = data.masterRegistrationId || data.regId;
+
+                        // Ensure Google Sheet records the Vercel Blob link even if currently running legacy Apps Script deployment
+                        try {
+                            await fetch(CONFIG.API_URL, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                                body: JSON.stringify({
+                                    action: 'submitPayment',
+                                    regId: masterId,
+                                    utr: utrVal,
+                                    screenshot: finalScreenshotUrl
+                                })
+                            });
+                        } catch (syncErr) {
+                            console.warn('[Sync] submitPayment auto-link warning:', syncErr);
+                        }
+
+                        const savedRecord = {
                             ...data,
+                            masterRegistrationId: masterId,
+                            regId: masterId,
+                            eventRegistrations: data.eventRegistrations || [],
+                            events: checkedEvents,
+                            fullname: fullname,
                             participationType: isTeam ? 'Team' : 'Solo',
                             teamName: isTeam ? teamName : '',
                             teamMembers: isTeam ? teamMembers : [],
-                            amount: totalAmount
-                        }));
-                        window.location.href = `payment.html?regId=${encodeURIComponent(data.regId)}&name=${encodeURIComponent(fullname)}&amount=${totalAmount}&events=${encodeURIComponent(eventName)}&team=${encodeURIComponent(teamName)}&type=${encodeURIComponent(isTeam ? 'Team' : 'Solo')}&members=${encodeURIComponent(teamMembers.join(', '))}`;
+                            amount: totalAmount,
+                            utr: utrVal,
+                            screenshot: finalScreenshotUrl,
+                            paymentStatus: 'UNDER_VERIFICATION'
+                        };
+                        sessionStorage.setItem('graviton_current_reg', JSON.stringify(savedRecord));
+
+                        // Update local cache too
+                        const existing = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
+                        existing.push(savedRecord);
+                        localStorage.setItem('graviton_registrations', JSON.stringify(existing));
+
+                        window.location.href = `status.html?regId=${encodeURIComponent(masterId)}&submitted=true`;
                     } else {
                         showError(data.error || 'Registration failed. Please try again.');
                         setLoading(false);
                     }
                 } else {
                     // Offline / Local Demo Fallback Mode
-                    const mockRegId = `GRAV-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+                    const mockMasterId = `GRAV-${String(Math.floor(10 + Math.random() * 9980)).padStart(4, '0')}`;
+                    const mockEventRegs = checkedEvents.map((ev, idx) => {
+                        const code = EVENT_CODE_MAP[ev] || 'EVT';
+                        return {
+                            event: ev,
+                            code: code,
+                            eventId: `${code}-${String(idx + 1).padStart(3, '0')}`,
+                            status: 'UNDER_VERIFICATION'
+                        };
+                    });
+
                     const localRecord = {
-                        regId: mockRegId,
+                        regId: mockMasterId,
+                        masterRegistrationId: mockMasterId,
                         timestamp: new Date().toISOString(),
                         fullname: fullname,
                         email: email,
@@ -507,13 +755,15 @@ function initRegisterPage() {
                         college: college,
                         dept: dept,
                         year: year,
-                        events: eventSummary,
+                        events: checkedEvents,
+                        eventRegistrations: mockEventRegs,
                         participationType: isTeam ? 'Team' : 'Solo',
                         teamName: isTeam ? teamName : '',
                         teamMembers: isTeam ? teamMembers : [],
                         amount: totalAmount,
-                        paymentStatus: 'PENDING',
-                        utr: ''
+                        paymentStatus: 'UNDER_VERIFICATION',
+                        utr: utrVal,
+                        screenshot: finalScreenshotUrl
                     };
 
                     const existing = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
@@ -522,14 +772,24 @@ function initRegisterPage() {
                     sessionStorage.setItem('graviton_current_reg', JSON.stringify(localRecord));
 
                     setTimeout(() => {
-                        window.location.href = `payment.html?regId=${encodeURIComponent(mockRegId)}&name=${encodeURIComponent(fullname)}&amount=${totalAmount}&events=${encodeURIComponent(eventName)}&team=${encodeURIComponent(teamName)}&type=${encodeURIComponent(isTeam ? 'Team' : 'Solo')}&members=${encodeURIComponent(teamMembers.join(', '))}`;
+                        window.location.href = `status.html?regId=${encodeURIComponent(mockMasterId)}&submitted=true`;
                     }, 500);
                 }
             } catch (err) {
                 console.error('Registration API Error:', err);
-                const mockRegId = `GRAV-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+                const mockMasterId = `GRAV-${String(Math.floor(10 + Math.random() * 9980)).padStart(4, '0')}`;
+                const mockEventRegs = checkedEvents.map((ev, idx) => {
+                    const code = EVENT_CODE_MAP[ev] || 'EVT';
+                    return {
+                        event: ev,
+                        code: code,
+                        eventId: `${code}-${String(idx + 1).padStart(3, '0')}`,
+                        status: 'UNDER_VERIFICATION'
+                    };
+                });
                 const localRecord = {
-                    regId: mockRegId,
+                    regId: mockMasterId,
+                    masterRegistrationId: mockMasterId,
                     timestamp: new Date().toISOString(),
                     fullname: fullname,
                     email: email,
@@ -537,20 +797,23 @@ function initRegisterPage() {
                     college: college,
                     dept: dept,
                     year: year,
-                    events: eventSummary,
+                    events: checkedEvents,
+                    eventRegistrations: mockEventRegs,
                     participationType: isTeam ? 'Team' : 'Solo',
                     teamName: isTeam ? teamName : '',
                     teamMembers: isTeam ? teamMembers : [],
                     amount: totalAmount,
-                    paymentStatus: 'PENDING',
-                    utr: ''
+                    paymentStatus: 'UNDER_VERIFICATION',
+                    utr: utrVal,
+                    screenshot: screenshotBase64
                 };
 
                 const existing = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
                 existing.push(localRecord);
                 localStorage.setItem('graviton_registrations', JSON.stringify(existing));
+                sessionStorage.setItem('graviton_current_reg', JSON.stringify(localRecord));
 
-                window.location.href = `payment.html?regId=${encodeURIComponent(mockRegId)}&name=${encodeURIComponent(fullname)}&amount=${totalAmount}&events=${encodeURIComponent(eventName)}&team=${encodeURIComponent(teamName)}&type=${encodeURIComponent(isTeam ? 'Team' : 'Solo')}&members=${encodeURIComponent(teamMembers.join(', '))}`;
+                window.location.href = `status.html?regId=${encodeURIComponent(mockMasterId)}&submitted=true`;
             }
         });
     }
@@ -565,13 +828,14 @@ function initRegisterPage() {
         }
     }
 
-    function setLoading(isLoading) {
+    function setLoading(isLoading, customText) {
         if (submitBtn) {
             submitBtn.disabled = isLoading;
             const currentTotal = updateFeeDisplay();
+            const loadingMsg = customText || 'Submitting Registration & Proof...';
             submitBtn.innerHTML = isLoading
-                ? '<i class="fa-solid fa-spinner fa-spin"></i> Processing Registration...'
-                : `<i class="fa-solid fa-arrow-right"></i> Proceed to UPI Payment (Step 2) • ₹${currentTotal}`;
+                ? `<i class="fa-solid fa-spinner fa-spin"></i> ${loadingMsg}`
+                : `<i class="fa-solid fa-paper-plane"></i> Submit Registration & Payment Proof • ₹${currentTotal}`;
         }
     }
 }

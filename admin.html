@@ -66,7 +66,7 @@
             <div class="portal-header">
                 <span class="section-tag"><i class="fa-solid fa-shield-halved"></i> DEPT OF CSE & CYBER SECURITY</span>
                 <h1 class="section-title">ORGANIZER ADMIN DASHBOARD</h1>
-                <p class="section-desc">Manage registrations, verify incoming UPI payments against bank transactions, and export Excel sheets.</p>
+                <p class="section-desc">Manage registrations, verify incoming payment screenshots and transaction records across all events, and export Excel sheets.</p>
             </div>
 
             <!-- Login PIN Card (Shown if not authenticated) -->
@@ -119,7 +119,29 @@
                 </div>
 
                 <!-- Dashboard Toolbar -->
-                <div class="admin-toolbar">
+                <div class="admin-toolbar" style="flex-wrap:wrap; gap:12px;">
+                    <!-- Event Sheet Selector Dropdown -->
+                    <div class="event-filter-box" style="display:flex; align-items:center; gap:8px;">
+                        <label for="admin-event-filter" style="font-size:0.82rem; color:var(--text-muted); font-weight:600; white-space:nowrap;">
+                            <i class="fa-solid fa-sheet-plastic text-crimson"></i> Sheet / Event:
+                        </label>
+                        <select id="admin-event-filter" class="form-select-sm" style="background:rgba(18, 22, 34, 0.95); border:1px solid var(--border-glass); color:#fff; border-radius:6px; padding:6px 12px; font-size:0.85rem; cursor:pointer;">
+                            <option value="ALL">ALL EVENTS (MASTER_REGISTRATIONS)</option>
+                            <option value="PPT">PPT Presentation (PPT_PRESENTATION)</option>
+                            <option value="QUIZ">Tech Quiz (TECH_QUIZ)</option>
+                            <option value="AIP">AI Prompt Battle (AI_PROMPT_BATTLE)</option>
+                            <option value="REV">Reverse Coding (REVERSE_CODING)</option>
+                            <option value="CTF">CTF (CTF)</option>
+                            <option value="WEB">Web Creation (WEB_CREATION)</option>
+                            <option value="DATA">Data Grid (DATA_GRID)</option>
+                            <option value="MEME">Meme Marketing (MEME_MARKETING)</option>
+                            <option value="NUM">Number Logic Battle (NUMBER_LOGIC)</option>
+                            <option value="ESPORTS">E Sports Battle (E_SPORTS)</option>
+                            <option value="SQUID">Squid Game (SQUID_GAME)</option>
+                            <option value="TH">Treasure Hunt (TREASURE_HUNT)</option>
+                        </select>
+                    </div>
+
                     <!-- Filter Tabs -->
                     <div class="tab-group" id="status-filter-tabs">
                         <button class="tab-btn active" data-status="ALL">All <span class="badge" id="badge-all">0</span></button>
@@ -129,7 +151,7 @@
                     </div>
 
                     <!-- Search Input -->
-                    <div class="search-box" style="flex:1; max-width:380px;">
+                    <div class="search-box" style="flex:1; min-width:240px; max-width:380px;">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="admin-search-input" placeholder="Search by name, college, email, ID, or UTR...">
                     </div>
@@ -148,7 +170,7 @@
                 <!-- Registration Table -->
                 <div class="table-wrapper glass-panel">
                     <table class="admin-table">
-                        <thead>
+                        <thead id="admin-thead">
                             <tr>
                                 <th>Reg ID</th>
                                 <th>Participant Name</th>
@@ -156,7 +178,8 @@
                                 <th>College & Dept</th>
                                 <th>Selected Events</th>
                                 <th>Amount</th>
-                                <th>UTR Number</th>
+                                <th>UTR / Reference</th>
+                                <th>Screenshot Proof</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -196,9 +219,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="script.js"></script>
-    <script src="config.js"></script>
-    <script src="admin.js"></script>
+    <script src="script.js?v=2.6"></script>
+    <script src="config.js?v=2.6"></script>
+    <script src="admin.js?v=2.6"></script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * GRAVITON 2026 - Central Configuration File
  * Jaya Sakthi Engineering College - Dept. of CSE & Cyber Security
  *
@@ -12,31 +12,25 @@ const CONFIG = {
     // 1. GOOGLE APPS SCRIPT WEB APP API URL
     // =========================================================================
     // Deploy your apps-script.gs as a Web App (Access: Anyone) and paste the URL here.
-    // Example: "https://script.google.com/macros/s/AKfycb.../exec"
-    // Leave empty to run in Local Demo / Offline Fallback Mode.
-    // =========================================================================
-    API_URL: "https://script.google.com/macros/s/AKfycbzT9CjwAQpImUTnSUAMgkIjwa_JkR-fbhozcDHBi-FX7GHkz-RIqpl_wXCaDaaGDCNwMA/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbx6agNvjGo4RpP3r9nmBMOZu6yrxbo19XbSVeu1_6Te3vDEoMK7CSUwWb45vfG9tME2JQ/exec",
 
     // =========================================================================
-    // 2. CASHFREE PAYMENT LINK CONFIGURATION
+    // 2. UPI & REGISTRATION FEE CONFIGURATION
     // =========================================================================
-    // Create a payment link in your Cashfree Merchant Dashboard:
-    // (Payment Gateway -> Payment Links -> Create Link for Rs. 100)
-    // Example: "https://payments.cashfree.com/links/..."
-    // =========================================================================
-    CASHFREE_PAYMENT_LINK: "", // CONFIGURE THIS: Paste your Cashfree Payment Link URL here
+    REGISTRATION_FEE: 100, // Registration fee in Indian Rupees (INR) per head
+    UPI_ID: "graviton2026@nyes",
+    UPI_NAME: "Mrs Kalavathi Munusamy",
+    UPI_PHONE: "7305318920",
+    UPI_QR_IMAGE: "assets/upi_qr.jpg",
+    PAYMENT_INSTRUCTIONS: "Pay ₹100 per head using the QR Code, UPI ID (graviton2026@nyes), or Phone Number (7305318920). Attach your payment screenshot and enter the 12-digit UTR/Transaction ID for verification.",
 
     // =========================================================================
-    // 3. DIRECT UPI PAYMENT CONFIGURATION
+    // 3. VERCEL BLOB STORAGE (PAYMENT SCREENSHOT PROOF)
     // =========================================================================
-    // Fallback direct UPI handle for scanning and paying
-    // =========================================================================
-    UPI_ID: "9003252177@okaxis", // CONFIGURE THIS: Organizer UPI ID
-    UPI_NAME: "GRAVITON 2026",    // Display name on UPI payment apps
-    REGISTRATION_FEE: 100,        // Registration fee in Indian Rupees (INR)
+    BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_wf4d4Po6W2B0uQP7_BpyYSXFmfczcdDa2D9hvvlgMtiMd3L",
 
     // =========================================================================
-    // 3. SYMPOSIUM METADATA
+    // 4. SYMPOSIUM METADATA
     // =========================================================================
     SYMPOSIUM_NAME: "GRAVITON 2026",
     SYMPOSIUM_TAGLINE: "IDEAS BEYOND LIMITS",
@@ -46,7 +40,7 @@ const CONFIG = {
     DEPARTMENT: "Department of Computer Science & Engineering & Cyber Security",
 
     // =========================================================================
-    // 4. STUDENT CHAIR PERSONS CONTACTS
+    // 5. STUDENT CHAIR PERSONS CONTACTS
     // =========================================================================
     CONTACTS: [
         {
@@ -54,7 +48,7 @@ const CONFIG = {
             role: "Student Chair Person",
             phone: "+91 90032 52177",
             tel: "+919003252177",
-            whatsapp: "919003252177"
+            whatsapp: "919043639975"
         },
         {
             name: "BALAGURUBARAN",
@@ -62,6 +56,13 @@ const CONFIG = {
             phone: "+91 90436 39975",
             tel: "+919043639975",
             whatsapp: "919043639975"
+        },
+        {
+            name: "MRS. KALAVATHI MUNUSAMY",
+            role: "Payment Coordinator / UPI Help",
+            phone: "+91 73053 18920",
+            tel: "+917305318920",
+            whatsapp: "917305318920"
         }
     ]
 };
@@ -69,4 +70,77 @@ const CONFIG = {
 // Freeze configuration to prevent accidental modification at runtime
 if (typeof Object.freeze === 'function') {
     Object.freeze(CONFIG);
+}
+
+/**
+ * Uploads an image (File, Blob, or base64 Data URL) directly to Vercel Blob storage.
+ * Returns the permanent, public Vercel CDN URL.
+ */
+async function uploadToVercelBlob(dataOrFile, customFilename) {
+    if (!dataOrFile) return "";
+    
+    // If it's already an HTTP / HTTPS URL, return as-is
+    if (typeof dataOrFile === 'string' && (dataOrFile.startsWith('http://') || dataOrFile.startsWith('https://'))) {
+        return dataOrFile;
+    }
+
+    const token = (typeof CONFIG !== 'undefined' && CONFIG.BLOB_READ_WRITE_TOKEN) 
+        ? CONFIG.BLOB_READ_WRITE_TOKEN 
+        : "vercel_blob_rw_wf4d4Po6W2B0uQP7_BpyYSXFmfczcdDa2D9hvvlgMtiMd3L";
+
+    const match = token.match(/^vercel_blob_rw_([a-zA-Z0-9]+)_/);
+    const storeId = match ? match[1] : "wf4d4Po6W2B0uQP7";
+
+    let bodyData = dataOrFile;
+    let contentType = (dataOrFile && dataOrFile.type) ? dataOrFile.type : "image/jpeg";
+
+    // Handle base64 Data URL strings
+    if (typeof dataOrFile === 'string') {
+        let cleanBase64 = dataOrFile;
+        if (dataOrFile.indexOf('base64,') !== -1) {
+            const parts = dataOrFile.split('base64,');
+            const mimeMatch = parts[0].match(/data:(.*?);/);
+            if (mimeMatch) contentType = mimeMatch[1];
+            cleanBase64 = parts[1];
+        }
+        const byteCharacters = atob(cleanBase64);
+        const byteNumbers = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        bodyData = new Blob([byteNumbers], { type: contentType });
+    }
+
+    const filename = (customFilename || (`proof_${Date.now()}.jpg`)).replace(/[^a-zA-Z0-9._-]/g, '_');
+    const pathname = `payments/${filename}`;
+    const requestId = `${storeId}:${Date.now()}:${Math.random().toString(16).slice(2)}`;
+    const apiUrl = `https://vercel.com/api/blob/?pathname=${encodeURIComponent(pathname)}`;
+
+    console.log('[Vercel Blob] Initiating direct CDN upload:', pathname, 'Size:', bodyData.size || 'unknown');
+
+    const response = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'x-api-version': '12',
+            'x-vercel-blob-access': 'public',
+            'x-vercel-blob-store-id': storeId,
+            'x-api-blob-request-id': requestId,
+            'x-api-blob-request-attempt': '0',
+            'x-content-type': contentType,
+            'content-type': contentType
+        },
+        body: bodyData
+    });
+
+    if (!response.ok) {
+        const errJson = await response.json().catch(() => ({}));
+        const msg = errJson.error?.message || `HTTP ${response.status}`;
+        console.error('[Vercel Blob] Upload failed:', msg);
+        throw new Error(`Vercel Blob upload failed: ${msg}`);
+    }
+
+    const result = await response.json();
+    console.log('[Vercel Blob] Successfully uploaded to public CDN:', result.url);
+    return result.url;
 }

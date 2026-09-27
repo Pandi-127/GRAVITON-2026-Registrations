@@ -12,9 +12,9 @@
 
 - **Cinematic Landing Page:** Atmospheric cosmic particle canvas, futuristic hero section with integrated animated warrior artwork, countdown timer, interactive 12+ event cards with category filtering, rules & guidelines modals, and symposium schedule.
 - **Dedicated Registration Portal (`/register.html`):** Multi-step registration allowing delegates to select their event across Technical and Non-Technical categories under their pass.
-- **Dynamic UPI Payment Gateway (`/payment.html`):** Dynamic peer-to-peer UPI QR code generation, deep link button to open mobile UPI apps (GPay, PhonePe, Paytm), and 12-digit UTR/transaction ID submission with optional screenshot upload.
+- **Payment Proof Verification Gateway (`/payment.html`):** Secure payment proof upload with instant client-side image compression, transaction/UTR ID submission, and live preview.
 - **Real-Time Status Tracker & Digital Pass (`/status.html`):** Live verification tracking with automatic unlocks for official **Digital Delegate Passes** complete with verified QR codes, college affiliations, and print/PDF support.
-- **Organizer Admin Dashboard (`/admin.html`):** Secure PIN-protected organizer dashboard to view delegate lists, verify/reject payments, contact participants directly via WhatsApp, and export full registries to Excel (.csv).
+- **Organizer Admin Dashboard (`/admin.html`):** Secure PIN-protected organizer dashboard to view delegate lists across all event sheets, inspect payment screenshots in a full-view lightbox, verify/reject payments, contact participants directly via WhatsApp, and export full registries to Excel (.csv).
 - **Lightweight Serverless Backend (`apps-script.gs`):** Powered by Google Apps Script with Google Sheets as the persistent database. Zero hosting cost, zero complex infrastructure, and 100% static Vercel compatible!
 
 ---
@@ -24,15 +24,15 @@
 ```
 graviton2026/
 ├── index.html          # Cinematic Main Landing Page (Hero, About, Events, Schedule, Venue, Contacts)
-├── register.html       # Delegate Registration Portal
-├── register.js         # Registration Form Validation & Submission Logic
-├── payment.html        # UPI Payment Gateway Page with Dynamic QR Code
-├── payment.js          # UPI Deep Links, Vector QR Renderer & UTR Submission
+├── register.html       # Delegate Registration Portal with Direct Screenshot Upload
+├── register.js         # Registration Form Validation, Image Compression & Submission Logic
+├── payment.html        # Payment Proof Verification Page
+├── payment.js          # Screenshot Compression, Preview & UTR Submission
 ├── status.html         # Pass Status Tracker & Digital Delegate Pass
 ├── status.js           # Live Status Checker & Printable Pass Generator
 ├── admin.html          # Organizer Management Portal
-├── admin.js            # Admin Dashboard, PIN Authentication, UTR Verification & Excel Export
-├── config.js           # Central Configuration (API_URL, UPI_ID, Fees, Contacts)
+├── admin.js            # Admin Dashboard, PIN Authentication, Screenshot Proof Viewer & Verification
+├── config.js           # Central Configuration (API_URL, Fees, Contacts)
 ├── apps-script.gs      # Google Apps Script Backend Code for Google Sheets
 ├── style.css           # Comprehensive Sci-Fi Dark Cosmic Design System
 ├── README.md           # Full Documentation & Deployment Guide
@@ -123,51 +123,70 @@ const CONFIG = {
     // 1. Google Apps Script Web App URL:
     API_URL: "https://script.google.com/macros/s/AKfycb.../exec",
 
-    // 2. Cashfree Payment Link (Optional but Recommended):
-    CASHFREE_PAYMENT_LINK: "https://payments.cashfree.com/links/...", // Your Cashfree Payment Link
+    // 2. Delegate Registration Fee (INR):
+    REGISTRATION_FEE: 100,
 
-    // 3. Direct UPI ID (Fallback peer-to-peer):
-    UPI_ID: "9003252177@okaxis", // Student Chair Harini's UPI or symposium UPI
-    UPI_NAME: "GRAVITON 2026",
-    REGISTRATION_FEE: 100, // INR
-    // ...
+    // 3. Vercel Blob Storage Token (Payment Screenshots):
+    BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_wf4d4Po6W2B0uQP7_BpyYSXFmfczcdDa2D9hvvlgMtiMd3L",
+
+    // 4. Organizer Contact Details:
+    CONTACTS: [
+        { name: "HARINI", phone: "+91 90032 52177", role: "Student Chair Person" },
+        { name: "BALAGURUBARAN", phone: "+91 90436 39975", role: "Student Chair Person" }
+    ]
 };
 ```
 
-### 💳 Creating a Cashfree Payment Link (Step-by-Step)
-1. Log into your [Cashfree Merchant Dashboard](https://merchant.cashfree.com).
-2. Go to **Payment Gateway** → **Payment Links**.
-3. Click **Create Payment Link**.
-4. Fill in:
-   - **Title / Purpose:** `GRAVITON 2026 Delegate Pass`
-   - **Amount:** `100` (or your registration fee)
-   - **Customer Details:** Can be left open or ask for Name/Email/Phone.
-5. Click **Create Link**.
-6. Copy the generated payment link (e.g. `https://payments.cashfree.com/links/...`).
-7. Paste it into `CASHFREE_PAYMENT_LINK` in `config.js`. When set, participants can click **"Pay via Cashfree"** to checkout via Credit/Debit Cards, UPI, NetBanking, and Wallets!
-
 ---
 
-## 💳 7. How Organizer Verification Works
+## 💳 7. How Payment Proof & Vercel Blob Storage Works
 
-1. **Participant Registration:**
-   - Delegate fills the form at [`register.html`](register.html).
-   - A unique Registration ID (`GRAV-2026-XXXX`) is generated and recorded in Google Sheets with `Payment Status: PENDING`.
-2. **UPI Payment & UTR Submission:**
-   - Participant scans the dynamic UPI QR code or clicks "Pay Using UPI App" on [`payment.html`](payment.html).
-   - Participant transfers ₹100 via their preferred UPI app (GPay/PhonePe/Paytm/BHIM).
-   - Participant enters the 12-digit **UTR / Transaction ID** and clicks "Submit Payment".
-   - The status updates to `UNDER_VERIFICATION`.
-3. **Organizer Approval (`admin.html`):**
+1. **Direct Vercel Blob Upload:**
+   - Delegate attaches their **Payment Screenshot** (JPG, PNG, WebP) in [`register.html`](register.html) or [`payment.html`](payment.html).
+   - The browser compresses the image using HTML5 Canvas and uploads it directly to **Vercel Blob** via its REST API with the read/write token.
+   - Vercel Blob returns a permanent, high-speed public CDN URL (e.g., `https://wf4d4po6w2b0uqp7.public.blob.vercel-storage.com/payments/...`).
+2. **Google Sheet Public Link Storage:**
+   - The permanent Vercel Blob URL is submitted with the registration payload.
+   - Google Apps Script records this URL into Google Sheets:
+     - **`MASTER_REGISTRATIONS`:** Column 18 (`Payment Screenshot`)
+     - **Event Sheets (e.g. `TECH_QUIZ`, `CTF`):** Column 17 (`Payment Screenshot`)
+   - *Fallback:* If a legacy client or offline base64 image is received, `apps-script.gs` also includes a server-side `uploadToVercelBlob()` fallback using `UrlFetchApp`.
+3. **Organizer Approval & Automated Confirmation Email (`admin.html`):**
    - Organizer logs into [`admin.html`](admin.html) using the Security PIN (default: `2026`).
-   - Organizer matches the participant's UTR against the symposium bank/UPI statement.
-   - Click **Mark Verified** (green check) or **Mark Rejected** (red cross).
+   - Organizer clicks **View Proof** in the registry table to inspect the high-resolution Vercel Blob CDN image.
+   - Organizer matches the screenshot and UTR against incoming account receipts and clicks **Mark Verified**.
+   - **Automated Confirmation Email:** Marking verified immediately dispatches an official HTML confirmation email via Google Apps Script's native `MailApp.sendEmail()` to the participant's registered email address.
+   - **Email Contents:**
+     - Master Registration ID (`GRAV-XXXX`) and individual event IDs (`PPT-001`, `QUIZ-001`, etc.).
+     - Complete delegate info (Name, College, Department, Year, Team Name & Members).
+     - Payment details (`VERIFIED`, ₹100, UTR number).
+     - Symposium logistics (Reporting Time: 8:30 AM, Venue: Jaya Sakthi Engineering College, Thiruninravur, Chennai - 602 024, Mandatory physical College ID checklist).
+     - Direct CTA button to view and download their live digital delegate pass.
+     - Direct WhatsApp contact links for Student Coordinators (Harini: +91 90032 52177, Balagurubaran: +91 90436 39975).
+   - **Manual Resend Option:** Organizers can also click **Send / Resend Email** inside the participant detail modal anytime.
 4. **Digital Pass Release:**
-   - Once verified, the participant checking [`status.html`](status.html) instantly receives their official **Digital Delegate Pass** featuring a holographic seal and scannable QR verification code.
+   - Once verified, the participant checking [`status.html`](status.html) instantly receives their official **Digital Delegate Pass** featuring a holographic seal and scannable QR verification code. Participants can also click **View Uploaded Proof** to open their receipt anytime.
 
 ---
 
-## 🚀 8. How to Deploy on Vercel (Zero Build Step)
+## 📧 8. Automated Participant Confirmation Email Feature
+
+When an organizer verifies a participant's registration in `admin.html`, the backend automatically triggers an official event confirmation email:
+
+- **Zero Third-Party Cost:** Uses Google Apps Script's built-in `MailApp.sendEmail()` running under the organizer's authenticated Google account.
+- **Responsive Brand Design:** Cosmic dark mode styled with Jaya Sakthi Engineering College credentials, NAAC 'A' Grade banner, and department branding.
+- **Fail-Safe Processing:** If an invalid email is provided or Google's daily email quota is reached, the verification status update in Google Sheets still succeeds without error, and `admin.js` informs the organizer.
+- **How to Update Apps Script Deployment:**
+  1. Open your Google Sheet → **Extensions** → **Apps Script**.
+  2. Paste the updated contents of [`apps-script.gs`](apps-script.gs).
+  3. Click **Deploy** → **Manage deployments**.
+  4. Click the **Pencil (Edit)** icon next to your active Web App deployment.
+  5. Under **Version**, select **New version**.
+  6. Click **Deploy**. (The URL stays exactly the same!).
+
+---
+
+## 🚀 9. How to Deploy on Vercel (Zero Build Step)
 
 Since the website is built with pure Vanilla HTML5, CSS3, and JavaScript, **no build process, Node.js, or bundlers are required**:
 
@@ -196,7 +215,7 @@ vercel
 
 ---
 
-## 🏆 9. Event Catalog & Rules
+## 🏆 10. Event Catalog & Rules
 
 All 12 events are faithfully preserved from the department's syllabus:
 
@@ -218,7 +237,7 @@ All 12 events are faithfully preserved from the department's syllabus:
 
 ---
 
-## 🔒 10. Security Notes
+## 🔒 11. Security Notes
 
 - **Zero Credential Exposure:** Never put Google Service Account keys, Sheet IDs, or admin passwords in `config.js` or client-side files.
 - **Server-Side Validation:** All status mutations (`verifyPayment`, `rejectPayment`, `getRegistrations`) are authenticated inside Google Apps Script using the secret `ADMIN_PIN`.

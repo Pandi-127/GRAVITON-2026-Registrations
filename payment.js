@@ -1,5 +1,5 @@
 /**
- * GRAVITON 2026 - UPI Payment Logic & Dynamic QR Generator
+ * GRAVITON 2026 - Payment Proof & Screenshot Verification Logic
  * Jaya Sakthi Engineering College (CSE & Cyber Security Dept.)
  */
 
@@ -18,23 +18,23 @@ function initPaymentPage() {
     let type = urlParams.get('type') || '';
     let members = urlParams.get('members') || '';
 
-    if (!regId) {
-        try {
-            const saved = JSON.parse(sessionStorage.getItem('graviton_current_reg') || '{}');
-            if (saved.regId) {
-                regId = saved.regId;
-                name = saved.fullname || saved.name || '';
-                amount = saved.amount || '';
-                events = events || (Array.isArray(saved.events) ? saved.events.join(', ') : saved.events) || '';
-                team = team || saved.teamName || '';
-                type = type || saved.participationType || '';
-                members = members || (Array.isArray(saved.teamMembers) ? saved.teamMembers.join(', ') : (saved.teamMembers || '')) || '';
-            }
-        } catch (e) {}
-    }
+    let eventRegistrations = [];
+    try {
+        const saved = JSON.parse(sessionStorage.getItem('graviton_current_reg') || '{}');
+        if (saved.eventRegistrations && Array.isArray(saved.eventRegistrations)) {
+            eventRegistrations = saved.eventRegistrations;
+        }
+        if (!regId && (saved.masterRegistrationId || saved.regId)) {
+            regId = saved.masterRegistrationId || saved.regId;
+            name = name || saved.fullname || saved.name || '';
+            amount = amount || saved.amount || '';
+            events = events || (Array.isArray(saved.events) ? saved.events.join(', ') : saved.events) || '';
+            team = team || saved.teamName || '';
+            type = type || saved.participationType || '';
+            members = members || (Array.isArray(saved.teamMembers) ? saved.teamMembers.join(', ') : (saved.teamMembers || '')) || '';
+        }
+    } catch (e) {}
 
-    const upiId = (typeof CONFIG !== 'undefined' && CONFIG.UPI_ID) ? CONFIG.UPI_ID : '9003252177@okaxis';
-    const upiName = (typeof CONFIG !== 'undefined' && CONFIG.UPI_NAME) ? CONFIG.UPI_NAME : 'GRAVITON 2026';
     const finalAmount = amount || (typeof CONFIG !== 'undefined' && CONFIG.REGISTRATION_FEE ? CONFIG.REGISTRATION_FEE : 100);
 
     // Update DOM Display Elements
@@ -42,18 +42,14 @@ function initPaymentPage() {
     const displayName = document.getElementById('display-name');
     const displayAmount = document.getElementById('display-amount');
     const displayEvent = document.getElementById('display-event');
+    const displayEventIds = document.getElementById('display-event-ids');
     const displayTeamBox = document.getElementById('display-team-box');
     const displayTeamName = document.getElementById('display-team-name');
     const displayTeamMembers = document.getElementById('display-team-members');
-    const displayUpiId = document.getElementById('display-upi-id');
     const regIdInput = document.getElementById('regId');
-    const deeplinkBtn = document.getElementById('upi-deeplink-btn');
-    const copyUpiBtn = document.getElementById('copy-upi-btn');
     const form = document.getElementById('payment-form');
     const paymentError = document.getElementById('payment-error');
     const submitBtn = document.getElementById('submit-payment-btn');
-    const screenshotInput = document.getElementById('screenshot');
-    const screenshotFeedback = document.getElementById('screenshot-feedback');
     const mobileToggle = document.getElementById('mobile-toggle');
     const navLinks = document.getElementById('nav-links');
 
@@ -64,14 +60,39 @@ function initPaymentPage() {
         });
     }
 
-    if (displayRegId) displayRegId.textContent = regId || 'GRAV-2026-PENDING';
+    if (displayRegId) displayRegId.textContent = regId || 'GRAV-0001';
     if (displayName) displayName.textContent = name ? `Delegate: ${name}` : 'Symposium Delegate';
     if (displayAmount) displayAmount.textContent = `₹${finalAmount}`;
-    if (displayUpiId) displayUpiId.textContent = upiId;
     if (regIdInput && regId) regIdInput.value = regId;
 
-    if (displayEvent && events) {
-        displayEvent.innerHTML = `<i class="fa-solid fa-trophy text-crimson"></i> Event: <strong>${events}</strong> ${type ? `(${type})` : ''}`;
+    // Display Event-Specific IDs and Details
+    if (displayEventIds) {
+        if (eventRegistrations && eventRegistrations.length > 0) {
+            displayEventIds.innerHTML = `
+                <span style="font-size:0.75rem; color:var(--text-muted); display:block; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+                    <i class="fa-solid fa-tags text-crimson"></i> Registered Event IDs:
+                </span>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    ${eventRegistrations.map(er => `
+                        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255, 30, 66, 0.08); border:1px solid rgba(255, 30, 66, 0.25); border-radius:6px; padding:5px 10px; font-size:0.82rem;">
+                            <code style="color:var(--tech-cyan); font-weight:700; font-size:0.88rem;">${escapeHTML(er.eventId)}</code>
+                            <span style="color:#fff; font-weight:500;">${escapeHTML(er.event || er.eventName || er.code)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else if (events) {
+            displayEventIds.innerHTML = `
+                <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;">
+                    <i class="fa-solid fa-trophy text-crimson"></i> Event(s): <strong>${escapeHTML(events)}</strong> ${type ? `(${escapeHTML(type)})` : ''}
+                </div>
+            `;
+        }
+    }
+
+    if (displayEvent && events && (!eventRegistrations || eventRegistrations.length === 0)) {
+        displayEvent.style.display = 'block';
+        displayEvent.innerHTML = `<i class="fa-solid fa-trophy text-crimson"></i> Event: <strong>${escapeHTML(events)}</strong> ${type ? `(${escapeHTML(type)})` : ''}`;
     }
     if (team && displayTeamBox) {
         displayTeamBox.style.display = 'block';
@@ -91,97 +112,119 @@ function initPaymentPage() {
         }
     }
 
-    // Cashfree Gateway Link Box
-    const cashfreeBox = document.getElementById('cashfree-box');
-    const cashfreePayBtn = document.getElementById('cashfree-pay-btn');
-    const cfAmountEls = document.querySelectorAll('.cf-amount');
-    const cashfreeLink = (typeof CONFIG !== 'undefined' && CONFIG.CASHFREE_PAYMENT_LINK) ? CONFIG.CASHFREE_PAYMENT_LINK.trim() : '';
-
-    if (cashfreeLink && cashfreeBox) {
-        cashfreeBox.style.display = 'block';
-        cfAmountEls.forEach(el => el.textContent = `₹${finalAmount}`);
-        if (cashfreePayBtn) {
-            cashfreePayBtn.setAttribute('href', cashfreeLink);
-        }
-    }
-
-    // 2. Generate UPI Deep Link URI
-    // Format: upi://pay?pa={UPI_ID}&pn={NAME}&am={AMOUNT}&cu=INR&tn={REG_ID}
-    const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent(regId || 'GRAVITON2026')}`;
-    if (deeplinkBtn) {
-        deeplinkBtn.setAttribute('href', upiUri);
-    }
-
-    // 3. Render UPI QR Code
-    renderUPIQRCode('qr-wrapper', upiUri);
-
-    // 4. Copy UPI ID Handler
-    if (copyUpiBtn) {
-        copyUpiBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(upiId).then(() => {
-                const icon = copyUpiBtn.querySelector('i');
-                if (icon) {
-                    icon.className = 'fa-solid fa-check text-success';
-                    setTimeout(() => {
-                        icon.className = 'fa-regular fa-copy';
-                    }, 2000);
-                }
-            }).catch(() => {
-                alert(`UPI ID: ${upiId}`);
-            });
-        });
-    }
-
-    // 5. Handle Screenshot File (Optional base64 conversion)
+    // Screenshot Handling with Live Preview & Canvas Compression
+    const screenshotInput = document.getElementById('screenshot');
+    const screenshotDropzone = document.getElementById('payment-screenshot-dropzone');
+    const previewCard = document.getElementById('payment-preview-card');
+    const previewImg = document.getElementById('payment-preview-img');
+    const fileNameEl = document.getElementById('payment-file-name');
+    const fileSizeEl = document.getElementById('payment-file-size');
+    const removeBtn = document.getElementById('payment-remove-btn');
     let screenshotBase64 = '';
+    let screenshotBlob = null;
+    let selectedScreenshotFile = null;
+
+    function handleScreenshotFile(file) {
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            showError('Please upload an image file (JPG, PNG, WebP).');
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            showError('Screenshot image size should be less than 10MB.');
+            return;
+        }
+
+        selectedScreenshotFile = file;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxDim = 1200;
+                let w = img.width;
+                let h = img.height;
+                if (w > maxDim || h > maxDim) {
+                    if (w > h) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                    } else {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                    }
+                }
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                screenshotBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+                canvas.toBlob((blob) => {
+                    screenshotBlob = blob;
+                }, 'image/jpeg', 0.85);
+
+                if (previewImg) previewImg.src = screenshotBase64;
+                if (fileNameEl) fileNameEl.textContent = file.name;
+                if (fileSizeEl) fileSizeEl.textContent = `${Math.round(file.size / 1024)} KB`;
+                if (previewCard) previewCard.style.display = 'flex';
+                if (screenshotDropzone) screenshotDropzone.style.display = 'none';
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
     if (screenshotInput) {
         screenshotInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            if (file.size > 3 * 1024 * 1024) {
-                alert('Screenshot image size should be less than 3MB.');
-                screenshotInput.value = '';
-                return;
+            if (e.target.files && e.target.files[0]) {
+                handleScreenshotFile(e.target.files[0]);
             }
-
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const maxDim = 600;
-                    let w = img.width;
-                    let h = img.height;
-                    if (w > maxDim || h > maxDim) {
-                        if (w > h) {
-                            h = Math.round((h * maxDim) / w);
-                            w = maxDim;
-                        } else {
-                            w = Math.round((w * maxDim) / h);
-                            h = maxDim;
-                        }
-                    }
-                    canvas.width = w;
-                    canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    screenshotBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    if (screenshotFeedback) {
-                        screenshotFeedback.innerHTML = '<span class="text-success"><i class="fa-solid fa-check"></i> Screenshot loaded successfully!</span>';
-                    }
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
         });
     }
 
-    // 6. Handle Payment Form Submission
+    if (screenshotDropzone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            screenshotDropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                screenshotDropzone.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            screenshotDropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                screenshotDropzone.classList.remove('dragover');
+            });
+        });
+
+        screenshotDropzone.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleScreenshotFile(e.dataTransfer.files[0]);
+            }
+        });
+    }
+
+    if (removeBtn) {
+        removeBtn.addEventListener('click', () => {
+            screenshotBase64 = '';
+            screenshotBlob = null;
+            selectedScreenshotFile = null;
+            if (screenshotInput) screenshotInput.value = '';
+            if (previewCard) previewCard.style.display = 'none';
+            if (screenshotDropzone) screenshotDropzone.style.display = 'block';
+        });
+    }
+
+    // Handle Payment Proof Form Submission
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            paymentError.style.display = 'none';
+            if (paymentError) paymentError.style.display = 'none';
 
             const enteredRegId = (regIdInput ? regIdInput.value.trim() : regId).toUpperCase();
             const utr = document.getElementById('utr').value.trim();
@@ -191,18 +234,39 @@ function initPaymentPage() {
                 return;
             }
 
-            if (!utr || utr.length < 6) {
-                showError('Please enter a valid UPI Transaction ID / UTR Number (typically 12 digits).');
+            if (!utr || utr.length < 4) {
+                showError('Please enter a valid Transaction ID / UTR Number.');
                 return;
             }
 
-            setLoading(true);
+            if (!screenshotBase64) {
+                showError('Please attach your payment screenshot/receipt.');
+                return;
+            }
+
+            setLoading(true, 'Uploading payment proof to Vercel Blob CDN...');
+
+            // Upload payment screenshot to Vercel Blob and retrieve permanent public CDN URL
+            let finalScreenshotUrl = screenshotBase64;
+            try {
+                const cleanReg = enteredRegId.replace(/[^a-zA-Z0-9]/g, '_');
+                const cleanName = `${cleanReg}_payment_${Date.now()}.jpg`;
+                const uploadSource = screenshotBlob || selectedScreenshotFile || screenshotBase64;
+                const blobUrl = await uploadToVercelBlob(uploadSource, cleanName);
+                if (blobUrl) {
+                    finalScreenshotUrl = blobUrl;
+                }
+            } catch (blobErr) {
+                console.warn('Vercel Blob upload fallback to base64:', blobErr);
+            }
+
+            setLoading(true, 'Recording payment proof in symposium database...');
 
             const payload = {
                 action: 'submitPayment',
                 regId: enteredRegId,
                 utr: utr,
-                screenshot: screenshotBase64
+                screenshot: finalScreenshotUrl
             };
 
             const hasAPI = Boolean(typeof CONFIG !== 'undefined' && CONFIG.API_URL && CONFIG.API_URL.trim().length > 10);
@@ -227,8 +291,9 @@ function initPaymentPage() {
                     const existing = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
                     let found = false;
                     for (let i = 0; i < existing.length; i++) {
-                        if (existing[i].regId.toUpperCase() === enteredRegId) {
+                        if (existing[i].regId.toUpperCase() === enteredRegId || (existing[i].masterRegistrationId && existing[i].masterRegistrationId.toUpperCase() === enteredRegId)) {
                             existing[i].utr = utr;
+                            existing[i].screenshot = finalScreenshotUrl;
                             existing[i].paymentStatus = 'UNDER_VERIFICATION';
                             found = true;
                             break;
@@ -238,16 +303,18 @@ function initPaymentPage() {
                     if (!found) {
                         existing.push({
                             regId: enteredRegId,
+                            masterRegistrationId: enteredRegId,
                             fullname: name || 'Participant',
                             email: '',
                             phone: '',
                             college: 'Jaya Sakthi Engineering College',
                             dept: 'CSE',
                             year: 'III Year',
-                            events: 'All Events',
+                            events: events || 'Registered Events',
                             amount: finalAmount,
                             paymentStatus: 'UNDER_VERIFICATION',
                             utr: utr,
+                            screenshot: finalScreenshotUrl,
                             timestamp: new Date().toISOString()
                         });
                     }
@@ -256,14 +323,15 @@ function initPaymentPage() {
 
                     setTimeout(() => {
                         window.location.href = `status.html?regId=${encodeURIComponent(enteredRegId)}&submitted=true`;
-                    }, 600);
+                    }, 500);
                 }
             } catch (err) {
                 console.error('Payment Submission Error:', err);
                 const existing = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
                 for (let i = 0; i < existing.length; i++) {
-                    if (existing[i].regId.toUpperCase() === enteredRegId) {
+                    if (existing[i].regId.toUpperCase() === enteredRegId || (existing[i].masterRegistrationId && existing[i].masterRegistrationId.toUpperCase() === enteredRegId)) {
                         existing[i].utr = utr;
+                        existing[i].screenshot = finalScreenshotUrl;
                         existing[i].paymentStatus = 'UNDER_VERIFICATION';
                         break;
                     }
@@ -284,81 +352,20 @@ function initPaymentPage() {
         }
     }
 
-    function setLoading(isLoading) {
+    function setLoading(isLoading, customText) {
         if (submitBtn) {
             submitBtn.disabled = isLoading;
+            const loadingMsg = customText || 'Submitting for Verification...';
             submitBtn.innerHTML = isLoading
-                ? '<i class="fa-solid fa-spinner fa-spin"></i> Submitting for Verification...'
-                : '<i class="fa-solid fa-paper-plane"></i> Submit Payment for Verification';
+                ? `<i class="fa-solid fa-spinner fa-spin"></i> ${loadingMsg}`
+                : '<i class="fa-solid fa-paper-plane"></i> Submit Payment Proof for Verification';
         }
     }
 }
 
-/**
- * Pure JavaScript Vector SVG QR Code Renderer
- */
-function renderUPIQRCode(containerId, text) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const size = 25;
-    const matrix = Array.from({ length: size }, () => Array(size).fill(0));
-
-    function markFinder(r, c) {
-        for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < 7; j++) {
-                if (i === 0 || i === 6 || j === 0 || j === 6 || (i >= 2 && i <= 4 && j >= 2 && j <= 4)) {
-                    matrix[r + i][c + j] = 1;
-                } else {
-                    matrix[r + i][c + j] = 0;
-                }
-            }
-        }
-    }
-
-    markFinder(0, 0);
-    markFinder(0, size - 7);
-    markFinder(size - 7, 0);
-
-    for (let i = 8; i < size - 8; i++) {
-        matrix[6][i] = (i % 2 === 0) ? 1 : 0;
-        matrix[i][6] = (i % 2 === 0) ? 1 : 0;
-    }
-
-    let hash = 0;
-    for (let k = 0; k < text.length; k++) {
-        hash = (hash * 31 + text.charCodeAt(k)) & 0xffffffff;
-    }
-
-    for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-            const inFinder1 = (r < 8 && c < 8);
-            const inFinder2 = (r < 8 && c >= size - 8);
-            const inFinder3 = (r >= size - 8 && c < 8);
-            const inTiming = (r === 6 || c === 6);
-
-            if (!inFinder1 && !inFinder2 && !inFinder3 && !inTiming) {
-                const val = (r * 7 + c * 13 + (hash >> (r % 16))) % 3;
-                matrix[r][c] = (val === 0 || val === 1) ? 1 : 0;
-            }
-        }
-    }
-
-    let rects = '';
-    const cellSize = 10;
-    for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-            if (matrix[r][c] === 1) {
-                rects += `<rect x="${c * cellSize}" y="${r * cellSize}" width="${cellSize}" height="${cellSize}" fill="#080a12"/>`;
-            }
-        }
-    }
-
-    const svgWidth = size * cellSize;
-    container.innerHTML = `
-        <svg viewBox="0 0 ${svgWidth} ${svgWidth}" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-            <rect width="${svgWidth}" height="${svgWidth}" fill="#ffffff"/>
-            ${rects}
-        </svg>
-    `;
+function escapeHTML(str) {
+    return String(str || '').replace(/[&<>"']/g, match => {
+        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+        return map[match];
+    });
 }

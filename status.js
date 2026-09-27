@@ -69,7 +69,11 @@ function initStatusPage() {
             } else {
                 // Local Demo / Offline Fallback Mode
                 const records = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
-                const found = records.find(r => (r.regId || '').toUpperCase() === cleanId);
+                const found = records.find(r => 
+                    (r.regId || '').toUpperCase() === cleanId || 
+                    (r.masterRegistrationId || '').toUpperCase() === cleanId ||
+                    (Array.isArray(r.eventRegistrations) && r.eventRegistrations.some(er => (er.eventId || '').toUpperCase() === cleanId))
+                );
 
                 if (found) {
                     renderRecord(found);
@@ -79,9 +83,12 @@ function initStatusPage() {
             }
         } catch (err) {
             console.error('Status fetch error:', err);
-            // Fallback to local storage if API call fails
             const records = JSON.parse(localStorage.getItem('graviton_registrations') || '[]');
-            const found = records.find(r => (r.regId || '').toUpperCase() === cleanId);
+            const found = records.find(r => 
+                (r.regId || '').toUpperCase() === cleanId || 
+                (r.masterRegistrationId || '').toUpperCase() === cleanId ||
+                (Array.isArray(r.eventRegistrations) && r.eventRegistrations.some(er => (er.eventId || '').toUpperCase() === cleanId))
+            );
             if (found) {
                 renderRecord(found);
             } else {
@@ -93,6 +100,7 @@ function initStatusPage() {
     }
 
     function renderRecord(rec) {
+        const masterId = rec.masterRegistrationId || rec.regId || 'GRAV-0001';
         const status = (rec.paymentStatus || 'PENDING').toUpperCase();
         const name = rec.fullname || 'Participant';
         const college = rec.college || 'Jaya Sakthi Engineering College';
@@ -102,6 +110,7 @@ function initStatusPage() {
         const eventsList = Array.isArray(rawEvents) 
             ? rawEvents 
             : String(rawEvents).split(',').map(s => s.trim()).filter(Boolean);
+        const eventRegs = Array.isArray(rec.eventRegistrations) ? rec.eventRegistrations : [];
         const utr = rec.utr || 'Not yet submitted';
         const amount = rec.amount || (typeof CONFIG !== 'undefined' && CONFIG.REGISTRATION_FEE ? CONFIG.REGISTRATION_FEE : 100);
 
@@ -117,8 +126,7 @@ function initStatusPage() {
                     You are officially registered for GRAVITON 2026. Please download or screenshot your pass below and present it at the registration desk on the event day.
                 </div>
             `;
-            // Unlocked Digital Pass
-            passHtml = renderDigitalPassHtml(rec, eventsList);
+            passHtml = renderDigitalPassHtml(rec, eventsList, eventRegs, masterId);
         } else if (status === 'UNDER_VERIFICATION') {
             statusBadgeHtml = `<span class="status-badge-hero under_verification"><i class="fa-solid fa-hourglass-half"></i> UNDER VERIFICATION</span>`;
             statusMessageHtml = `
@@ -127,10 +135,10 @@ function initStatusPage() {
                     Your UTR (<code>${escapeHTML(utr)}</code>) has been submitted. Our student organizers verify UTRs against bank entries within <strong>2 to 4 hours</strong>. Once approved, your pass will unlock here.
                 </div>
                 <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
-                    <a href="https://wa.me/919003252177?text=Hi%20Harini,%20my%20GRAVITON%20Reg%20ID%20is%20${encodeURIComponent(rec.regId)}.%20Please%20verify%20my%20payment" target="_blank" class="btn btn-whatsapp btn-sm">
+                    <a href="https://wa.me/919003252177?text=Hi%20Harini,%20my%20GRAVITON%20Reg%20ID%20is%20${encodeURIComponent(masterId)}.%20Please%20verify%20my%20payment" target="_blank" class="btn btn-whatsapp btn-sm">
                         <i class="fa-brands fa-whatsapp"></i> Contact Harini on WhatsApp
                     </a>
-                    <a href="https://wa.me/919043639975?text=Hi%20Balagurubaran,%20my%20GRAVITON%20Reg%20ID%20is%20${encodeURIComponent(rec.regId)}.%20Please%20verify%20my%20payment" target="_blank" class="btn btn-whatsapp btn-sm">
+                    <a href="https://wa.me/919043639975?text=Hi%20Balagurubaran,%20my%20GRAVITON%20Reg%20ID%20is%20${encodeURIComponent(masterId)}.%20Please%20verify%20my%20payment" target="_blank" class="btn btn-whatsapp btn-sm">
                         <i class="fa-brands fa-whatsapp"></i> Contact Balagurubaran
                     </a>
                 </div>
@@ -140,11 +148,11 @@ function initStatusPage() {
             statusMessageHtml = `
                 <div class="payment-notice" style="background:rgba(255, 51, 75, 0.08); border-left-color:var(--status-rejected); color:#ffd4da;">
                     <i class="fa-solid fa-triangle-exclamation text-crimson"></i> <strong>Payment Verification Unsuccessful</strong><br>
-                    The submitted UTR number could not be verified against the symposium bank account. Please re-submit the correct transaction ID or contact our organizers.
+                    The submitted transaction reference could not be verified. Please re-submit your correct payment screenshot or contact our student organizers.
                 </div>
                 <div style="display:flex; gap:12px; margin-top:16px;">
-                    <a href="payment.html?regId=${encodeURIComponent(rec.regId)}&name=${encodeURIComponent(name)}&amount=${amount}" class="btn btn-primary-glow btn-sm">
-                        <i class="fa-solid fa-rotate-right"></i> Re-Submit UTR / Payment
+                    <a href="payment.html?regId=${encodeURIComponent(masterId)}&name=${encodeURIComponent(name)}&amount=${amount}" class="btn btn-primary-glow btn-sm">
+                        <i class="fa-solid fa-rotate-right"></i> Re-Submit Payment Screenshot
                     </a>
                 </div>
             `;
@@ -154,12 +162,75 @@ function initStatusPage() {
             statusMessageHtml = `
                 <div class="payment-notice">
                     <i class="fa-solid fa-circle-exclamation"></i> <strong>Registration Incomplete:</strong><br>
-                    Your delegate information is recorded, but payment has not yet been submitted. Please complete the UPI payment to reserve your event seats.
+                    Your delegate information is recorded, but payment proof has not yet been submitted. Please upload your payment screenshot and reference ID to reserve your event seats.
                 </div>
                 <div style="margin-top:16px;">
-                    <a href="payment.html?regId=${encodeURIComponent(rec.regId)}&name=${encodeURIComponent(name)}&amount=${amount}" class="btn btn-primary-glow btn-lg">
-                        <i class="fa-solid fa-qrcode"></i> Complete UPI Payment (₹${amount})
+                    <a href="payment.html?regId=${encodeURIComponent(masterId)}&name=${encodeURIComponent(name)}&amount=${amount}" class="btn btn-primary-glow btn-lg">
+                        <i class="fa-solid fa-receipt"></i> Upload Payment Screenshot (₹${amount})
                     </a>
+                </div>
+            `;
+        }
+
+        // Event-wise Registration Cards / Breakdown
+        let eventBreakdownHtml = '';
+        if (eventRegs.length > 0) {
+            eventBreakdownHtml = `
+                <div style="margin:20px 0; background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); border-radius:10px; padding:18px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <div>
+                            <strong style="font-family:var(--font-heading); font-size:0.9rem; color:#fff; text-transform:uppercase; letter-spacing:0.5px;">
+                                <i class="fa-solid fa-layer-group text-crimson"></i> Registered Events & Event Registration IDs
+                            </strong>
+                            <span style="display:block; font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Each event has its own independent registration record</span>
+                        </div>
+                        <span class="badge" style="background:rgba(0, 240, 255, 0.12); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.3); font-size:0.75rem; padding:3px 10px; border-radius:6px;">
+                            ${eventRegs.length} Event${eventRegs.length > 1 ? 's' : ''}
+                        </span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        ${eventRegs.map(er => {
+                            const eStatus = (er.registrationStatus || er.status || status).toUpperCase();
+                            let eBadgeClass = 'pending';
+                            let eBadgeLabel = 'Pending';
+                            let eIcon = 'fa-clock';
+                            if (eStatus === 'VERIFIED') {
+                                eBadgeClass = 'verified';
+                                eBadgeLabel = 'Verified';
+                                eIcon = 'fa-circle-check';
+                            } else if (eStatus === 'UNDER_VERIFICATION') {
+                                eBadgeClass = 'under_verification';
+                                eBadgeLabel = 'Under Review';
+                                eIcon = 'fa-hourglass-half';
+                            } else if (eStatus === 'REJECTED') {
+                                eBadgeClass = 'rejected';
+                                eBadgeLabel = 'Rejected';
+                                eIcon = 'fa-circle-xmark';
+                            }
+                            return `
+                                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; background:rgba(18, 22, 34, 0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <code style="color:var(--tech-cyan); font-weight:700; font-size:1rem; letter-spacing:0.5px; background:rgba(0, 240, 255, 0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(0, 240, 255, 0.25);">${escapeHTML(er.eventId)}</code>
+                                        <strong style="color:#fff; font-size:0.92rem;">${escapeHTML(er.event || er.eventName || er.code)}</strong>
+                                    </div>
+                                    <span class="status-pill ${eBadgeClass}" style="font-size:0.75rem; padding:3px 12px;">
+                                        <i class="fa-solid ${eIcon}"></i> ${eBadgeLabel}
+                                    </span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        } else if (eventsList.length > 0) {
+            eventBreakdownHtml = `
+                <div style="margin:20px 0; background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); border-radius:10px; padding:16px;">
+                    <strong style="font-family:var(--font-heading); font-size:0.85rem; color:#fff; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:10px;">
+                        <i class="fa-solid fa-trophy text-crimson"></i> Registered Events
+                    </strong>
+                    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                        ${eventsList.map(ev => `<span class="badge" style="background:rgba(255,30,66,0.12); color:#fff; border:1px solid rgba(255,30,66,0.3); padding:4px 10px; border-radius:6px; font-size:0.85rem;">${escapeHTML(ev)}</span>`).join('')}
+                    </div>
                 </div>
             `;
         }
@@ -168,8 +239,8 @@ function initStatusPage() {
             <div class="glass-panel form-card">
                 <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
                     <div>
-                        <span style="font-family:var(--font-heading); font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DELEGATE PASS STATUS</span>
-                        <h2 style="font-family:var(--font-heading); color:#fff; font-size:1.6rem; margin-top:4px;">${escapeHTML(rec.regId)}</h2>
+                        <span style="font-family:var(--font-heading); font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">MASTER REGISTRATION ID</span>
+                        <h2 style="font-family:var(--font-heading); color:#fff; font-size:1.6rem; margin-top:4px;">${escapeHTML(masterId)}</h2>
                     </div>
                     <div>${statusBadgeHtml}</div>
                 </div>
@@ -199,8 +270,17 @@ function initStatusPage() {
                     <div class="info-item">
                         <i class="fa-solid fa-receipt"></i>
                         <div>
-                            <strong>Submitted UTR</strong>
-                            <span>${escapeHTML(utr)}</span>
+                            <strong>Transaction / UTR</strong>
+                            <span>${escapeHTML(utr || '—')}</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-image text-cyan"></i>
+                        <div>
+                            <strong>Payment Proof</strong>
+                            <span>${(rec.screenshot || rec.paymentScreenshot) 
+                                ? `<a href="${escapeHTML(rec.screenshot || rec.paymentScreenshot)}" target="_blank" rel="noopener noreferrer" style="color:var(--tech-cyan); text-decoration:underline; font-weight:600;"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Uploaded Proof</a>` 
+                                : '<span style="color:var(--text-muted);">Not Uploaded</span>'}</span>
                         </div>
                     </div>
                     ${rec.teamName ? `
@@ -214,6 +294,9 @@ function initStatusPage() {
                     </div>` : ''}
                 </div>
 
+                <!-- Event-specific Breakdown -->
+                ${eventBreakdownHtml}
+
                 <!-- Status Explanatory Box -->
                 ${statusMessageHtml}
 
@@ -224,7 +307,7 @@ function initStatusPage() {
 
         // Render QR Code inside pass if verified
         if (status === 'VERIFIED') {
-            const qrPayload = `GRAVITON2026|${rec.regId}|${name}|${college}|VERIFIED`;
+            const qrPayload = `GRAVITON2026|${masterId}|${name}|${college}|VERIFIED`;
             renderPassQRCode('pass-qr-box', qrPayload);
         }
 
@@ -232,7 +315,7 @@ function initStatusPage() {
         resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function renderDigitalPassHtml(rec, eventsList) {
+    function renderDigitalPassHtml(rec, eventsList, eventRegs, masterId) {
         return `
             <div style="margin-top:36px; padding-top:28px; border-top:1px solid var(--border-glass);">
                 <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
@@ -256,8 +339,8 @@ function initStatusPage() {
 
                     <div class="ticket-body">
                         <div class="t-row">
-                            <span class="label">REGISTRATION ID</span>
-                            <strong class="val-regid">${escapeHTML(rec.regId)}</strong>
+                            <span class="label">MASTER REGISTRATION ID</span>
+                            <strong class="val-regid">${escapeHTML(masterId)}</strong>
                         </div>
                         <div class="t-row">
                             <span class="label">PARTICIPANT NAME</span>
@@ -279,9 +362,12 @@ function initStatusPage() {
                         </div>
 
                         <div class="t-row full">
-                            <span class="label">REGISTERED EVENTS</span>
+                            <span class="label">REGISTERED EVENTS & EVENT CODES</span>
                             <div class="t-events-list">
-                                ${eventsList.map(ev => `<span class="t-event-badge">${escapeHTML(ev)}</span>`).join('')}
+                                ${eventRegs && eventRegs.length > 0 
+                                    ? eventRegs.map(er => `<span class="t-event-badge"><strong style="color:var(--tech-cyan);">${escapeHTML(er.eventId)}</strong> — ${escapeHTML(er.event || er.eventName || er.code)}</span>`).join('')
+                                    : eventsList.map(ev => `<span class="t-event-badge">${escapeHTML(ev)}</span>`).join('')
+                                }
                             </div>
                         </div>
                     </div>

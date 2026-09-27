@@ -64,7 +64,7 @@
             <div class="portal-header">
                 <span class="section-tag"><i class="fa-solid fa-magnifying-glass"></i> LIVE PASS TRACKER</span>
                 <h1 class="section-title">REGISTRATION & PASS STATUS</h1>
-                <p class="section-desc">Enter your unique Registration ID (GRAV-2026-XXXX) to track your verification status or download your digital pass.</p>
+                <p class="section-desc">Enter your unique Master Registration ID (e.g. GRAV-0042) or Event Registration ID (e.g. QUIZ-001) to track your verification status or download your digital pass.</p>
             </div>
 
             <!-- Just Submitted Alert Notice (if redirected from payment) -->
@@ -78,7 +78,7 @@
                 <form id="status-search-form" style="display:flex; gap:12px; flex-wrap:wrap;">
                     <div class="input-with-icon" style="flex:1; min-width:240px;">
                         <i class="fa-solid fa-ticket"></i>
-                        <input type="text" id="status-regid-input" placeholder="Enter Registration ID (e.g. GRAV-2026-8942)" required>
+                        <input type="text" id="status-regid-input" placeholder="Enter Master or Event ID (e.g. GRAV-0042 or QUIZ-001)" required>
                     </div>
                     <button type="submit" id="search-status-btn" class="btn btn-primary-glow">
                         <i class="fa-solid fa-magnifying-glass"></i> Check Status
@@ -102,9 +102,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="script.js"></script>
-    <script src="config.js"></script>
-    <script src="status.js"></script>
+    <script src="script.js?v=2.5"></script>
+    <script src="config.js?v=2.5"></script>
+    <script src="status.js?v=2.5"></script>
 </body>
 
 </html>

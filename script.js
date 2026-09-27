@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    GRAVITON 2026 - Main Interactive Script
    Jaya Sakthi Engineering College (CSE & Cyber Security Dept.)
    ========================================================================== */
@@ -568,3 +568,24 @@ function initModalHandlers() {
         }
     });
 }
+
+/* --------------------------------------------------------------------------
+   6. UPI Copy Helper
+   -------------------------------------------------------------------------- */
+window.copyUpiText = function(text, btnElement) {
+    if (!navigator.clipboard) {
+        prompt('Copy to clipboard:', text);
+        return;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btnElement.innerHTML;
+        btnElement.innerHTML = '<i class="fa-solid fa-check text-cyan"></i> Copied!';
+        btnElement.style.borderColor = '#00f0ff';
+        setTimeout(() => {
+            btnElement.innerHTML = originalHtml;
+            btnElement.style.borderColor = '';
+        }, 2000);
+    }).catch(() => {
+        prompt('Copy to clipboard:', text);
+    });
+};

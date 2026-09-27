@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,9 +7,9 @@
     <meta name="theme-color" content="#050608">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>UPI Payment | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
+    <title>Payment Verification | GRAVITON 2026 - Jaya Sakthi Engineering College</title>
     <meta name="description"
-        content="Complete UPI Payment for GRAVITON 2026 National Level Technical Symposium delegate registration.">
+        content="Submit Payment Screenshot and Verification Proof for GRAVITON 2026 National Level Technical Symposium delegate registration.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,9 +62,9 @@
         <div class="portal-container">
             <!-- Header -->
             <div class="portal-header">
-                <span class="section-tag"><i class="fa-solid fa-shield-halved"></i> SECURE UPI GATEWAY</span>
-                <h1 class="section-title">DELEGATE PASS PAYMENT</h1>
-                <p class="section-desc">Scan the UPI QR code or pay via any UPI app (GPay, PhonePe, Paytm), then submit your UTR number.</p>
+                <span class="section-tag"><i class="fa-solid fa-receipt"></i> PAYMENT PROOF VERIFICATION</span>
+                <h1 class="section-title">SUBMIT PAYMENT SCREENSHOT</h1>
+                <p class="section-desc">Upload your payment receipt screenshot and transaction reference number to verify your delegate pass and registered event.</p>
             </div>
 
             <!-- Step Progress Indicator -->
@@ -75,8 +75,8 @@
                 </div>
                 <div class="step-line" style="background:var(--status-verified);"></div>
                 <div class="step-node active">
-                    <div class="node-circle"><i class="fa-solid fa-qrcode"></i></div>
-                    <span>2. UPI Payment</span>
+                    <div class="node-circle"><i class="fa-solid fa-receipt"></i></div>
+                    <span>2. Payment Proof</span>
                 </div>
                 <div class="step-line"></div>
                 <div class="step-node">
@@ -85,58 +85,99 @@
                 </div>
             </div>
 
-            <!-- Cashfree Payment Gateway Option Card (Visible if CASHFREE_PAYMENT_LINK is set) -->
-            <div id="cashfree-box" class="glass-panel" style="padding:22px; margin-bottom:28px; border-color:rgba(0, 240, 255, 0.45); background:linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(14, 18, 28, 0.9)); display:none;">
-                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-                    <div>
-                        <span class="section-tag" style="background:rgba(0, 240, 255, 0.15); border-color:var(--tech-cyan); color:var(--tech-cyan); margin-bottom:6px;">
-                            <i class="fa-solid fa-bolt"></i> FASTEST ONLINE CHECKOUT
-                        </span>
-                        <h3 style="font-family:var(--font-heading); color:#fff; font-size:1.3rem; margin-top:4px;">Cashfree Payment Gateway</h3>
-                        <p style="color:var(--text-secondary); font-size:0.88rem; max-width:550px;">
-                            Pay securely using <strong>UPI, Credit/Debit Cards, NetBanking, or Mobile Wallets</strong> via Cashfree.
-                        </p>
-                    </div>
-                    <a href="#" id="cashfree-pay-btn" target="_blank" rel="noopener noreferrer" class="btn btn-cyan-glow btn-lg">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Pay via Cashfree (<span class="cf-amount">₹100</span>)
-                    </a>
-                </div>
-                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:14px; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
-                    <i class="fa-solid fa-circle-info text-cyan"></i> After completing payment on Cashfree, copy the <strong>Payment ID / Reference No / UTR</strong> and enter it in the form below.
-                </div>
-            </div>
-
             <!-- Payment Layout Grid -->
             <div class="payment-grid">
-                <!-- Left: UPI QR Code & Instructions -->
-                <div class="glass-panel qr-card">
-                    <span class="section-tag" style="margin-bottom:8px;"><i class="fa-solid fa-qrcode"></i> DIRECT UPI SCAN</span>
-                    <h3 style="font-family:var(--font-heading); color:#fff; font-size:1.3rem;">GRAVITON 2026</h3>
-                    <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">GPay, PhonePe, Paytm, BHIM</p>
+                <!-- Left: Official UPI Payment Card & Guidelines -->
+                <div class="glass-panel qr-card" style="text-align:center;">
+                    <span class="section-tag" style="margin-bottom:8px;"><i class="fa-solid fa-qrcode text-cyan"></i> OFFICIAL UPI SCAN & PAY</span>
+                    <h3 style="font-family:var(--font-heading); color:#fff; font-size:1.35rem; margin-bottom:2px;">GRAVITON 2026</h3>
+                    <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:2px;">Scan with Any UPI App to Pay ₹100 per Delegate</p>
 
-                    <!-- Dynamically Generated QR Canvas Frame -->
-                    <div class="qr-frame" id="qr-wrapper">
-                        <!-- Canvas / SVG rendered by payment.js -->
+                    <!-- UPI QR Code Frame -->
+                    <div style="background:#ffffff; padding:12px; border-radius:14px; box-shadow:0 0 35px rgba(0, 240, 255, 0.25); border:2px solid rgba(0, 240, 255, 0.5); max-width:240px; margin:18px auto 14px auto;">
+                        <img src="assets/upi_qr.jpg" alt="GRAVITON 2026 UPI QR Code" style="width:100%; height:auto; display:block; border-radius:8px;">
                     </div>
 
-                    <!-- UPI ID Display & Copy -->
-                    <div class="upi-id-box">
-                        <div>
-                            <span style="font-size:0.7rem; color:var(--text-muted); display:block; text-align:left;">ORGANIZER UPI ID:</span>
-                            <code id="display-upi-id">9003252177@okaxis</code>
+                    <!-- Account Name & UPI App Badges -->
+                    <div style="margin-bottom:14px;">
+                        <strong style="color:#ffffff; font-size:1.05rem; display:block;">Mrs Kalavathi Munusamy</strong>
+                        <div style="display:flex; justify-content:center; gap:8px; margin-top:6px; flex-wrap:wrap;">
+                            <span class="badge" style="background:rgba(0, 240, 255, 0.1); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.25); font-size:0.72rem;">Google Pay</span>
+                            <span class="badge" style="background:rgba(103, 58, 183, 0.15); color:#a78bfa; border:1px solid rgba(167, 139, 250, 0.3); font-size:0.72rem;">PhonePe</span>
+                            <span class="badge" style="background:rgba(0, 186, 242, 0.15); color:#38bdf8; border:1px solid rgba(56, 189, 248, 0.3); font-size:0.72rem;">Paytm</span>
+                            <span class="badge" style="background:rgba(0, 230, 118, 0.15); color:#4ade80; border:1px solid rgba(74, 222, 128, 0.3); font-size:0.72rem;">navi</span>
                         </div>
-                        <button type="button" class="copy-btn" id="copy-upi-btn" title="Copy UPI ID">
-                            <i class="fa-regular fa-copy"></i>
+                    </div>
+
+                    <!-- UPI ID Box with Copy Button -->
+                    <div class="upi-id-box" style="margin-bottom:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(0,240,255,0.25); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; width:100%;">
+                        <div style="text-align:left;">
+                            <small style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; letter-spacing:0.5px;">UPI ID</small>
+                            <code style="color:var(--tech-cyan); font-size:0.95rem; font-weight:700;">graviton2026@nyes</code>
+                        </div>
+                        <button type="button" class="btn btn-outline-glow btn-sm" onclick="copyUpiText('graviton2026@nyes', this)" title="Copy UPI ID" style="padding:6px 12px; font-size:0.75rem;">
+                            <i class="fa-regular fa-copy"></i> Copy
                         </button>
                     </div>
 
-                    <!-- Deep Link Pay via UPI Button for Mobile -->
-                    <a href="#" id="upi-deeplink-btn" class="btn btn-primary-glow btn-block" style="margin-bottom:12px;">
-                        <i class="fa-solid fa-mobile-screen"></i> Pay Using UPI App
-                    </a>
+                    <!-- Phone Number Box with Copy & Call Button -->
+                    <div class="upi-id-box" style="margin-bottom:18px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,51,75,0.25); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; width:100%;">
+                        <div style="text-align:left;">
+                            <small style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; letter-spacing:0.5px;">UPI Phone Number (GPay / PhonePe / Paytm)</small>
+                            <code style="color:#ff8093; font-size:1rem; font-weight:700;">7305318920</code>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button type="button" class="btn btn-outline-glow btn-sm" onclick="copyUpiText('7305318920', this)" title="Copy Phone Number" style="padding:6px 12px; font-size:0.75rem;">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                            <a href="tel:7305318920" class="btn btn-sm" style="background:#ff334b; color:#fff; padding:6px 12px; font-size:0.75rem; text-decoration:none;" title="Call Number">
+                                <i class="fa-solid fa-phone"></i>
+                            </a>
+                        </div>
+                    </div>
 
-                    <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.4;">
-                        <i class="fa-solid fa-lock text-crimson"></i> Direct Peer-to-Peer UPI Payment.
+                    <!-- Mandatory Instruction Alert -->
+                    <div style="background:rgba(255, 51, 75, 0.08); border:1px solid rgba(255, 51, 75, 0.35); border-radius:10px; padding:14px; text-align:left; margin-bottom:16px; width:100%;">
+                        <div style="display:flex; align-items:flex-start; gap:10px;">
+                            <i class="fa-solid fa-triangle-exclamation" style="color:#ff334b; font-size:1.1rem; margin-top:2px;"></i>
+                            <div>
+                                <strong style="color:#ffffff; font-size:0.85rem; display:block;">MANDATORY STEP:</strong>
+                                <p style="font-size:0.78rem; color:#cbd5e1; margin:4px 0 0 0; line-height:1.5;">
+                                    After paying ₹100, <strong>take a screenshot</strong> of your successful payment screen showing the <strong>12-digit Transaction ID / UTR</strong>. Upload both on the right to verify and release your official Delegate Pass!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guidelines List -->
+                    <div class="proof-guidelines-list" style="text-align:left; margin-top:14px; width:100%;">
+                        <div class="proof-guideline-item">
+                            <i class="fa-solid fa-circle-check text-cyan"></i>
+                            <div>
+                                <strong style="color:#fff;">Legible Transaction ID / UTR</strong>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Ensure your 12-digit UTR or reference number is clearly visible on the receipt.</p>
+                            </div>
+                        </div>
+                        <div class="proof-guideline-item">
+                            <i class="fa-solid fa-circle-check text-cyan"></i>
+                            <div>
+                                <strong style="color:#fff;">Exact Amount (₹100 / Head)</strong>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">The receipt must display ₹100 per delegate along with timestamp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Helpline -->
+                    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; margin-top:14px; width:100%; text-align:left;">
+                        <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:8px;">NEED HELP WITH PAYMENT?</span>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            <a href="https://wa.me/917305318920?text=Hi%20Mrs.%20Kalavathi,%20need%20help%20with%20GRAVITON%202026%20payment" target="_blank" class="btn btn-whatsapp btn-sm btn-block">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp Payment Desk: 7305318920
+                            </a>
+                            <a href="tel:7305318920" class="btn btn-outline-glow btn-sm btn-block">
+                                <i class="fa-solid fa-phone"></i> Call: +91 73053 18920
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -145,10 +186,11 @@
                     <!-- Participant Summary Box -->
                     <div class="fee-summary-card" style="margin-bottom:20px;">
                         <div class="fee-info">
-                            <span style="color:var(--primary-crimson); font-family:var(--font-heading); font-size:0.75rem; letter-spacing:1px; display:block;">REGISTRATION PASS</span>
-                            <strong id="display-regid" style="font-size:1.15rem; color:#fff;">GRAV-2026-XXXX</strong>
+                            <span style="color:var(--primary-crimson); font-family:var(--font-heading); font-size:0.75rem; letter-spacing:1px; display:block;">MASTER REGISTRATION ID</span>
+                            <strong id="display-regid" style="font-size:1.15rem; color:#fff;">GRAV-0001</strong>
                             <span id="display-name" style="font-size:0.85rem; color:var(--text-secondary);">Participant Name</span>
-                            <span id="display-event" style="font-size:0.82rem; color:var(--text-secondary); display:block; margin-top:2px;"></span>
+                            <div id="display-event-ids" style="margin-top:8px;"></div>
+                            <span id="display-event" style="font-size:0.82rem; color:var(--text-secondary); display:none; margin-top:2px;"></span>
                             <div id="display-team-box" style="display:none; margin-top:4px;">
                                 <span class="badge" style="background:rgba(0, 240, 255, 0.12); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.3); padding:2px 8px; border-radius:6px; font-size:0.75rem;">
                                     <i class="fa-solid fa-users"></i> Team: <strong id="display-team-name"></strong>
@@ -166,38 +208,55 @@
                     <div class="payment-notice">
                         <i class="fa-solid fa-circle-exclamation"></i>
                         <strong>Payment Verification Notice:</strong><br>
-                        Payments are verified by student organizers by cross-checking your <strong>Transaction ID / UTR / Cashfree Reference</strong> against receipts. Verification typically completes within <strong>2 to 4 hours</strong>. After verification, your Official Digital Delegate Pass will be unlocked automatically!
+                        Payments are verified by student organizers by cross-checking your <strong>Transaction ID / Reference Number</strong> and <strong>Payment Screenshot</strong> against records. Verification typically completes within <strong>2 to 4 hours</strong>. After verification, your Official Digital Delegate Pass will be unlocked automatically!
                     </div>
 
-                    <!-- UTR Form -->
+                    <!-- Payment Proof Form -->
                     <form id="payment-form">
                         <!-- Registration ID (Read-only / Editable if needed) -->
                         <div class="form-group">
                             <label for="regId">Registration ID <span class="required">*</span></label>
                             <div class="input-with-icon">
                                 <i class="fa-solid fa-hashtag"></i>
-                                <input type="text" id="regId" name="regId" placeholder="e.g. GRAV-2026-8942" required>
+                                <input type="text" id="regId" name="regId" placeholder="e.g. GRAV-0042 or QUIZ-001" required>
                             </div>
                         </div>
 
-                        <!-- 12-digit UTR / Cashfree Transaction ID -->
+                        <!-- 12-digit UTR / Transaction Reference ID -->
                         <div class="form-group">
-                            <label for="utr">Transaction ID / UTR / Cashfree Reference No <span class="required">*</span></label>
+                            <label for="utr">Transaction ID / UTR / Reference No <span class="required">*</span></label>
                             <div class="input-with-icon">
                                 <i class="fa-solid fa-receipt"></i>
-                                <input type="text" id="utr" name="utr" placeholder="UTR or Cashfree Payment Reference (e.g. 426819204918)" required maxlength="40">
+                                <input type="text" id="utr" name="utr" placeholder="Enter 12-digit UTR or Transaction Reference (e.g. 426819204918)" required maxlength="40">
                             </div>
-                            <span class="helper-text">Find the 12-digit UTR or Cashfree Order/Payment ID in your payment receipt / SMS.</span>
+                            <span class="helper-text">Find the 12-digit UTR or transaction ID in your payment receipt / SMS.</span>
                         </div>
 
-                        <!-- Optional Screenshot Upload -->
-                        <div class="form-group">
-                            <label for="screenshot">Payment Screenshot <span style="font-size:0.75rem; color:var(--text-muted);">(Optional for faster approval)</span></label>
-                            <div class="input-with-icon">
-                                <i class="fa-solid fa-image"></i>
-                                <input type="file" id="screenshot" accept="image/*">
+                        <!-- Screenshot Upload Dropzone -->
+                        <div class="screenshot-upload-container">
+                            <label style="margin-bottom:6px; display:block;">Payment Screenshot / Receipt <span class="required">*</span></label>
+                            <div class="screenshot-dropzone" id="payment-screenshot-dropzone">
+                                <input type="file" id="screenshot" accept="image/*" required>
+                                <div class="dropzone-icon">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                </div>
+                                <div class="dropzone-text">
+                                    <strong>Click or Drag & Drop Payment Screenshot</strong>
+                                    <span>Supports JPG, PNG, WebP (Max 5MB • Auto-optimized)</span>
+                                </div>
                             </div>
-                            <span class="helper-text" id="screenshot-feedback">Upload JPG / PNG receipt screenshot.</span>
+
+                            <!-- Preview Card -->
+                            <div id="payment-preview-card" class="screenshot-preview-card" style="display:none;">
+                                <img id="payment-preview-img" class="screenshot-preview-thumb" src="" alt="Screenshot Preview">
+                                <div class="screenshot-preview-info">
+                                    <strong id="payment-file-name">screenshot.png</strong>
+                                    <small id="payment-file-size">0 KB</small>
+                                </div>
+                                <button type="button" id="payment-remove-btn" class="screenshot-remove-btn">
+                                    <i class="fa-solid fa-trash-can"></i> Remove
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Form Error Alert -->
@@ -205,7 +264,7 @@
 
                         <!-- Submit Button -->
                         <button type="submit" id="submit-payment-btn" class="btn btn-primary-glow btn-block btn-lg" style="margin-top:14px;">
-                            <i class="fa-solid fa-paper-plane"></i> Submit Payment for Verification
+                            <i class="fa-solid fa-paper-plane"></i> Submit Payment Proof for Verification
                         </button>
 
                         <div style="text-align:center; margin-top:16px;">
@@ -228,9 +287,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="script.js"></script>
-    <script src="config.js"></script>
-    <script src="payment.js"></script>
+    <script src="script.js?v=2.5"></script>
+    <script src="config.js?v=2.5"></script>
+    <script src="payment.js?v=2.5"></script>
 </body>
 
 </html>
