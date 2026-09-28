@@ -155,6 +155,7 @@ const EVENTS_DATA = {
 
 document.addEventListener('DOMContentLoaded', () => {
     initMoonKnightIntro();
+    initHeroBackgroundVideo();
     initParticleCanvas();
     initMouseMovieEffects();
     initStickyNavbar();
@@ -238,6 +239,16 @@ function initMoonKnightIntro() {
         }
     }
 
+    // Intro Ambient Background Video Player
+    const introBgVideo = document.getElementById('mk-intro-bg-video');
+    if (introBgVideo) {
+        introBgVideo.muted = true;
+        const playPromise = introBgVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {});
+        }
+    }
+
     // Sound toggle listener
     if (soundToggle) {
         soundToggle.addEventListener('click', (e) => {
@@ -247,11 +258,18 @@ function initMoonKnightIntro() {
                 soundToggle.classList.add('active');
                 if (soundIcon) soundIcon.className = 'fa-solid fa-volume-high';
                 if (soundStatus) soundStatus.textContent = 'Sound ON';
+                if (introBgVideo) {
+                    introBgVideo.muted = false;
+                    introBgVideo.volume = 0.85;
+                }
                 playLunarChime('tick');
             } else {
                 soundToggle.classList.remove('active');
                 if (soundIcon) soundIcon.className = 'fa-solid fa-volume-xmark';
                 if (soundStatus) soundStatus.textContent = 'Sound OFF';
+                if (introBgVideo) {
+                    introBgVideo.muted = true;
+                }
             }
         });
     }
@@ -298,6 +316,17 @@ function initMoonKnightIntro() {
         if (hasDismissed) return;
         hasDismissed = true;
         if (countdownInterval) clearInterval(countdownInterval);
+
+        // Pause intro background video when entering website
+        if (introBgVideo) {
+            try { introBgVideo.pause(); } catch(e) {}
+        }
+
+        // Ensure hero background video starts playing
+        const heroVideo = document.getElementById('hero-bg-video');
+        if (heroVideo) {
+            heroVideo.play().catch(() => {});
+        }
 
         playLunarChime('enter');
         overlay.classList.add('dismissed');
@@ -367,12 +396,79 @@ function initMoonKnightIntro() {
         replayBtn.addEventListener('click', () => {
             overlay.classList.remove('dismissed');
             playLunarChime('ambient');
+            if (introBgVideo) {
+                try {
+                    introBgVideo.currentTime = 0;
+                    introBgVideo.play().catch(() => {});
+                } catch(e) {}
+            }
             startCountdown();
         });
     }
 
     // Initialize auto-entry countdown when website opens
     startCountdown();
+}
+
+/* --------------------------------------------------------------------------
+   0B. Hero Section Ambient Background Video Controller
+   -------------------------------------------------------------------------- */
+function initHeroBackgroundVideo() {
+    const heroVideo = document.getElementById('hero-bg-video');
+    const soundBtn = document.getElementById('hero-video-sound-btn');
+    const soundIcon = document.getElementById('hero-video-sound-icon');
+    const soundText = document.getElementById('hero-video-sound-text');
+
+    if (!heroVideo) return;
+
+    // Browser policy: must start muted for autoplay to succeed
+    heroVideo.muted = true;
+    const playPromise = heroVideo.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            // Unlock on first user interaction if browser blocked autoplay
+            const unlockVideo = () => {
+                heroVideo.play().catch(() => {});
+                document.removeEventListener('click', unlockVideo);
+                document.removeEventListener('touchstart', unlockVideo);
+            };
+            document.addEventListener('click', unlockVideo, { once: true });
+            document.addEventListener('touchstart', unlockVideo, { once: true });
+        });
+    }
+
+    // Sound toggle button for Hero background video
+    if (soundBtn) {
+        soundBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            heroVideo.muted = !heroVideo.muted;
+            if (!heroVideo.muted) {
+                heroVideo.volume = 0.85;
+                soundBtn.classList.add('active');
+                if (soundIcon) soundIcon.className = 'fa-solid fa-volume-high';
+                if (soundText) soundText.textContent = 'Sound ON';
+            } else {
+                soundBtn.classList.remove('active');
+                if (soundIcon) soundIcon.className = 'fa-solid fa-volume-xmark';
+                if (soundText) soundText.textContent = 'Sound OFF';
+            }
+        });
+    }
+
+    // Pause video when scrolled far out of view to conserve GPU/CPU
+    if ('IntersectionObserver' in window) {
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    if (heroVideo.paused) heroVideo.play().catch(() => {});
+                } else {
+                    if (!heroVideo.paused) heroVideo.pause();
+                }
+            });
+        }, { threshold: 0.08 });
+        const heroSection = document.getElementById('home');
+        if (heroSection) heroObserver.observe(heroSection);
+    }
 }
 
 /* --------------------------------------------------------------------------

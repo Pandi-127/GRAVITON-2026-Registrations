@@ -32,6 +32,14 @@
 
     <!-- Moon Knight Cinematic Intro Welcome Experience -->
     <div id="mk-intro-overlay" class="mk-intro-overlay" role="dialog" aria-modal="true" aria-label="Moon Knight Welcome Intro">
+        <!-- Full-Bleed Ambient Background Video -->
+        <div class="mk-intro-bg-video-wrap">
+            <video id="mk-intro-bg-video" class="mk-intro-bg-video" autoplay loop muted playsinline preload="auto">
+                <source src="assets/intro_video.mp4" type="video/mp4">
+                <source src="assets/WhatsApp%20Video%202026-09-28%20at%2011.31.34%20AM.mp4" type="video/mp4">
+            </video>
+            <div class="mk-intro-bg-overlay"></div>
+        </div>
         <div class="mk-intro-stars"></div>
         <div class="mk-intro-crescent-bg"></div>
         <div class="mk-intro-scanlines"></div>
@@ -147,6 +155,7 @@
             <nav class="nav-links" id="nav-links">
                 <a href="#home" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a>
                 <a href="#about" class="nav-link"><i class="fa-solid fa-circle-info"></i> About</a>
+                <a href="#teaser-video" class="nav-link"><i class="fa-solid fa-film"></i> Teaser</a>
                 <a href="#events" class="nav-link"><i class="fa-solid fa-trophy"></i> Events</a>
                 <a href="#schedule" class="nav-link"><i class="fa-solid fa-calendar-days"></i> Schedule</a>
                 <a href="#venue" class="nav-link"><i class="fa-solid fa-location-dot"></i> Venue</a>
@@ -168,8 +177,21 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
+        <!-- Hero Section with Ambient Cinematic Video Background -->
         <section id="home" class="hero-section">
+            <div class="hero-video-bg">
+                <video class="hero-bg-video" id="hero-bg-video" autoplay loop muted playsinline preload="auto">
+                    <source src="assets/intro_video.mp4" type="video/mp4">
+                    <source src="assets/WhatsApp%20Video%202026-09-28%20at%2011.31.34%20AM.mp4" type="video/mp4">
+                </video>
+                <div class="hero-video-overlay"></div>
+                <div class="hero-video-scanlines"></div>
+                <button type="button" class="btn-hero-video-sound" id="hero-video-sound-btn" aria-label="Toggle Hero Background Audio">
+                    <i class="fa-solid fa-volume-xmark" id="hero-video-sound-icon"></i>
+                    <span id="hero-video-sound-text">Sound</span>
+                </button>
+            </div>
+
             <div class="hero-container">
                 <div class="hero-content">
                     <div class="header-stamps">
@@ -234,6 +256,9 @@
                         </a>
                         <a href="register.html" class="btn btn-moon-outline btn-lg">
                             <i class="fa-solid fa-id-card"></i> Summon The Suit (Pass)
+                        </a>
+                        <a href="#teaser-video" class="btn btn-primary-glow btn-lg">
+                            <i class="fa-solid fa-circle-play"></i> Watch Intro Teaser
                         </a>
                     </div>
 
