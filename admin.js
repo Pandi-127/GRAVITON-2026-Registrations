@@ -1,4 +1,4 @@
-﻿/**
+/**
  * GRAVITON 2026 - Organizer Admin Dashboard Logic
  * Jaya Sakthi Engineering College (CSE & Cyber Security Dept.)
  */
@@ -392,7 +392,7 @@ function initAdminPage() {
                         <td><strong class="text-crimson">${escapeHTML(masterId)}</strong></td>
                         <td>
                             <strong>${escapeHTML(r.fullname)}</strong>
-                            ${r.teamName ? `<br><span class="badge" style="background:rgba(0, 240, 255, 0.12); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.3); font-size:0.72rem; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:3px;"><i class="fa-solid fa-users"></i> ${escapeHTML(r.teamName)}</span>` : ''}
+                            ${r.teamName ? `<br><span class="badge" style="background:rgba(255, 30, 66, 0.14); color:var(--tech-cyan); border:1px solid rgba(255, 30, 66, 0.4); font-size:0.72rem; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:3px;"><i class="fa-solid fa-users"></i> ${escapeHTML(r.teamName)}</span>` : ''}
                         </td>
                         <td>
                             <a href="mailto:${escapeHTML(r.email)}" style="color:var(--text-secondary); text-decoration:none;">${escapeHTML(r.email)}</a><br>
@@ -435,7 +435,7 @@ function initAdminPage() {
                         <td><strong class="text-crimson">${escapeHTML(masterId)}</strong></td>
                         <td>
                             <strong>${escapeHTML(r.fullname)}</strong>
-                            ${r.teamName ? `<br><span class="badge" style="background:rgba(0, 240, 255, 0.12); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.3); font-size:0.72rem; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:3px;"><i class="fa-solid fa-users"></i> Team: ${escapeHTML(r.teamName)}</span>` : ''}
+                            ${r.teamName ? `<br><span class="badge" style="background:rgba(255, 30, 66, 0.14); color:var(--tech-cyan); border:1px solid rgba(255, 30, 66, 0.4); font-size:0.72rem; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:3px;"><i class="fa-solid fa-users"></i> Team: ${escapeHTML(r.teamName)}</span>` : ''}
                         </td>
                         <td>
                             <a href="mailto:${escapeHTML(r.email)}" style="color:var(--text-secondary); text-decoration:none;">${escapeHTML(r.email)}</a><br>
@@ -504,7 +504,7 @@ function initAdminPage() {
         let screenshotHtml = '';
         if (proofImg) {
             screenshotHtml = `
-                <div style="margin-top:18px; background:rgba(0, 240, 255, 0.05); border:1px solid rgba(0, 240, 255, 0.25); border-radius:8px; padding:14px;">
+                <div style="margin-top:18px; background:rgba(255, 30, 66, 0.08); border:1px solid rgba(255, 30, 66, 0.35); border-radius:8px; padding:14px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
                         <strong style="color:var(--tech-cyan); font-size:0.85rem;"><i class="fa-solid fa-receipt"></i> Payment Proof / Screenshot:</strong>
                         <a href="${escapeHTML(proofImg)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-glow btn-sm" style="font-size:0.75rem; padding:4px 10px; text-decoration:none;">
@@ -559,7 +559,7 @@ function initAdminPage() {
             </div>
 
             ${record.teamName ? `
-            <div style="margin:16px 0; background:rgba(0, 240, 255, 0.06); border:1px solid rgba(0, 240, 255, 0.25); padding:14px; border-radius:8px;">
+            <div style="margin:16px 0; background:rgba(255, 30, 66, 0.08); border:1px solid rgba(255, 30, 66, 0.35); padding:14px; border-radius:8px;">
                 <strong style="font-family:var(--font-heading); font-size:0.75rem; color:var(--tech-cyan); display:block; text-transform:uppercase;">
                     <i class="fa-solid fa-users"></i> TEAM PARTICIPATION (${escapeHTML(record.teamName)})
                 </strong>

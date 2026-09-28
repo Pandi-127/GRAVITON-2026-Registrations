@@ -1,6 +1,6 @@
 # 🚀 GRAVITON 2026 - National Level College Technical Symposium
 > **Department of Computer Science & Engineering & Cyber Security**  
-> **Jaya Sakthi Engineering College (NAAC 'A' Grade | AICTE Approved | Anna Univ. Affiliated)**  
+> **Jaya Sakthi Engineering College (AICTE Approved | Anna Univ. Affiliated)**  
 > *Thiruninravur, Chennai - 602 024, Tamil Nadu*  
 > **Theme:** *IDEAS BEYOND LIMITS*
 
@@ -174,7 +174,7 @@ const CONFIG = {
 When an organizer verifies a participant's registration in `admin.html`, the backend automatically triggers an official event confirmation email:
 
 - **Zero Third-Party Cost:** Uses Google Apps Script's built-in `MailApp.sendEmail()` running under the organizer's authenticated Google account.
-- **Responsive Brand Design:** Cosmic dark mode styled with Jaya Sakthi Engineering College credentials, NAAC 'A' Grade banner, and department branding.
+- **Responsive Brand Design:** Cosmic dark mode styled with Jaya Sakthi Engineering College credentials, institutional banner, and department branding.
 - **Fail-Safe Processing:** If an invalid email is provided or Google's daily email quota is reached, the verification status update in Google Sheets still succeeds without error, and `admin.js` informs the organizer.
 - **How to Update Apps Script Deployment:**
   1. Open your Google Sheet → **Extensions** → **Apps Script**.

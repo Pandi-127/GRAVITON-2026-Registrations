@@ -1,4 +1,4 @@
-﻿/**
+/**
  * GRAVITON 2026 - Central Configuration File
  * Jaya Sakthi Engineering College - Dept. of CSE & Cyber Security
  *
@@ -35,7 +35,7 @@ const CONFIG = {
     SYMPOSIUM_NAME: "GRAVITON 2026",
     SYMPOSIUM_TAGLINE: "IDEAS BEYOND LIMITS",
     COLLEGE_NAME: "Jaya Sakthi Engineering College",
-    COLLEGE_ACCREDITATION: "NAAC 'A' Grade | AICTE Approved | Anna Univ. Affiliated",
+    COLLEGE_ACCREDITATION: "AICTE Approved | Anna Univ. Affiliated",
     CAMPUS_LOCATION: "Thiruninravur, Chennai - 602 024, Tamil Nadu",
     DEPARTMENT: "Department of Computer Science & Engineering & Cyber Security",
 
@@ -64,7 +64,13 @@ const CONFIG = {
             tel: "+917305318920",
             whatsapp: "917305318920"
         }
-    ]
+    ],
+
+    // =========================================================================
+    // 6. OFFICIAL SOCIAL MEDIA
+    // =========================================================================
+    INSTAGRAM_URL: "https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D",
+    INSTAGRAM_HANDLE: "@graviton_2026"
 };
 
 // Freeze configuration to prevent accidental modification at runtime

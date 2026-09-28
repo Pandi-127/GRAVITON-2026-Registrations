@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const path = require('path');
@@ -63,14 +63,14 @@ function buildConfirmationEmail(p) {
 <body style="margin: 0; padding: 0; background-color: #060913; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #ffffff;">
   <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #060913; padding: 24px 12px;">
     <tr><td align="center">
-      <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 620px; background: #0e1626; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+      <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 620px; background: #0a0709; border: 1px solid #2d1319; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
         <tr>
-          <td style="background: linear-gradient(135deg, #b3001b 0%, #ff334b 60%, #0e1626 100%); padding: 26px 20px; text-align: center;">
+          <td style="background: linear-gradient(135deg, #800010 0%, #ff1e42 60%, #0a0709 100%); padding: 26px 20px; text-align: center;">
             <div style="color: rgba(255,255,255,0.9); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px;">Jaya Sakthi Engineering College</div>
-            <div style="color: #ffffff; font-size: 11px; opacity: 0.85;">NAAC 'A' Grade Accredited • Anna University Affiliated</div>
+            <div style="color: #ffffff; font-size: 11px; opacity: 0.85;">AICTE Approved • Anna University Affiliated</div>
             <div style="height: 1px; background: rgba(255,255,255,0.25); margin: 12px auto; max-width: 280px;"></div>
             <h1 style="color: #ffffff; font-size: 26px; font-weight: 800; margin: 0; letter-spacing: 2px;">GRAVITON 2026</h1>
-            <div style="color: #00f0ff; font-size: 13px; font-weight: 600; margin-top: 4px;">Department of Computer Science & Engineering and Cyber Security</div>
+            <div style="color: #ffffff; font-size: 13px; font-weight: 600; margin-top: 4px;">Department of Computer Science & Engineering and Cyber Security</div>
           </td>
         </tr>
         <tr>
@@ -79,17 +79,17 @@ function buildConfirmationEmail(p) {
               ✓ Payment & Pass Verified
             </div>
             <h2 style="color: #ffffff; font-size: 20px; font-weight: 700; margin: 16px 0 6px 0;">Official Registration Confirmation</h2>
-            <p style="color: #94a3b8; font-size: 14px; line-height: 1.6; margin: 0;">
+            <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0;">
               Dear <strong style="color: #ffffff;">${name}</strong>, congratulations! Your payment for <strong>GRAVITON 2026</strong> has been verified by the organizing committee. Your official delegate credentials are confirmed below.
             </p>
           </td>
         </tr>
         <tr>
           <td style="padding: 12px 28px;">
-            <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(0, 240, 255, 0.04); border: 1px dashed rgba(0, 240, 255, 0.4); border-radius: 12px; padding: 18px; text-align: center;">
+            <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255, 30, 66, 0.08); border: 1px dashed rgba(255, 30, 66, 0.5); border-radius: 12px; padding: 18px; text-align: center;">
               <tr><td>
-                <div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Master Delegate Registration ID</div>
-                <div style="color: #00f0ff; font-size: 24px; font-weight: 800; letter-spacing: 2px; font-family: monospace; margin: 6px 0;">${masterId}</div>
+                <div style="color: #cbd5e1; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Master Delegate Registration ID</div>
+                <div style="color: #ff1e42; font-size: 24px; font-weight: 800; letter-spacing: 2px; font-family: monospace; margin: 6px 0; text-shadow: 0 0 10px rgba(255, 30, 66, 0.4);">${masterId}</div>
                 <div style="color: #cbd5e1; font-size: 12px;">Present this ID or your digital pass at the registration desk.</div>
               </td></tr>
             </table>
@@ -97,13 +97,13 @@ function buildConfirmationEmail(p) {
         </tr>
         <tr>
           <td style="padding: 12px 28px;">
-            <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #121b2d; border: 1px solid #1e293b; border-radius: 12px; padding: 16px;">
+            <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #11090d; border: 1px solid #2d1319; border-radius: 12px; padding: 16px;">
               <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px; width: 40%;">Participant Name:</td><td style="padding: 6px 8px; color: #ffffff; font-size: 13px; font-weight: 600;">${name}</td></tr>
               <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px;">College / Institution:</td><td style="padding: 6px 8px; color: #ffffff; font-size: 13px; font-weight: 600;">${college}</td></tr>
               <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px;">Department & Year:</td><td style="padding: 6px 8px; color: #ffffff; font-size: 13px; font-weight: 600;">${dept} • ${year}</td></tr>
               <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px;">Registered Phone:</td><td style="padding: 6px 8px; color: #ffffff; font-size: 13px; font-weight: 600;">${phone}</td></tr>
               <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px;">Registration Fee:</td><td style="padding: 6px 8px; color: #00e676; font-size: 13px; font-weight: 700;">₹${amount} (PAID & VERIFIED)</td></tr>
-              <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px;">Transaction / UTR:</td><td style="padding: 6px 8px; color: #00f0ff; font-size: 13px; font-family: monospace; font-weight: 600;">${utr}</td></tr>
+              <tr><td style="padding: 6px 8px; color: #94a3b8; font-size: 13px;">Transaction / UTR:</td><td style="padding: 6px 8px; color: #ff334b; font-size: 13px; font-family: monospace; font-weight: 600;">${utr}</td></tr>
             </table>
             ${teamHtml}
           </td>
@@ -111,14 +111,14 @@ function buildConfirmationEmail(p) {
         <tr>
           <td style="padding: 16px 28px 8px 28px;">
             <h3 style="color: #ffffff; font-size: 15px; font-weight: 700; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">Registered Events</h3>
-            <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 8px; padding: 12px 16px;">
+            <div style="background: rgba(255, 30, 66, 0.08); border: 1px solid rgba(255, 30, 66, 0.35); border-radius: 8px; padding: 12px 16px;">
               <strong style="color: #ffffff; font-size: 15px;">${events}</strong>
             </div>
           </td>
         </tr>
         <tr>
           <td style="padding: 12px 28px;">
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid #1e293b; border-radius: 12px; padding: 18px;">
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid #2d1319; border-radius: 12px; padding: 18px;">
               <h4 style="color: #ff334b; font-size: 14px; font-weight: 700; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">Event Day Guidelines & Logistics</h4>
               <ul style="margin: 0; padding-left: 20px; color: #cbd5e1; font-size: 13px; line-height: 1.7;">
                 <li><strong>Reporting Time:</strong> 8:30 AM IST (Registration desk opens at 8:00 AM).</li>
@@ -132,18 +132,23 @@ function buildConfirmationEmail(p) {
         </tr>
         <tr>
           <td style="padding: 16px 28px 24px 28px; text-align: center;">
-            <a href="${passUrl}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #00f0ff, #00a8ff); color: #060913; font-weight: 800; font-size: 14px; text-decoration: none; padding: 14px 32px; border-radius: 8px; letter-spacing: 0.5px;">
+            <a href="${passUrl}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #b3001b, #ff1e42); color: #ffffff; font-weight: 800; font-size: 14px; text-decoration: none; padding: 14px 32px; border-radius: 8px; letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(255,30,66,0.5);">
               View Digital Delegate Pass Online →
             </a>
           </td>
         </tr>
         <tr>
           <td style="padding: 0 28px 24px 28px;">
-            <div style="border-top: 1px solid #1e293b; padding-top: 18px; text-align: center;">
+            <div style="border-top: 1px solid #2d1319; padding-top: 18px; text-align: center;">
               <div style="color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Student Coordinator Contacts</div>
-              <div style="font-size: 13px; color: #cbd5e1; line-height: 1.6;">
-                <strong>Harini:</strong> <a href="https://wa.me/919003252177" style="color: #00f0ff; text-decoration: none;">+91 90032 52177 (WhatsApp)</a> &nbsp;|&nbsp; 
-                <strong>Balagurubaran:</strong> <a href="https://wa.me/919043639975" style="color: #00f0ff; text-decoration: none;">+91 90436 39975 (WhatsApp)</a>
+              <div style="font-size: 13px; color: #cbd5e1; line-height: 1.6; margin-bottom: 12px;">
+                <strong>Harini:</strong> <a href="https://wa.me/919003252177" style="color: #ff334b; text-decoration: none;">+91 90032 52177 (WhatsApp)</a> &nbsp;|&nbsp; 
+                <strong>Balagurubaran:</strong> <a href="https://wa.me/919043639975" style="color: #ff334b; text-decoration: none;">+91 90436 39975 (WhatsApp)</a>
+              </div>
+              <div style="margin-top: 10px;">
+                <a href="https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 700; padding: 7px 18px; border-radius: 20px; letter-spacing: 0.5px;">
+                  📸 Follow @graviton_2026 on Instagram →
+                </a>
               </div>
             </div>
           </td>
@@ -162,7 +167,7 @@ function buildConfirmationEmail(p) {
 </body></html>`;
 
   const plainTextBody = `GRAVITON 2026 - OFFICIAL REGISTRATION CONFIRMATION
-Jaya Sakthi Engineering College (NAAC 'A' Grade | Anna Univ. Affiliated)
+Jaya Sakthi Engineering College (AICTE Approved | Anna Univ. Affiliated)
 Department of Computer Science & Engineering and Cyber Security
 
 Dear ${name},
@@ -203,6 +208,9 @@ COORDINATOR CONTACTS:
 ============================================================
 - Harini (Student Coordinator)       : +91 90032 52177
 - Balagurubaran (Student Coordinator): +91 90436 39975
+
+OFFICIAL INSTAGRAM:
+- Follow @graviton_2026: https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D
 
 We look forward to seeing you at GRAVITON 2026!
 Code • Create • Compete • Conquer`;

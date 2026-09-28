@@ -1,8 +1,8 @@
-﻿/**
+/**
  * ============================================================================
  * GRAVITON 2026 - Google Apps Script Backend (Multi-Event Sheet Architecture)
  * Department of Computer Science & Engineering & Cyber Security
- * Jaya Sakthi Engineering College (NAAC 'A' Grade | Anna Univ. Affiliated)
+ * Jaya Sakthi Engineering College (AICTE Approved | Anna Univ. Affiliated)
  * ============================================================================
  *
  * SPREADSHEET ARCHITECTURE:
@@ -1537,7 +1537,7 @@ function sendPaymentConfirmationEmail(participant, linkedEvents) {
               '<tr>' +
                 '<td style="background: linear-gradient(135deg, #b3001b 0%, #ff334b 60%, #0e1626 100%); padding: 26px 20px; text-align: center;">' +
                   '<div style="color: rgba(255,255,255,0.9); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px;">Jaya Sakthi Engineering College</div>' +
-                  '<div style="color: #ffffff; font-size: 11px; opacity: 0.85;">NAAC \'A\' Grade Accredited • Anna University Affiliated</div>' +
+                  '<div style="color: #ffffff; font-size: 11px; opacity: 0.85;">AICTE Approved • Anna University Affiliated</div>' +
                   '<div style="height: 1px; background: rgba(255,255,255,0.25); margin: 12px auto; max-width: 280px;"></div>' +
                   '<h1 style="color: #ffffff; font-size: 26px; font-weight: 800; margin: 0; letter-spacing: 2px;">GRAVITON 2026</h1>' +
                   '<div style="color: #00f0ff; font-size: 13px; font-weight: 600; margin-top: 4px;">Department of Computer Science & Engineering and Cyber Security</div>' +
@@ -1607,11 +1607,16 @@ function sendPaymentConfirmationEmail(participant, linkedEvents) {
               '</tr>' +
               '<tr>' +
                 '<td style="padding: 0 28px 24px 28px;">' +
-                  '<div style="border-top: 1px solid #1e293b; padding-top: 18px; text-align: center;">' +
+                  '<div style="border-top: 1px solid #2d1319; padding-top: 18px; text-align: center;">' +
                     '<div style="color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Student Coordinator Contacts</div>' +
-                    '<div style="font-size: 13px; color: #cbd5e1; line-height: 1.6;">' +
-                      '<strong>Harini:</strong> <a href="https://wa.me/919003252177" style="color: #00f0ff; text-decoration: none;">+91 90032 52177 (WhatsApp)</a> &nbsp;|&nbsp; ' +
-                      '<strong>Balagurubaran:</strong> <a href="https://wa.me/919043639975" style="color: #00f0ff; text-decoration: none;">+91 90436 39975 (WhatsApp)</a>' +
+                    '<div style="font-size: 13px; color: #cbd5e1; line-height: 1.6; margin-bottom: 12px;">' +
+                      '<strong>Harini:</strong> <a href="https://wa.me/919003252177" style="color: #ff334b; text-decoration: none;">+91 90032 52177 (WhatsApp)</a> &nbsp;|&nbsp; ' +
+                      '<strong>Balagurubaran:</strong> <a href="https://wa.me/919043639975" style="color: #ff334b; text-decoration: none;">+91 90436 39975 (WhatsApp)</a>' +
+                    '</div>' +
+                    '<div style="margin-top: 10px;">' +
+                      '<a href="https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 700; padding: 7px 18px; border-radius: 20px; letter-spacing: 0.5px;">' +
+                        '📸 Follow @graviton_2026 on Instagram →' +
+                      '</a>' +
                     '</div>' +
                   '</div>' +
                 '</td>' +
@@ -1631,7 +1636,7 @@ function sendPaymentConfirmationEmail(participant, linkedEvents) {
 
     const plainTextBody = (
       "GRAVITON 2026 - OFFICIAL REGISTRATION CONFIRMATION\n" +
-      "Jaya Sakthi Engineering College (NAAC 'A' Grade | Anna Univ. Affiliated)\n" +
+      "Jaya Sakthi Engineering College (AICTE Approved | Anna Univ. Affiliated)\n" +
       "Department of Computer Science & Engineering and Cyber Security\n\n" +
       "Dear " + name + ",\n\n" +
       "Congratulations! Your payment for GRAVITON 2026 has been verified by the organizing committee. Your official delegate credentials are confirmed.\n\n" +
@@ -1665,6 +1670,8 @@ function sendPaymentConfirmationEmail(participant, linkedEvents) {
       "- Harini (Student Coordinator)       : +91 90032 52177\n" +
       "- Balagurubaran (Student Coordinator): +91 90436 39975\n" +
       "- Staff Coordinator                  : Dr. S. K. Rajasekaran\n\n" +
+      "OFFICIAL INSTAGRAM:\n" +
+      "- Follow @graviton_2026: https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D\n\n" +
       "We look forward to seeing you at GRAVITON 2026!\n" +
       "Code • Create • Compete • Conquer"
     );

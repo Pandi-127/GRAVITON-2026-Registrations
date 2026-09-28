@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    GRAVITON 2026 - Main Interactive Script
    Jaya Sakthi Engineering College (CSE & Cyber Security Dept.)
    ========================================================================== */
@@ -154,7 +154,9 @@ const EVENTS_DATA = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    initMoonKnightIntro();
     initParticleCanvas();
+    initMouseMovieEffects();
     initStickyNavbar();
     initCountdownTimer();
     initNumberCounters();
@@ -163,10 +165,218 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* --------------------------------------------------------------------------
-   1. Atmospheric Cosmic Background Particles Canvas
+   0. Moon Knight Cinematic Welcome Intro Controller
    -------------------------------------------------------------------------- */
+function initMoonKnightIntro() {
+    const overlay = document.getElementById('mk-intro-overlay');
+    const introCard = document.getElementById('mk-intro-card');
+    const enterBtn = document.getElementById('mk-enter-btn');
+    const eventsFastBtn = document.getElementById('mk-events-fast-btn');
+    const skipBtn = document.getElementById('mk-intro-skip');
+    const replayBtn = document.getElementById('replay-intro-btn');
+    const soundToggle = document.getElementById('mk-intro-sound-toggle');
+    const soundIcon = document.getElementById('intro-sound-icon');
+    const soundStatus = document.getElementById('intro-sound-status');
+    const timerCountEl = document.getElementById('intro-timer-count');
+    const progressFillEl = document.getElementById('intro-progress-fill');
+
+    if (!overlay) return;
+
+    // Audio state
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    // Web Audio API Synthesizer for Khonshu Cinematic Sound
+    function playLunarChime(mode = 'enter') {
+        if (!soundEnabled) return;
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const now = audioCtx.currentTime;
+
+            // Sub-Bass Drone / Whoosh
+            const subOsc = audioCtx.createOscillator();
+            const subGain = audioCtx.createGain();
+            subOsc.type = 'triangle';
+            subOsc.frequency.setValueAtTime(mode === 'enter' ? 85 : 110, now);
+            subOsc.frequency.exponentialRampToValueAtTime(32, now + 1.2);
+            subGain.gain.setValueAtTime(0.001, now);
+            subGain.gain.exponentialRampToValueAtTime(0.12, now + 0.1);
+            subGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+            subOsc.connect(subGain);
+            subGain.connect(audioCtx.destination);
+            subOsc.start(now);
+            subOsc.stop(now + 1.3);
+
+            // Shimmering Lunar Crystal Chord [Khonshu harmonic series]
+            const freqs = [528, 660, 792, 1056, 1320];
+            freqs.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.045 / (idx + 1), now + 0.08 + idx * 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.8 + idx * 0.25);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now + idx * 0.03);
+                osc.stop(now + 2.5);
+            });
+        } catch (e) {
+            // Audio context policy fallback
+        }
+    }
+
+    // Sound toggle listener
+    if (soundToggle) {
+        soundToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                soundToggle.classList.add('active');
+                if (soundIcon) soundIcon.className = 'fa-solid fa-volume-high';
+                if (soundStatus) soundStatus.textContent = 'Sound ON';
+                playLunarChime('tick');
+            } else {
+                soundToggle.classList.remove('active');
+                if (soundIcon) soundIcon.className = 'fa-solid fa-volume-xmark';
+                if (soundStatus) soundStatus.textContent = 'Sound OFF';
+            }
+        });
+    }
+
+    // Auto-Enter Countdown Timer (5.0 seconds)
+    const TOTAL_DURATION_MS = 5000;
+    let remainingMs = TOTAL_DURATION_MS;
+    let isPaused = false;
+    let countdownInterval = null;
+    let hasDismissed = false;
+
+    function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        remainingMs = TOTAL_DURATION_MS;
+        hasDismissed = false;
+
+        countdownInterval = setInterval(() => {
+            if (isPaused) return;
+
+            remainingMs -= 50;
+            const progressRatio = Math.max(0, (TOTAL_DURATION_MS - remainingMs) / TOTAL_DURATION_MS);
+            
+            if (progressFillEl) {
+                progressFillEl.style.width = (progressRatio * 100).toFixed(1) + '%';
+            }
+            if (timerCountEl) {
+                timerCountEl.textContent = Math.max(1, Math.ceil(remainingMs / 1000));
+            }
+
+            if (remainingMs <= 0) {
+                clearInterval(countdownInterval);
+                dismissIntro('#home');
+            }
+        }, 50);
+    }
+
+    // Pause on card hover so user can read everything comfortably
+    if (introCard) {
+        introCard.addEventListener('mouseenter', () => { isPaused = true; });
+        introCard.addEventListener('mouseleave', () => { isPaused = false; });
+    }
+
+    function dismissIntro(targetId = null) {
+        if (hasDismissed) return;
+        hasDismissed = true;
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        playLunarChime('enter');
+        overlay.classList.add('dismissed');
+
+        // Cinematic Radial Shockwave Burst
+        const shockwave = document.createElement('div');
+        shockwave.style.position = 'fixed';
+        shockwave.style.top = '50%';
+        shockwave.style.left = '50%';
+        shockwave.style.transform = 'translate(-50%, -50%) scale(0)';
+        shockwave.style.width = '180px';
+        shockwave.style.height = '180px';
+        shockwave.style.borderRadius = '50%';
+        shockwave.style.border = '3px solid #ff1e42';
+        shockwave.style.boxShadow = '0 0 60px #ff1e42, 0 0 100px rgba(255, 30, 66, 0.6), inset 0 0 40px #ffffff';
+        shockwave.style.pointerEvents = 'none';
+        shockwave.style.zIndex = '99998';
+        shockwave.style.transition = 'transform 0.85s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.85s ease';
+        document.body.appendChild(shockwave);
+
+        requestAnimationFrame(() => {
+            shockwave.style.transform = 'translate(-50%, -50%) scale(18)';
+            shockwave.style.opacity = '0';
+        });
+        setTimeout(() => shockwave.remove(), 900);
+
+        if (targetId) {
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }
+
+    // Button event handlers
+    if (enterBtn) {
+        enterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dismissIntro('#home');
+        });
+    }
+
+    if (eventsFastBtn) {
+        eventsFastBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dismissIntro('#events');
+        });
+    }
+
+    if (skipBtn) {
+        skipBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dismissIntro();
+        });
+    }
+
+    // ESC key to dismiss intro
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !overlay.classList.contains('dismissed')) {
+            dismissIntro();
+        }
+    });
+
+    // Replay Intro Button in Navbar
+    if (replayBtn) {
+        replayBtn.addEventListener('click', () => {
+            overlay.classList.remove('dismissed');
+            playLunarChime('ambient');
+            startCountdown();
+        });
+    }
+
+    // Initialize auto-entry countdown when website opens
+    startCountdown();
+}
+
 /* --------------------------------------------------------------------------
-   1. Atmospheric Cosmic Background Particles Canvas (Device Adaptive & High-DPI)
+   1. Atmospheric Cosmic Background Particles & Lunar Cosmos Canvas
    -------------------------------------------------------------------------- */
 function initParticleCanvas() {
     const canvas = document.getElementById('bg-canvas');
@@ -174,13 +384,28 @@ function initParticleCanvas() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Check prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     let isMobile = window.innerWidth <= 768;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
     let width = window.innerWidth;
     let height = window.innerHeight;
+
+    // Track mouse coordinates for interactive particle physics
+    const mouse = {
+        x: -9999,
+        y: -9999,
+        radius: isMobile ? 80 : 150
+    };
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+    });
 
     function resizeCanvas() {
         width = window.innerWidth;
@@ -199,7 +424,6 @@ function initParticleCanvas() {
 
     resizeCanvas();
 
-    // Prevent resize flashing on mobile scroll when address bar toggles
     let lastWidth = window.innerWidth;
     window.addEventListener('resize', () => {
         if (Math.abs(window.innerWidth - lastWidth) > 30 || Math.abs(window.innerHeight - height) > 150) {
@@ -208,35 +432,70 @@ function initParticleCanvas() {
         }
     }, { passive: true });
 
-    // Adaptive particle count based on device capability
-    const maxParticles = isMobile ? 26 : Math.min(Math.floor((width * height) / 22000), 75);
+    // Adaptive particle count for ultra smooth 60fps performance
+    const maxParticles = isMobile ? 32 : Math.min(Math.floor((width * height) / 18000), 85);
     const particles = [];
 
-    class CosmicParticle {
+    // Official GRAVITON Blood Moon Stardust & Embers (Blood Red, Scarlet, Silver, White)
+    const stardustColors = [
+        '#ffffff', // Metallic silver/white
+        '#cbd5e1', // Chrome silver
+        '#ff1e42', // Blood red neon
+        '#e50914', // Crimson
+        '#b3001b', // Deep scarlet
+        '#ff4757', // Radiant ember
+        '#94a3b8'  // Steel gray
+    ];
+
+    class LunarParticle {
         constructor() {
             this.reset();
         }
         reset() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.radius = Math.random() * (isMobile ? 1.5 : 2.2) + 0.5;
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.radius = Math.random() * (isMobile ? 1.6 : 2.4) + 0.6;
             this.vx = (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35);
-            this.vy = (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35) - 0.1;
-            this.alpha = Math.random() * 0.65 + 0.2;
-            const rand = Math.random();
-            if (rand < 0.6) {
-                this.color = '#ff1e42'; // Crimson
-            } else if (rand < 0.85) {
-                this.color = '#ff6b00'; // Fire orange
-            } else {
-                this.color = '#00f0ff'; // Cyan accent
-            }
+            this.vy = -(Math.random() * (isMobile ? 0.35 : 0.5) + 0.1); // Gently float upward like stardust
+            this.alpha = Math.random() * 0.65 + 0.25;
+            this.baseAlpha = this.alpha;
+            this.color = stardustColors[Math.floor(Math.random() * stardustColors.length)];
+            this.density = Math.random() * 20 + 2;
         }
         update() {
+            // Natural drifting movement
             this.x += this.vx;
             this.y += this.vy;
-            if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-                this.reset();
+
+            // Interactive mouse repulsion (Mouse Movie Effect)
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const distance = Math.hypot(dx, dy);
+
+            if (distance < mouse.radius && distance > 0) {
+                const forceDirectionX = dx / distance;
+                const forceDirectionY = dy / distance;
+                const force = (mouse.radius - distance) / mouse.radius;
+                const directionX = forceDirectionX * force * this.density * 0.6;
+                const directionY = forceDirectionY * force * this.density * 0.6;
+
+                this.x -= directionX;
+                this.y -= directionY;
+                this.alpha = Math.min(1, this.baseAlpha + 0.4);
+            } else {
+                if (this.alpha > this.baseAlpha) {
+                    this.alpha -= 0.02;
+                }
+            }
+
+            // Wrap edges
+            if (this.x < -10) this.x = width + 10;
+            if (this.x > width + 10) this.x = -10;
+            if (this.y < -10) {
+                this.y = height + 10;
+                this.x = Math.random() * width;
             }
         }
         draw() {
@@ -246,8 +505,8 @@ function initParticleCanvas() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
-            // Skip expensive shadowBlur on mobile devices to preserve battery and 60fps smoothness
-            if (!isMobile && (this.color === '#ff1e42' || this.color === '#00f0ff')) {
+
+            if (!isMobile && (this.color === '#ff1e42' || this.color === '#e50914' || this.color === '#ff4757')) {
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
             }
@@ -255,12 +514,73 @@ function initParticleCanvas() {
         }
     }
 
-    for (let i = 0; i < maxParticles; i++) {
-        particles.push(new CosmicParticle());
+    // Shooting Star (Khonshu Crescent Streak)
+    class ShootingStar {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * width * 0.8;
+            this.y = Math.random() * (height * 0.4);
+            this.len = Math.random() * 80 + 40;
+            this.speed = Math.random() * 6 + 7;
+            this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.2;
+            this.alpha = 1;
+            this.active = false;
+            this.nextSpawn = Date.now() + Math.random() * 6000 + 4000;
+        }
+        update() {
+            if (!this.active) {
+                if (Date.now() > this.nextSpawn) {
+                    this.active = true;
+                    this.alpha = 1;
+                    this.x = Math.random() * width * 0.8;
+                    this.y = Math.random() * (height * 0.35);
+                }
+                return;
+            }
+
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+            this.alpha -= 0.015;
+
+            if (this.alpha <= 0 || this.x > width || this.y > height) {
+                this.reset();
+            }
+        }
+        draw() {
+            if (!this.active) return;
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            const grad = ctx.createLinearGradient(
+                this.x, this.y,
+                this.x - Math.cos(this.angle) * this.len,
+                this.y - Math.sin(this.angle) * this.len
+            );
+            grad.addColorStop(0, '#ffffff');
+            grad.addColorStop(0.3, '#ff1e42');
+            grad.addColorStop(1, 'transparent');
+
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(
+                this.x - Math.cos(this.angle) * this.len,
+                this.y - Math.sin(this.angle) * this.len
+            );
+            ctx.stroke();
+            ctx.restore();
+        }
     }
 
+    for (let i = 0; i < maxParticles; i++) {
+        particles.push(new LunarParticle());
+    }
+
+    const shootingStar = new ShootingStar();
+
     if (prefersReducedMotion) {
-        // Draw static starfield once for users requesting reduced motion
         ctx.clearRect(0, 0, width, height);
         particles.forEach(p => p.draw());
         return;
@@ -272,14 +592,38 @@ function initParticleCanvas() {
     function animate() {
         if (!isTabVisible) return;
         ctx.clearRect(0, 0, width, height);
+
+        // Draw and update stardust
         for (let i = 0; i < particles.length; i++) {
             particles[i].update();
             particles[i].draw();
+
+            // Connect nearby particles to mouse with delicate constellation lines
+            if (!isMobile && mouse.x > 0) {
+                const dx = mouse.x - particles[i].x;
+                const dy = mouse.y - particles[i].y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 110) {
+                    ctx.save();
+                    ctx.globalAlpha = (1 - dist / 110) * 0.25;
+                    ctx.strokeStyle = 'rgba(255, 30, 66, 0.45)';
+                    ctx.lineWidth = 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(mouse.x, mouse.y);
+                    ctx.lineTo(particles[i].x, particles[i].y);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
         }
+
+        // Draw shooting star
+        shootingStar.update();
+        shootingStar.draw();
+
         animationFrameId = requestAnimationFrame(animate);
     }
 
-    // Energy saving: Pause animation when tab is not visible
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             isTabVisible = false;
@@ -291,6 +635,162 @@ function initParticleCanvas() {
     });
 
     animate();
+}
+
+/* --------------------------------------------------------------------------
+   1.5. Mouse Movie Effects (Custom Cursor, Stardust Trails & 3D Tilt)
+   -------------------------------------------------------------------------- */
+function initMouseMovieEffects() {
+    let cursor = document.getElementById('custom-cursor');
+    let follower = document.getElementById('custom-cursor-follower');
+
+    if (!cursor) {
+        cursor = document.createElement('div');
+        cursor.id = 'custom-cursor';
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+    }
+    if (!follower) {
+        follower = document.createElement('div');
+        follower.id = 'custom-cursor-follower';
+        follower.className = 'custom-cursor-follower';
+        document.body.appendChild(follower);
+    }
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let followerX = -100;
+    let followerY = -100;
+    let lastSparkTime = 0;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        cursor.style.left = `${mouseX}px`;
+        cursor.style.top = `${mouseY}px`;
+
+        // Spawn glowing stardust sparks on mouse movement
+        const now = Date.now();
+        if (now - lastSparkTime > 55) {
+            lastSparkTime = now;
+            createStardustSpark(mouseX, mouseY);
+        }
+    }, { passive: true });
+
+    // Smooth lerp follower loop
+    function updateFollower() {
+        followerX += (mouseX - followerX) * 0.18;
+        followerY += (mouseY - followerY) * 0.18;
+
+        follower.style.left = `${followerX}px`;
+        follower.style.top = `${followerY}px`;
+
+        requestAnimationFrame(updateFollower);
+    }
+    requestAnimationFrame(updateFollower);
+
+    // Stardust Spark Generator (Blood Red & Silver Embers)
+    function createStardustSpark(x, y) {
+        if (window.innerWidth <= 768) return; // Skip on mobile
+        const spark = document.createElement('div');
+        spark.className = 'stardust-spark';
+        const size = Math.random() * 4 + 2;
+        const colors = ['#ff1e42', '#e50914', '#ffffff', '#cbd5e1', '#ff4757'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        spark.style.width = `${size}px`;
+        spark.style.height = `${size}px`;
+        spark.style.backgroundColor = color;
+        spark.style.boxShadow = `0 0 10px ${color}`;
+        spark.style.left = `${x + (Math.random() - 0.5) * 12}px`;
+        spark.style.top = `${y + (Math.random() - 0.5) * 12}px`;
+
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 650);
+    }
+
+    // Hover interactive state detection
+    const interactiveSelectors = 'a, button, input, select, textarea, .tab-btn, .btn, .nav-link, .modal-close, .event-card, [data-tilt], [role="button"]';
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.closest(interactiveSelectors)) {
+            cursor.classList.add('cursor-hover');
+            follower.classList.add('cursor-hover');
+        }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.closest(interactiveSelectors)) {
+            cursor.classList.remove('cursor-hover');
+            follower.classList.remove('cursor-hover');
+        }
+    });
+
+    document.addEventListener('mousedown', () => {
+        cursor.classList.add('cursor-click');
+        follower.classList.add('cursor-click');
+    });
+
+    document.addEventListener('mouseup', () => {
+        cursor.classList.remove('cursor-click');
+        follower.classList.remove('cursor-click');
+    });
+
+    // 3D Card Tilt & Specular Spotlight Engine ("Movie Effect")
+    const tiltCards = document.querySelectorAll('[data-tilt], .event-card, .about-card, .timeline-content, .chair-card');
+    tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Set specular spotlight coordinates
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+
+            // 3D tilt calculation
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotX = -((y - centerY) / centerY) * 7.5;
+            const rotY = ((x - centerX) / centerX) * 7.5;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.025, 1.025, 1.025)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+    });
+
+    // Hero Section Cinematic Parallax Shift
+    const heroVisual = document.querySelector('.hero-visual');
+    const heroSection = document.querySelector('.hero-section');
+    if (heroSection && heroVisual && window.innerWidth > 768) {
+        heroSection.addEventListener('mousemove', (e) => {
+            const rect = heroSection.getBoundingClientRect();
+            const relX = (e.clientX - rect.left) / rect.width - 0.5;
+            const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+            const crestCenter = heroVisual.querySelector('.hero-crest-centerpiece') || heroVisual.querySelector('.hero-warrior-img');
+            const halo = heroVisual.querySelector('.lunar-crescent-halo');
+            const orb = heroVisual.querySelector('.glow-orb');
+            const badge1 = heroVisual.querySelector('.badge-1');
+            const badge2 = heroVisual.querySelector('.badge-2');
+            const badge3 = heroVisual.querySelector('.badge-3');
+
+            if (crestCenter) crestCenter.style.transform = `translate(${relX * 18}px, ${relY * 18}px)`;
+            if (halo) halo.style.transform = `translate(${relX * -14}px, ${relY * -14}px)`;
+            if (orb) orb.style.transform = `translate(${relX * -22}px, ${relY * -22}px)`;
+            if (badge1) badge1.style.transform = `translate(${relX * 28}px, ${relY * 28}px)`;
+            if (badge2) badge2.style.transform = `translate(${relX * -25}px, ${relY * -25}px)`;
+            if (badge3) badge3.style.transform = `translate(${relX * 32}px, ${relY * 32}px)`;
+        });
+
+        heroSection.addEventListener('mouseleave', () => {
+            const elements = heroVisual.querySelectorAll('.hero-crest-centerpiece, .hero-warrior-img, .lunar-crescent-halo, .glow-orb, .badge-1, .badge-2, .badge-3');
+            elements.forEach(el => el.style.transform = '');
+        });
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -580,7 +1080,7 @@ window.copyUpiText = function(text, btnElement) {
     navigator.clipboard.writeText(text).then(() => {
         const originalHtml = btnElement.innerHTML;
         btnElement.innerHTML = '<i class="fa-solid fa-check text-cyan"></i> Copied!';
-        btnElement.style.borderColor = '#00f0ff';
+        btnElement.style.borderColor = '#ff1e42';
         setTimeout(() => {
             btnElement.innerHTML = originalHtml;
             btnElement.style.borderColor = '';

@@ -130,7 +130,7 @@ function initStatusPage() {
         } else if (status === 'UNDER_VERIFICATION') {
             statusBadgeHtml = `<span class="status-badge-hero under_verification"><i class="fa-solid fa-hourglass-half"></i> UNDER VERIFICATION</span>`;
             statusMessageHtml = `
-                <div class="payment-notice" style="background:rgba(0, 240, 255, 0.08); border-left-color:var(--tech-cyan); color:#e0f9ff;">
+                <div class="payment-notice" style="background:rgba(255, 30, 66, 0.1); border-left-color:var(--primary-crimson); color:#ffffff;">
                     <i class="fa-solid fa-clock-rotate-left text-cyan"></i> <strong>Payment Under Review</strong><br>
                     Your UTR (<code>${escapeHTML(utr)}</code>) has been submitted. Our student organizers verify UTRs against bank entries within <strong>2 to 4 hours</strong>. Once approved, your pass will unlock here.
                 </div>
@@ -184,7 +184,7 @@ function initStatusPage() {
                             </strong>
                             <span style="display:block; font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Each event has its own independent registration record</span>
                         </div>
-                        <span class="badge" style="background:rgba(0, 240, 255, 0.12); color:var(--tech-cyan); border:1px solid rgba(0, 240, 255, 0.3); font-size:0.75rem; padding:3px 10px; border-radius:6px;">
+                        <span class="badge" style="background:rgba(255, 30, 66, 0.14); color:var(--tech-cyan); border:1px solid rgba(255, 30, 66, 0.4); font-size:0.75rem; padding:3px 10px; border-radius:6px;">
                             ${eventRegs.length} Event${eventRegs.length > 1 ? 's' : ''}
                         </span>
                     </div>
@@ -208,9 +208,9 @@ function initStatusPage() {
                                 eIcon = 'fa-circle-xmark';
                             }
                             return `
-                                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; background:rgba(18, 22, 34, 0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; background:rgba(18, 12, 16, 0.75); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
                                     <div style="display:flex; align-items:center; gap:12px;">
-                                        <code style="color:var(--tech-cyan); font-weight:700; font-size:1rem; letter-spacing:0.5px; background:rgba(0, 240, 255, 0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(0, 240, 255, 0.25);">${escapeHTML(er.eventId)}</code>
+                                        <code style="color:var(--tech-cyan); font-weight:700; font-size:1rem; letter-spacing:0.5px; background:rgba(255, 30, 66, 0.12); padding:2px 8px; border-radius:4px; border:1px solid rgba(255, 30, 66, 0.35);">${escapeHTML(er.eventId)}</code>
                                         <strong style="color:#fff; font-size:0.92rem;">${escapeHTML(er.event || er.eventName || er.code)}</strong>
                                     </div>
                                     <span class="status-pill ${eBadgeClass}" style="font-size:0.75rem; padding:3px 12px;">
@@ -331,7 +331,7 @@ function initStatusPage() {
                 <div class="digital-ticket">
                     <div class="ticket-top">
                         <div>
-                            <div class="t-college">JAYA SAKTHI ENGINEERING COLLEGE (NAAC 'A' GRADE)</div>
+                            <div class="t-college">JAYA SAKTHI ENGINEERING COLLEGE</div>
                             <div class="t-symposium">GRAVITON 2026</div>
                         </div>
                         <span class="t-tag"><i class="fa-solid fa-shield-check"></i> VERIFIED DELEGATE</span>

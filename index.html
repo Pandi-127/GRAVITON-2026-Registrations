@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,14 +8,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>GRAVITON 2026 | National Level Technical Symposium - Jaya Sakthi Engineering College</title>
     <meta name="description"
-        content="GRAVITON 2026 - Flagship National Level Technical Symposium organized by Dept. of Computer Science & Engineering & Cyber Security, Jaya Sakthi Engineering College (NAAC 'A' Grade), Chennai. 12+ Technical and Non-Technical Battles with Cash Prizes!">
+        content="GRAVITON 2026 - Flagship National Level Technical Symposium organized by Dept. of Computer Science & Engineering & Cyber Security, Jaya Sakthi Engineering College, Chennai. 12+ Technical and Non-Technical Battles with Cash Prizes!">
     <meta name="keywords" content="GRAVITON 2026, Jaya Sakthi Engineering College, Symposium, Chennai, CSE, Cyber Security, CTF, PPT, AI Prompt Battle, Coding, Esports">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
     <!-- FontAwesome Icons -->
@@ -26,17 +26,108 @@
 </head>
 
 <body>
-    <!-- Background Canvas for Cosmic Particles -->
+    <!-- Interactive Moon Knight Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="custom-cursor-follower" id="custom-cursor-follower"></div>
+
+    <!-- Moon Knight Cinematic Intro Welcome Experience -->
+    <div id="mk-intro-overlay" class="mk-intro-overlay" role="dialog" aria-modal="true" aria-label="Moon Knight Welcome Intro">
+        <div class="mk-intro-stars"></div>
+        <div class="mk-intro-crescent-bg"></div>
+        <div class="mk-intro-scanlines"></div>
+
+        <!-- Top Intro Action Bar -->
+        <div class="mk-intro-top-bar">
+            <button class="mk-intro-sound" id="mk-intro-sound-toggle" aria-label="Toggle Cinematic Audio">
+                <i class="fa-solid fa-volume-high" id="intro-sound-icon"></i> <span id="intro-sound-status">Sound ON</span>
+            </button>
+            <button class="mk-intro-skip" id="mk-intro-skip" aria-label="Skip Intro (Escape)">
+                <span>Skip Intro</span> <kbd>ESC</kbd> <i class="fa-solid fa-angles-right"></i>
+            </button>
+        </div>
+
+        <div class="mk-intro-content" id="mk-intro-card">
+            <!-- Central Khonshu Crescent Crest -->
+            <div class="mk-crest-frame">
+                <div class="mk-hieroglyph-circle"></div>
+                <div class="mk-lunar-burst"></div>
+                <div class="mk-crest-corner-accent tl"></div>
+                <div class="mk-crest-corner-accent tr"></div>
+                <div class="mk-crest-corner-accent bl"></div>
+                <div class="mk-crest-corner-accent br"></div>
+                <img src="assets/khonshu_crescent_crest.jpg" alt="Khonshu Crescent Emblem" class="mk-crest-image">
+            </div>
+            
+            <div class="mk-intro-badge-row">
+                <span class="mk-pill-badge"><i class="fa-solid fa-moon"></i> TEMPLE OF KHONSHU</span>
+                <span class="mk-pill-badge gold"><i class="fa-solid fa-graduation-cap"></i> AICTE APPROVED</span>
+            </div>
+
+            <div class="mk-institution-text">JAYA SAKTHI ENGINEERING COLLEGE</div>
+            <div class="mk-dept-text">Department of Computer Science & Engineering and Cyber Security</div>
+
+            <h1 class="mk-intro-main-title">
+                GRAVIT<span class="blood-crescent-o">O</span>N
+            </h1>
+            <div class="hero-year-wrapper">
+                <span class="hero-year-line"></span>
+                <span class="hero-year-badge">2026</span>
+                <span class="hero-year-line"></span>
+            </div>
+            <div class="mk-intro-tagline">IDEAS BEYOND LIMITS • NATIONAL TECHNICAL SYMPOSIUM</div>
+
+            <p class="mk-intro-lore">
+                <span class="text-lunar-gold">"SUMMON THE SUIT • EMBRACE THE CHAOS"</span><br>
+                Step into the high-tech sanctuary of innovation. 12+ national battles in coding, cybersecurity CTF, AI prompt battles, and esports.
+            </p>
+
+            <!-- Arena Highlight Chips -->
+            <div class="mk-intro-arena-chips">
+                <span class="arena-chip"><i class="fa-solid fa-code"></i> Code Crypt</span>
+                <span class="arena-chip"><i class="fa-solid fa-shield-halved"></i> Cyber CTF</span>
+                <span class="arena-chip"><i class="fa-solid fa-robot"></i> AI Prompt Battle</span>
+                <span class="arena-chip"><i class="fa-solid fa-gamepad"></i> BGMI & Free Fire</span>
+                <span class="arena-chip"><i class="fa-solid fa-gem"></i> Tech Treasure Hunt</span>
+            </div>
+
+            <div class="mk-intro-buttons">
+                <button class="btn btn-moon-glow btn-lg" id="mk-enter-btn">
+                    <i class="fa-solid fa-moon"></i> Summon The Suit & Enter
+                </button>
+                <a href="#events" class="btn btn-moon-outline btn-lg" id="mk-events-fast-btn">
+                    <i class="fa-solid fa-trophy"></i> Explore 12+ Arenas
+                </a>
+            </div>
+
+            <!-- Auto-Enter Countdown Progress -->
+            <div class="mk-intro-countdown-wrapper" id="mk-intro-countdown-wrap">
+                <div class="mk-intro-countdown-label">
+                    <span><i class="fa-solid fa-hourglass-half text-crimson"></i> Entering Sanctuary in <strong id="intro-timer-count">5</strong>s</span>
+                    <span class="mk-countdown-pause-tip">(Hover to pause)</span>
+                </div>
+                <div class="mk-intro-progress-bar">
+                    <div class="mk-intro-progress-fill" id="intro-progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="mk-intro-footer-hint">
+                <i class="fa-solid fa-wand-magic-sparkles text-cyan"></i> Interactive 3D Cursor & Parallax Active • Press <kbd>ESC</kbd> to skip
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Canvas for Cosmic Particles & Lunar Stars -->
     <canvas id="bg-canvas"></canvas>
 
     <!-- Top Announcement Ticker -->
     <div class="ticker-wrapper">
         <div class="ticker-content">
-            <span>⚡ NATIONAL LEVEL TECHNICAL SYMPOSIUM</span>
-            <span>🚀 GRAVITON 2026 - IDEAS BEYOND LIMITS</span>
+            <span>🌙 SUMMON THE SUIT • EMBRACE THE CHAOS</span>
+            <span>⚡ GRAVITON 2026 - NATIONAL LEVEL TECHNICAL SYMPOSIUM</span>
             <span>🔥 DEPARTMENT OF CSE & CYBER SECURITY</span>
-            <span>🏆 JAYA SAKTHI ENGINEERING COLLEGE (NAAC 'A' GRADE)</span>
-            <span>🎫 ONLINE REGISTRATION & DELEGATE PASSES NOW OPEN!</span>
+            <span>🏆 JAYA SAKTHI ENGINEERING COLLEGE • CHENNAI</span>
+            <span>🎫 ONLINE DELEGATE PASSES & BATTLE REGISTRATIONS NOW OPEN!</span>
+            <span>✨ CASH PRIZES & MERIT BADGES FOR ALL ARENA CHAMPIONS</span>
         </div>
     </div>
 
@@ -45,7 +136,7 @@
         <div class="nav-container">
             <a href="index.html" class="brand-logo">
                 <div class="college-badge">
-                    <i class="fa-solid fa-award text-glow"></i> NAAC 'A'
+                    <i class="fa-solid fa-moon text-glow"></i> GRAVIT<span class="blood-crescent-o">O</span>N
                 </div>
                 <div class="brand-text">
                     <span class="college-title">JAYA SAKTHI</span>
@@ -62,10 +153,11 @@
                 <a href="#contact" class="nav-link"><i class="fa-solid fa-phone"></i> Contact</a>
                 <a href="status.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Check Status</a>
                 <a href="admin.html" class="nav-link organizer-pill"><i class="fa-solid fa-user-shield"></i> Organizer Portal</a>
+                <button class="nav-link intro-pill" id="replay-intro-btn" title="Replay Welcome Intro"><i class="fa-solid fa-play"></i> Intro</button>
             </nav>
 
             <div class="nav-actions">
-                <a href="register.html" class="btn btn-primary-glow btn-sm">
+                <a href="register.html" class="btn btn-moon-glow btn-sm">
                     <i class="fa-solid fa-ticket"></i> Register Pass
                 </a>
                 <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
@@ -82,12 +174,17 @@
                 <div class="hero-content">
                     <div class="header-stamps">
                         <span class="stamp-pill"><i class="fa-solid fa-graduation-cap"></i> AICTE Approved & Anna Univ. Affiliated</span>
-                        <span class="stamp-pill highlight"><i class="fa-solid fa-rocket"></i> Some Ideas Don't Stay On Earth</span>
+                        <span class="stamp-pill highlight"><i class="fa-solid fa-moon"></i> Summon The Suit • Khonshu's Arena</span>
                     </div>
 
-                    <h3 class="symposium-label">NATIONAL LEVEL TECHNICAL SYMPOSIUM</h3>
+                    <h3 class="symposium-label"><i class="fa-solid fa-moon text-cyan"></i> NATIONAL LEVEL TECHNICAL SYMPOSIUM</h3>
 
-                    <h1 class="hero-title">GRAVITON</h1>
+                    <h1 class="hero-title">GRAVIT<span class="blood-crescent-o">O</span>N</h1>
+                    <div class="hero-year-wrapper">
+                        <span class="hero-year-line"></span>
+                        <span class="hero-year-badge">2026</span>
+                        <span class="hero-year-line"></span>
+                    </div>
 
                     <p class="hero-subtitle">IDEAS BEYOND LIMITS</p>
 
@@ -97,16 +194,16 @@
                     </div>
 
                     <div class="motto-pills">
-                        <span class="motto-item"><i class="fa-solid fa-bolt text-crimson"></i> Learn</span>
-                        <span class="motto-item"><i class="fa-solid fa-seedling text-fire"></i> Grow</span>
-                        <span class="motto-item"><i class="fa-solid fa-hammer text-cyan"></i> Build</span>
-                        <span class="motto-item"><i class="fa-solid fa-shield-halved text-crimson"></i> Belong</span>
+                        <span class="motto-item"><i class="fa-solid fa-moon text-cyan"></i> Protect</span>
+                        <span class="motto-item"><i class="fa-solid fa-code text-amber"></i> Code</span>
+                        <span class="motto-item"><i class="fa-solid fa-shield-halved text-cyan"></i> Defend</span>
+                        <span class="motto-item"><i class="fa-solid fa-bolt text-amber"></i> Conquer</span>
                     </div>
 
                     <!-- Countdown Timer -->
-                    <div class="countdown-card glass-panel">
+                    <div class="countdown-card glass-panel" data-tilt>
                         <div class="countdown-header">
-                            <i class="fa-solid fa-clock-rotate-left"></i> SYMPOSIUM COUNTDOWN
+                            <i class="fa-solid fa-clock-rotate-left text-cyan"></i> SYMPOSIUM COUNTDOWN
                         </div>
                         <div class="countdown-timer" id="countdown">
                             <div class="time-box">
@@ -132,46 +229,50 @@
                     </div>
 
                     <div class="hero-cta">
-                        <a href="#events" class="btn btn-primary-glow btn-lg">
-                            <i class="fa-solid fa-fire"></i> Explore 12+ Events
+                        <a href="#events" class="btn btn-moon-glow btn-lg">
+                            <i class="fa-solid fa-moon"></i> Explore 12+ Arenas
                         </a>
-                        <a href="register.html" class="btn btn-outline-glow btn-lg">
-                            <i class="fa-solid fa-id-card"></i> Get Delegate Pass
+                        <a href="register.html" class="btn btn-moon-outline btn-lg">
+                            <i class="fa-solid fa-id-card"></i> Summon The Suit (Pass)
                         </a>
                     </div>
 
                     <!-- Hero Stats -->
                     <div class="hero-stats">
-                        <div class="stat-item">
+                        <div class="stat-item" data-tilt>
                             <span class="stat-value stat-count" data-target="12" data-suffix="+">12+</span>
-                            <span class="stat-label">Total Events</span>
+                            <span class="stat-label">Total Arenas</span>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat-item" data-tilt>
                             <span class="stat-value stat-count" data-target="7" data-suffix="">7</span>
-                            <span class="stat-label">Technical Arenas</span>
+                            <span class="stat-label">Technical Battles</span>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat-item" data-tilt>
                             <span class="stat-value stat-count" data-target="5" data-suffix="">5</span>
                             <span class="stat-label">Non-Tech Showcases</span>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat-item" data-tilt>
                             <span class="stat-value">NATIONAL</span>
                             <span class="stat-label">College Level</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hero Visual with Futuristic Warrior -->
+                <!-- Hero Visual with Khonshu Crescent Emblem & Interactive Parallax -->
                 <div class="hero-visual">
-                    <div class="visual-wrapper">
+                    <div class="visual-wrapper" data-tilt>
                         <div class="glow-orb"></div>
+                        <div class="lunar-crescent-halo"></div>
                         <div class="hud-ring-outer"></div>
                         <div class="hud-ring-inner"></div>
-                        <img src="assets/hero_warrior.png" alt="GRAVITON Sci-Fi Hero Warrior" class="hero-warrior-img">
+                        <div class="hero-crest-centerpiece">
+                            <img src="assets/khonshu_crescent_crest.jpg" alt="Khonshu Crescent Emblem - GRAVITON 2026" class="hero-crest-img">
+                            <div class="hero-crest-pulse"></div>
+                        </div>
                         <div class="floating-badge badge-1 glass-panel">
-                            <i class="fa-solid fa-code text-crimson"></i>
+                            <i class="fa-solid fa-moon text-cyan"></i>
                             <div>
-                                <strong>Code & Conquer</strong>
+                                <strong>Summon The Suit</strong>
                                 <span>12 Thrilling Battles</span>
                             </div>
                         </div>
@@ -179,7 +280,14 @@
                             <i class="fa-solid fa-trophy text-amber"></i>
                             <div>
                                 <strong>Cash Prizes</strong>
-                                <span>& Merit Certificates</span>
+                                <span>& Merit Badges</span>
+                            </div>
+                        </div>
+                        <div class="floating-badge badge-3 glass-panel">
+                            <i class="fa-solid fa-shield-halved text-cyan"></i>
+                            <div>
+                                <strong>Cyber Security & CSE</strong>
+                                <span>Premier Hack Arena</span>
                             </div>
                         </div>
                     </div>
@@ -195,7 +303,7 @@
                         <div class="card-icon"><i class="fa-solid fa-building-columns"></i></div>
                         <h3>Jaya Sakthi Engineering College</h3>
                         <p>
-                            Accredited with <strong>NAAC 'A' Grade</strong>, approved by AICTE New Delhi, and affiliated to Anna University Chennai. Located in Thiruninravur, Chennai, Jaya Sakthi Engineering College stands as a beacon of academic excellence and technical innovation.
+                            Approved by <strong>AICTE New Delhi</strong> and affiliated to <strong>Anna University Chennai</strong>. Located in Thiruninravur, Chennai, Jaya Sakthi Engineering College stands as a beacon of academic excellence and technical innovation.
                         </p>
                         <ul class="feature-list">
                             <li><i class="fa-solid fa-check text-crimson"></i> State-of-the-art AI & Cyber Security Research Labs</li>
@@ -683,10 +791,27 @@
                     </div>
                 </div>
 
+                <!-- Official Instagram Follow Card (Below Student Coordinators) -->
+                <div class="insta-social-card glass-panel">
+                    <div class="insta-left-meta">
+                        <div class="insta-icon-box">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div>
+                            <span class="insta-tag-label"><i class="fa-solid fa-fire"></i> OFFICIAL SYMPOSIUM INSTAGRAM</span>
+                            <h3 class="insta-handle-title">@graviton_2026</h3>
+                            <p class="insta-desc-text">Follow our official page for live announcements, arena battle schedules, winner spotlights, and campus vibes!</p>
+                        </div>
+                    </div>
+                    <a href="https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D" target="_blank" rel="noopener noreferrer" class="btn btn-instagram btn-md">
+                        <i class="fa-brands fa-instagram"></i> Follow on Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; margin-left:4px;"></i>
+                    </a>
+                </div>
+
                 <!-- Payment Support Help Desk Card -->
-                <div class="glass-panel" style="margin-top: 24px; padding: 20px 24px; border-radius: 14px; border: 1px solid rgba(0, 240, 255, 0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                <div class="glass-panel" style="margin-top: 24px; padding: 20px 24px; border-radius: 14px; border: 1px solid rgba(255, 30, 66, 0.35); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div style="display: flex; align-items: center; gap: 16px;">
-                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--tech-cyan);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 30, 66, 0.12); border: 1px solid rgba(255, 30, 66, 0.35); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--tech-cyan);">
                             <i class="fa-solid fa-receipt"></i>
                         </div>
                         <div>
@@ -728,7 +853,12 @@
         <div class="footer-container">
             <p>&copy; 2026 GRAVITON - Jaya Sakthi Engineering College. All Rights Reserved.</p>
             <p class="sub-footer">Code • Create • Compete • Conquer</p>
-            <p style="margin-top: 14px;">
+            <p style="margin-top: 10px;">
+                <a href="https://www.instagram.com/graviton_2026?utm_source=qr&stkn=MXJzZ3B6amVweDE3NA%3D%3D" target="_blank" rel="noopener noreferrer" style="color: #ff334b; text-decoration: none; font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-brands fa-instagram" style="font-size: 1.15rem; color: #f472b6;"></i> Follow @graviton_2026 on Instagram
+                </a>
+            </p>
+            <p style="margin-top: 12px;">
                 <a href="admin.html" class="text-crimson" style="text-decoration:none; font-size:0.85rem; font-weight:600;">
                     <i class="fa-solid fa-lock"></i> Organizer Portal Access
                 </a>
