@@ -14,17 +14,13 @@
  * 6. CTF                    - Code: CTF
  * 7. WEB_CREATION           - Code: WEB
  * 8. DATA_GRID              - Code: DATA
- * 9. MEME_MARKETING         - Code: MEME
- * 10. NUMBER_LOGIC          - Code: NUM
- * 11. E_SPORTS              - Code: ESPORTS
- * 12. SQUID_GAME            - Code: SQUID
- * 13. TREASURE_HUNT         - Code: TH
+ * 9. E_SPORTS               - Code: ESPORTS
  *
  * HOW TO DEPLOY:
  * 1. Open Google Sheets (create new or use existing).
  * 2. Go to "Extensions" > "Apps Script".
  * 3. Replace all code in the editor with this entire file.
- * 4. (Optional) Set custom Admin PIN: Project Settings > Script Properties > Add "ADMIN_PIN" = "2026".
+ * 4. (Optional) Set custom Admin PIN: Project Settings > Script Properties > Add "ADMIN_PIN" = "JSEC@2027".
  * 5. Click "Deploy" > "New deployment".
  * 6. Select type: "Web app".
  *    - Description: "GRAVITON 2026 Multi-Event API"
@@ -36,7 +32,7 @@
  */
 
 // Default Admin Security PIN if not configured in Script Properties
-const DEFAULT_ADMIN_PIN = "2026";
+const DEFAULT_ADMIN_PIN = "JSEC@2027";
 
 // ============================================================================
 // HTTP EMAIL API CONFIGURATION (NO GOOGLE ACCOUNT PERMISSIONS REQUIRED)
@@ -115,40 +111,12 @@ const EVENT_REGISTRY = {
     category: "Technical",
     aliases: ["data grid", "data"]
   },
-  "MEME": {
-    code: "MEME",
-    name: "Meme Marketing",
-    sheetName: "MEME_MARKETING",
-    category: "Non-Technical",
-    aliases: ["meme marketing", "meme"]
-  },
-  "NUM": {
-    code: "NUM",
-    name: "Number Logic Battle",
-    sheetName: "NUMBER_LOGIC",
-    category: "Non-Technical",
-    aliases: ["number logic battle", "number logic", "num"]
-  },
   "ESPORTS": {
     code: "ESPORTS",
     name: "E Sports Battle",
     sheetName: "E_SPORTS",
     category: "Non-Technical",
     aliases: ["e sports battle", "e sports", "esports", "gaming"]
-  },
-  "SQUID": {
-    code: "SQUID",
-    name: "Squid Game",
-    sheetName: "SQUID_GAME",
-    category: "Non-Technical",
-    aliases: ["squid game", "squid"]
-  },
-  "TH": {
-    code: "TH",
-    name: "Treasure Hunt",
-    sheetName: "TREASURE_HUNT",
-    category: "Non-Technical",
-    aliases: ["treasure hunt", "th"]
   }
 };
 

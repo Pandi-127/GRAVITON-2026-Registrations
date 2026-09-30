@@ -75,36 +75,12 @@ function initRegisterPage() {
             allowsTeam: false,
             ruleNote: 'Individual Event (Solo Only)'
         },
-        "Meme Marketing": {
-            allowsTeam: true,
-            allowsSolo: true,
-            minMembers: 2,
-            maxMembers: 2,
-            ruleNote: 'Team Size: 1 to 2 Members (Solo or Duo)',
-            defaultType: 'Solo'
-        },
-        "Number Logic Battle": {
-            allowsTeam: false,
-            ruleNote: 'Individual Event (Solo Only)'
-        },
         "E Sports": {
             allowsTeam: true,
             allowsSolo: false, // Squad event strictly
             minMembers: 4,
             maxMembers: 4,
             ruleNote: 'Squad Event: 4 Members Required',
-            defaultType: 'Team'
-        },
-        "Squid Game": {
-            allowsTeam: false,
-            ruleNote: 'Individual Event (Solo Only)'
-        },
-        "Treasure Hunt": {
-            allowsTeam: true,
-            allowsSolo: false, // Strictly 2-3 members
-            minMembers: 2,
-            maxMembers: 3,
-            ruleNote: 'Team Event: 2 to 3 Members Required',
             defaultType: 'Team'
         }
     };
@@ -143,11 +119,7 @@ function initRegisterPage() {
         "CTF (Capture The Flag)": "CTF",
         "Website Creation Without Using AI": "WEB",
         "Data Grid": "DATA",
-        "Meme Marketing": "MEME",
-        "Number Logic Battle": "NUM",
-        "E Sports": "ESPORTS",
-        "Squid Game": "SQUID",
-        "Treasure Hunt": "TH"
+        "E Sports": "ESPORTS"
     };
 
     function getCheckedEvents() {
@@ -431,7 +403,7 @@ function initRegisterPage() {
         const teamRadio = document.querySelector('input[name="participation_type"][value="Team"]');
 
         if (!allowsTeam) {
-            // Strictly Solo only (e.g. AI Prompt Battle, Reverse Coding, Website Creation, Data Grid, Number Logic, Squid Game)
+            // Strictly Solo only (e.g. AI Prompt Battle, Reverse Coding, Website Creation, Data Grid)
             if (soloOnlyCard) {
                 soloOnlyCard.style.display = 'flex';
                 const noteSpan = soloOnlyCard.querySelector('.solo-badge-text span');
@@ -441,7 +413,7 @@ function initRegisterPage() {
             if (teamDetailsCard) teamDetailsCard.style.display = 'none';
             if (soloRadio) soloRadio.checked = true;
         } else if (allowsTeam && !allowsSolo) {
-            // Strictly Team only (e.g. E-Sports Squad of 4, Treasure Hunt 2-3)
+            // Strictly Team only (e.g. E-Sports Squad of 4)
             if (soloOnlyCard) soloOnlyCard.style.display = 'none';
             if (teamChoiceContainer) teamChoiceContainer.style.display = 'block';
             if (choiceSoloCard) choiceSoloCard.style.display = 'none';
@@ -453,7 +425,7 @@ function initRegisterPage() {
 
             showTeamDetails(currentEventConfig);
         } else {
-            // Flexible: allows both Solo and Team (e.g. PPT Presentation 1-3, Tech Quiz 1-2, CTF 1-2, Meme Marketing 1-2)
+            // Flexible: allows both Solo and Team (e.g. PPT Presentation 1-3, Tech Quiz 1-2, CTF 1-2)
             if (soloOnlyCard) soloOnlyCard.style.display = 'none';
             if (teamChoiceContainer) teamChoiceContainer.style.display = 'block';
             if (choiceSoloCard) choiceSoloCard.style.display = 'flex';

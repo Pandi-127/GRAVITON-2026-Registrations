@@ -137,7 +137,7 @@ function initAdminPage() {
                 }
             } else {
                 // Local Demo / Offline Fallback Mode
-                const validPins = ['2026', '9003252177', '9043639975'];
+                const validPins = ['JSEC@2027', '2026', '9003252177', '9043639975'];
                 if (validPins.includes(pin)) {
                     currentAdminPin = pin;
                     sessionStorage.setItem('graviton_admin_pin', pin);
@@ -150,7 +150,7 @@ function initAdminPage() {
         } catch (err) {
             console.error('Admin Auth Error:', err);
             // Fallback for offline testing
-            if (pin === '2026' || pin === '9003252177' || pin === '9043639975') {
+            if (pin === 'JSEC@2027' || pin === '2026' || pin === '9003252177' || pin === '9043639975') {
                 currentAdminPin = pin;
                 sessionStorage.setItem('graviton_admin_pin', pin);
                 loadLocalRegistrations();

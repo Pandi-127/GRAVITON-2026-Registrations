@@ -84,8 +84,8 @@ graviton2026/
 6. *(Optional)* Set a custom Security PIN:
    - Click the gear icon on the left navigation (**Project Settings**).
    - Scroll down to **Script Properties** → Click **Add script property**.
-   - Property: `ADMIN_PIN` | Value: `your_secret_pin` (e.g. `2026`).
-   - If you skip this, the default PIN `2026` will be used.
+   - Property: `ADMIN_PIN` | Value: `your_secret_pin` (e.g. `JSEC@2027`).
+   - If you skip this, the default PIN `JSEC@2027` will be used.
 
 ---
 
@@ -217,7 +217,7 @@ vercel
 
 ## 🏆 10. Event Catalog & Rules
 
-All 12 events are faithfully preserved from the department's syllabus:
+All 8 events are faithfully preserved from the department's syllabus:
 
 ### Technical Arenas (7 Events)
 1. **PPT Presentation:** 10 mins presentation + 10 mins Q&A before expert panel. (Team 1-3)
@@ -228,12 +228,8 @@ All 12 events are faithfully preserved from the department's syllabus:
 6. **Web Creation Without Using AI:** Build pure HTML/CSS/JS responsive webpage without AI tools. (Individual)
 7. **Data Grid:** Clean messy data & formulate complex SQL queries under time constraint. (Individual)
 
-### Non-Technical Showcases (5 Events)
-8. **Meme Marketing:** Craft viral, humorous tech memes for brand campaigns. (Solo / Duo)
-9. **Number Logic Battle:** Rapid mental arithmetic, sequences, and numerical puzzles. (Individual)
-10. **E Sports Battle:** Tactical tournament matches (custom rooms & knockouts). (Squad 4)
-11. **Squid Game:** High-stakes physical and mental agility survival challenges. (Individual)
-12. **Treasure Hunt:** Decode cryptic technical clues hidden across campus. (Team 2-3)
+### Non-Technical Showcase (1 Event)
+8. **E Sports Battle:** Tactical tournament matches (custom rooms & knockouts). (Squad 4)
 
 ---
 

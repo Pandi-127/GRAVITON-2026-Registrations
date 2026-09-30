@@ -38,6 +38,8 @@ const CONFIG = {
     COLLEGE_ACCREDITATION: "AICTE Approved | Anna Univ. Affiliated",
     CAMPUS_LOCATION: "Thiruninravur, Chennai - 602 024, Tamil Nadu",
     DEPARTMENT: "Department of Computer Science & Engineering & Cyber Security",
+    SYMPOSIUM_DATE: "2026-10-09T09:00:00+05:30", // 09/10/2026 9:00 AM IST
+    SYMPOSIUM_DATE_DISPLAY: "09/10/2026 09:00 AM",
 
     // =========================================================================
     // 5. STUDENT CHAIR PERSONS CONTACTS

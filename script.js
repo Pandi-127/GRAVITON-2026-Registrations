@@ -91,30 +91,6 @@ const EVENTS_DATA = {
             "Dataset schema will be revealed at the beginning of the round."
         ]
     },
-    "meme-marketing": {
-        title: "Meme Marketing",
-        category: "Non-Technical",
-        teamSize: "1 - 2 Members",
-        duration: "40 Mins",
-        desc: "Channel your internet culture mastery! Create humorous, viral tech memes to promote a given fictional brand or product line.",
-        rules: [
-            "Memes must be original and created during the event timeframe.",
-            "No offensive, derogatory, or inappropriate content permitted.",
-            "Judged on humor, viral appeal, brand alignment, and creativity."
-        ]
-    },
-    "number-logic": {
-        title: "Number Logic Battle",
-        category: "Non-Technical",
-        teamSize: "Individual (1 Member)",
-        duration: "30 Mins",
-        desc: "High-octane numerical face-off testing speed mental arithmetic, number sequence decoding, and quantitative logic grids.",
-        rules: [
-            "Calculators and mobile devices are strictly disallowed.",
-            "Speed round format with elimination after preliminary grid.",
-            "Highest score in shortest time wins."
-        ]
-    },
     "esports": {
         title: "E Sports Battle",
         category: "Non-Technical",
@@ -125,30 +101,6 @@ const EVENTS_DATA = {
             "Game titles & match settings announced prior to room creation.",
             "Emulators strictly prohibited; mobile devices only.",
             "Unsportsmanlike conduct or hacking results in immediate team ban."
-        ]
-    },
-    "squid-game": {
-        title: "Squid Game",
-        category: "Non-Technical",
-        teamSize: "Individual (1 Member)",
-        duration: "4 Survival Rounds",
-        desc: "Thrilling physical & mental agility survival challenges inspired by high-stakes games (Red Light Green Light, Memory Grid, Tug of Strategy).",
-        rules: [
-            "Players failing a round challenge are immediately eliminated.",
-            "Strict adherence to event referee signals is mandatory.",
-            "Final surviving player wins the GRAVITON Squid Champion title!"
-        ]
-    },
-    "treasure-hunt": {
-        title: "Treasure Hunt",
-        category: "Non-Technical",
-        teamSize: "2 - 3 Members",
-        duration: "60 Mins Campus Hunt",
-        desc: "Decode cryptic technical puzzles and riddles hidden across the Jaya Sakthi campus to locate the final physical treasure chest.",
-        rules: [
-            "Teams must solve each clue sequentially to receive the next location coordinate.",
-            "Damaging college property or altering hidden clue cards leads to instant disqualification.",
-            "First team to retrieve the final treasure chest wins."
         ]
     }
 };
@@ -974,10 +926,15 @@ function initStickyNavbar() {
    3. Animated Countdown Timer
    -------------------------------------------------------------------------- */
 function initCountdownTimer() {
-    // Set symposium date: 14 days from current date
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 14);
-    targetDate.setHours(9, 0, 0, 0);
+    // Set symposium date: 09/10/2026 9:00 AM IST (October 9, 2026)
+    let targetDate = (typeof CONFIG !== 'undefined' && CONFIG.SYMPOSIUM_DATE)
+        ? new Date(CONFIG.SYMPOSIUM_DATE)
+        : new Date('2026-10-09T09:00:00+05:30');
+
+    // Fallback if ISO string parsing fails (Month is 0-indexed: 9 = October)
+    if (isNaN(targetDate.getTime())) {
+        targetDate = new Date(2026, 9, 9, 9, 0, 0);
+    }
 
     const daysEl = document.getElementById('days');
     const hoursEl = document.getElementById('hours');
