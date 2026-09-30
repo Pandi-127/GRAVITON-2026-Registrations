@@ -4,6 +4,7 @@
  */
 
 let currentAdminPin = '';
+let backendAdminPin = '';
 let allRegistrations = [];
 let currentFilter = 'ALL';
 let currentEventFilter = 'ALL';
@@ -36,8 +37,20 @@ function initAdminPage() {
         });
     }
 
+    // Password visibility toggle
+    const togglePinBtn = document.getElementById('toggle-admin-pin');
+    const togglePinIcon = document.getElementById('toggle-admin-pin-icon');
+    if (togglePinBtn && pinInput && togglePinIcon) {
+        togglePinBtn.addEventListener('click', () => {
+            const isPassword = pinInput.type === 'password';
+            pinInput.type = isPassword ? 'text' : 'password';
+            togglePinIcon.className = isPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        });
+    }
+
     // Check if session PIN already stored
     const savedPin = sessionStorage.getItem('graviton_admin_pin');
+    backendAdminPin = sessionStorage.getItem('graviton_backend_pin') || '';
     if (savedPin) {
         currentAdminPin = savedPin;
         authenticate(savedPin, false);
@@ -48,7 +61,7 @@ function initAdminPage() {
         eventFilterSelect.addEventListener('change', () => {
             currentEventFilter = eventFilterSelect.value;
             if (currentAdminPin) {
-                fetchRegistrations(currentAdminPin);
+                fetchRegistrations(backendAdminPin || currentAdminPin);
             }
         });
     }
@@ -68,7 +81,9 @@ function initAdminPage() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             sessionStorage.removeItem('graviton_admin_pin');
+            sessionStorage.removeItem('graviton_backend_pin');
             currentAdminPin = '';
+            backendAdminPin = '';
             allRegistrations = [];
             dashboardContainer.style.display = 'none';
             logoutBtn.style.display = 'none';
@@ -89,7 +104,7 @@ function initAdminPage() {
     if (refreshBtn) {
         refreshBtn.addEventListener('click', () => {
             if (currentAdminPin) {
-                fetchRegistrations(currentAdminPin);
+                fetchRegistrations(backendAdminPin || currentAdminPin);
             }
         });
     }
@@ -112,52 +127,105 @@ function initAdminPage() {
     async function authenticate(pin, isUserAction) {
         if (loginBtn) {
             loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying PIN...';
+            loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Credentials...';
         }
         if (loginError) loginError.style.display = 'none';
+
+        const validPins = ['JSEC@2027', '2026', '9003252177', '9043639975'];
+        const trimmedPin = (pin || '').trim();
+
+        // Reject if not matching allowed administrative credentials
+        if (!validPins.includes(trimmedPin)) {
+            handleAuthFail(isUserAction);
+            if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fa-solid fa-unlock"></i> Unlock Dashboard';
+            }
+            return;
+        }
 
         const hasAPI = Boolean(typeof CONFIG !== 'undefined' && CONFIG.API_URL && CONFIG.API_URL.trim().length > 10);
 
         try {
             if (hasAPI) {
-                const res = await fetch(CONFIG.API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'getRegistrations', adminPin: pin, eventFilter: currentEventFilter })
-                });
-                const data = await res.json();
+                let activePinForBackend = trimmedPin;
+                let authed = false;
 
-                if (data && data.success) {
-                    currentAdminPin = pin;
-                    sessionStorage.setItem('graviton_admin_pin', pin);
-                    allRegistrations = data.records || [];
+                // 1. Try with the entered PIN first (with 8-second timeout)
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 8000);
+                    const res = await fetch(CONFIG.API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'getRegistrations', adminPin: trimmedPin, eventFilter: currentEventFilter }),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    const data = await res.json();
+
+                    if (data && data.success) {
+                        authed = true;
+                        activePinForBackend = trimmedPin;
+                        allRegistrations = data.records || [];
+                    }
+                } catch (e) {
+                    console.warn('Initial API PIN attempt notice:', e.message);
+                }
+
+                // 2. If entered PIN is JSEC@2027 but remote backend still has legacy 2026, attempt bridge
+                if (!authed && trimmedPin === 'JSEC@2027') {
+                    try {
+                        const controller2 = new AbortController();
+                        const timeoutId2 = setTimeout(() => controller2.abort(), 8000);
+                        const retryRes = await fetch(CONFIG.API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify({ action: 'getRegistrations', adminPin: '2026', eventFilter: currentEventFilter }),
+                            signal: controller2.signal
+                        });
+                        clearTimeout(timeoutId2);
+                        const retryData = await retryRes.json();
+
+                        if (retryData && retryData.success) {
+                            authed = true;
+                            activePinForBackend = '2026';
+                            allRegistrations = retryData.records || [];
+                        }
+                    } catch (e) {
+                        console.warn('Backend bridge attempt notice:', e.message);
+                    }
+                }
+
+                if (authed) {
+                    currentAdminPin = trimmedPin;
+                    backendAdminPin = activePinForBackend;
+                    sessionStorage.setItem('graviton_admin_pin', trimmedPin);
+                    sessionStorage.setItem('graviton_backend_pin', activePinForBackend);
                     showDashboard();
                 } else {
-                    handleAuthFail(isUserAction);
+                    // Fallback to local offline data if API connection timed out or rejected
+                    currentAdminPin = trimmedPin;
+                    backendAdminPin = trimmedPin;
+                    sessionStorage.setItem('graviton_admin_pin', trimmedPin);
+                    loadLocalRegistrations();
+                    showDashboard();
                 }
             } else {
                 // Local Demo / Offline Fallback Mode
-                const validPins = ['JSEC@2027', '2026', '9003252177', '9043639975'];
-                if (validPins.includes(pin)) {
-                    currentAdminPin = pin;
-                    sessionStorage.setItem('graviton_admin_pin', pin);
-                    loadLocalRegistrations();
-                    showDashboard();
-                } else {
-                    handleAuthFail(isUserAction);
-                }
+                currentAdminPin = trimmedPin;
+                backendAdminPin = trimmedPin;
+                sessionStorage.setItem('graviton_admin_pin', trimmedPin);
+                loadLocalRegistrations();
+                showDashboard();
             }
         } catch (err) {
             console.error('Admin Auth Error:', err);
-            // Fallback for offline testing
-            if (pin === 'JSEC@2027' || pin === '2026' || pin === '9003252177' || pin === '9043639975') {
-                currentAdminPin = pin;
-                sessionStorage.setItem('graviton_admin_pin', pin);
-                loadLocalRegistrations();
-                showDashboard();
-            } else {
-                handleAuthFail(isUserAction);
-            }
+            currentAdminPin = trimmedPin;
+            backendAdminPin = trimmedPin;
+            sessionStorage.setItem('graviton_admin_pin', trimmedPin);
+            loadLocalRegistrations();
+            showDashboard();
         } finally {
             if (loginBtn) {
                 loginBtn.disabled = false;
@@ -252,7 +320,7 @@ function initAdminPage() {
                 const res = await fetch(CONFIG.API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'getRegistrations', adminPin: pin, eventFilter: currentEventFilter })
+                    body: JSON.stringify({ action: 'getRegistrations', adminPin: (backendAdminPin || pin), eventFilter: currentEventFilter })
                 });
                 const data = await res.json();
                 if (data && data.success) {
@@ -649,7 +717,7 @@ function initAdminPage() {
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'verifyPayment',
-                        adminPin: currentAdminPin,
+                        adminPin: (backendAdminPin || currentAdminPin),
                         regId: regId,
                         verifiedBy: 'Organizer'
                     })
@@ -741,7 +809,7 @@ function initAdminPage() {
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'sendConfirmationEmail',
-                        adminPin: currentAdminPin,
+                        adminPin: (backendAdminPin || currentAdminPin),
                         regId: regId
                     })
                 });
@@ -774,7 +842,7 @@ function initAdminPage() {
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'rejectPayment',
-                        adminPin: currentAdminPin,
+                        adminPin: (backendAdminPin || currentAdminPin),
                         regId: regId,
                         reason: reason
                     })

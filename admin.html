@@ -79,9 +79,12 @@
                     <form id="admin-login-form">
                         <div class="form-group" style="text-align:left;">
                             <label for="admin-pin">Security PIN / Password <span class="required">*</span></label>
-                            <div class="input-with-icon">
+                            <div class="input-with-icon" style="position:relative;">
                                 <i class="fa-solid fa-key"></i>
-                                <input type="password" id="admin-pin" required autocomplete="off">
+                                <input type="password" id="admin-pin" required autocomplete="off" style="padding-right:42px;">
+                                <button type="button" id="toggle-admin-pin" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;" aria-label="Toggle password visibility">
+                                    <i class="fa-solid fa-eye" id="toggle-admin-pin-icon"></i>
+                                </button>
                             </div>
                         </div>
 

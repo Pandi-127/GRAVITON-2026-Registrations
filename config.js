@@ -12,7 +12,7 @@ const CONFIG = {
     // 1. GOOGLE APPS SCRIPT WEB APP API URL
     // =========================================================================
     // Deploy your apps-script.gs as a Web App (Access: Anyone) and paste the URL here.
-    API_URL: "https://script.google.com/macros/s/AKfycbx6agNvjGo4RpP3r9nmBMOZu6yrxbo19XbSVeu1_6Te3vDEoMK7CSUwWb45vfG9tME2JQ/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbwwCL-_pI18v78OBmeYLFQH7QPqOVz1wh2EIVU81aZ7kb4ECi16cSCgZvldZO7D4nLa5w/exec",
 
     // =========================================================================
     // 2. UPI & REGISTRATION FEE CONFIGURATION
