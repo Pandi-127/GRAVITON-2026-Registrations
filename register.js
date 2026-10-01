@@ -56,8 +56,12 @@ function initRegisterPage() {
             ruleNote: 'Individual Event (Solo Only)'
         },
         "Reverse Coding": {
-            allowsTeam: false,
-            ruleNote: 'Individual Event (Solo Only)'
+            allowsTeam: true,
+            allowsSolo: false,
+            minMembers: 2,
+            maxMembers: 4,
+            ruleNote: 'Team Size: 2 to 4 Members (Duo to Squad)',
+            defaultType: 'Team'
         },
         "CTF (Capture The Flag)": {
             allowsTeam: true,
@@ -72,8 +76,12 @@ function initRegisterPage() {
             ruleNote: 'Individual Event (Solo Only)'
         },
         "Data Grid": {
-            allowsTeam: false,
-            ruleNote: 'Individual Event (Solo Only)'
+            allowsTeam: true,
+            allowsSolo: true,
+            minMembers: 2,
+            maxMembers: 2,
+            ruleNote: 'Team Size: 1 to 2 Members (Solo or Duo)',
+            defaultType: 'Team'
         },
         "E Sports": {
             allowsTeam: true,
@@ -403,7 +411,7 @@ function initRegisterPage() {
         const teamRadio = document.querySelector('input[name="participation_type"][value="Team"]');
 
         if (!allowsTeam) {
-            // Strictly Solo only (e.g. AI Prompt Battle, Reverse Coding, Website Creation, Data Grid)
+            // Strictly Solo only (e.g. AI Prompt Battle, Website Creation)
             if (soloOnlyCard) {
                 soloOnlyCard.style.display = 'flex';
                 const noteSpan = soloOnlyCard.querySelector('.solo-badge-text span');
@@ -413,7 +421,7 @@ function initRegisterPage() {
             if (teamDetailsCard) teamDetailsCard.style.display = 'none';
             if (soloRadio) soloRadio.checked = true;
         } else if (allowsTeam && !allowsSolo) {
-            // Strictly Team only (e.g. E-Sports Squad of 4)
+            // Strictly Team only (e.g. Reverse Coding Duo-Squad of 2-4, E-Sports Squad of 4)
             if (soloOnlyCard) soloOnlyCard.style.display = 'none';
             if (teamChoiceContainer) teamChoiceContainer.style.display = 'block';
             if (choiceSoloCard) choiceSoloCard.style.display = 'none';

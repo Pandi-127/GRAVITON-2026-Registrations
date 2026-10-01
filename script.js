@@ -46,13 +46,18 @@ const EVENTS_DATA = {
     "reverse-coding": {
         title: "Reverse Coding",
         category: "Technical",
-        teamSize: "Individual (1 Member)",
-        duration: "45 Mins",
-        desc: "An algorithmic challenge where source code is hidden! Analyze black-box inputs and outputs to deduce the underlying algorithm and code it.",
+        teamSize: "2 - 4 Members (Duo to Squad)",
+        duration: "3 Rounds Challenge",
+        desc: "A three-round Python challenge to rearrange scrambled code, debug programs, and uncover hidden logic from inputs and outputs. Accuracy, speed, and smart hint usage decide the winners!",
         rules: [
-            "Languages allowed: C, C++, Java, or Python 3.",
-            "Multiple testcases (including edge cases) must pass.",
-            "Plagiarism or unauthorized external code assistance leads to immediate disqualification."
+            "Rounds: Scrambled Code → Debug Race → Black Box Challenge.",
+            "Python only; individual timers for each participant/team.",
+            "Maximum 5 aid slots per round, costing 2 points each. Scores can go negative.",
+            "Black Box: 4 free test requests; each additional distinct request uses one aid slot.",
+            "Solutions must pass the organizers’ test cases.",
+            "Top 5 by cumulative scores after Round 2 qualify for the final.",
+            "Personal Laptops are to be brought.",
+            "Internet searches, AI tools, copied code, and unauthorized assistance are strictly prohibited."
         ]
     },
     "ctf": {
@@ -82,13 +87,16 @@ const EVENTS_DATA = {
     "data-grid": {
         title: "Data Grid",
         category: "Technical",
-        teamSize: "Individual (1 Member)",
-        duration: "45 Mins",
-        desc: "Dive into data analytics and SQL query crafting. Clean messy datasets, formulate complex JOIN queries, and extract key insights under time constraints.",
+        teamSize: "1 - 2 Members (Solo / Duo)",
+        duration: "3 Rounds Challenge",
+        desc: "An exciting data-analysis and logical-thinking event where participants work with real-world datasets to find, analyze, calculate, and organize information. Analyze • Calculate • Create • Conquer.",
         rules: [
-            "Database engine provided: MySQL / PostgreSQL sandbox.",
-            "Evaluation based on query execution time, correctness, and output format.",
-            "Dataset schema will be revealed at the beginning of the round."
+            "Three challenging rounds: Round 1 (Data Hunt) → Round 2 (Data Quiz) → Round 3 (Data Dashboard Challenge).",
+            "Participants work with real-world datasets to find, analyze, calculate, and organize information.",
+            "Tests observation, analytical thinking, accuracy, speed, and spreadsheet skills.",
+            "Solutions are evaluated based on calculation precision, data wrangling speed, and dashboard insights.",
+            "Personal laptops with spreadsheet software (Excel, Google Sheets, or equivalent data tools) should be brought.",
+            "Theme: Analyze • Calculate • Create • Conquer."
         ]
     },
     "esports": {
@@ -96,11 +104,13 @@ const EVENTS_DATA = {
         category: "Non-Technical",
         teamSize: "Squad (4 Members)",
         duration: "Tournament Matches",
-        desc: "Competitive multiplayer gaming tournament featuring custom rooms, tactical squad gameplay, and knockout final battles.",
+        desc: "Battle it out in Free Fire, BGMI, and other thrilling multiplayer games! Squad showdown featuring custom rooms, tactical squad combat, and intense knockout matches.",
         rules: [
-            "Game titles & match settings announced prior to room creation.",
-            "Emulators strictly prohibited; mobile devices only.",
-            "Unsportsmanlike conduct or hacking results in immediate team ban."
+            "Featured Games: Free Fire, BGMI (Battlegrounds Mobile India), and other exciting multiplayer games.",
+            "Matches will be hosted in custom rooms with standard tournament rules and scoring systems.",
+            "Mobile devices only. Emulators, iPads/tablets, and third-party tools are strictly prohibited.",
+            "Participants must bring their own mobile devices with games pre-installed and updated.",
+            "Unsportsmanlike conduct, hacking, or teaming results in immediate squad disqualification."
         ]
     }
 };
