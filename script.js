@@ -46,7 +46,7 @@ const EVENTS_DATA = {
     "reverse-coding": {
         title: "Reverse Coding",
         category: "Technical",
-        teamSize: "2 - 4 Members (Duo to Squad)",
+        teamSize: "2 Members (Duo)",
         duration: "3 Rounds Challenge",
         desc: "A three-round Python challenge to rearrange scrambled code, debug programs, and uncover hidden logic from inputs and outputs. Accuracy, speed, and smart hint usage decide the winners!",
         rules: [
@@ -75,8 +75,8 @@ const EVENTS_DATA = {
     "web-creation": {
         title: "Website Creation Without Using AI",
         category: "Technical",
-        teamSize: "Individual (1 Member)",
-        duration: "60 Mins",
+        teamSize: "2 Members (Duo)",
+        duration: "4 Hours",
         desc: "Unleash your raw web development craft! Build a responsive, aesthetic webpage on a given theme using pure HTML5, CSS3, and JavaScript.",
         rules: [
             "Strictly NO AI assistants (ChatGPT, Copilot, Gemini) allowed.",

@@ -59,8 +59,8 @@ function initRegisterPage() {
             allowsTeam: true,
             allowsSolo: false,
             minMembers: 2,
-            maxMembers: 4,
-            ruleNote: 'Team Size: 2 to 4 Members (Duo to Squad)',
+            maxMembers: 2,
+            ruleNote: 'Team Size: 2 Members (Duo Only)',
             defaultType: 'Team'
         },
         "CTF (Capture The Flag)": {
@@ -72,8 +72,12 @@ function initRegisterPage() {
             defaultType: 'Team'
         },
         "Website Creation Without Using AI": {
-            allowsTeam: false,
-            ruleNote: 'Individual Event (Solo Only)'
+            allowsTeam: true,
+            allowsSolo: false,
+            minMembers: 2,
+            maxMembers: 2,
+            ruleNote: 'Team Size: 2 Members (Duo Only)',
+            defaultType: 'Team'
         },
         "Data Grid": {
             allowsTeam: true,
@@ -421,7 +425,7 @@ function initRegisterPage() {
             if (teamDetailsCard) teamDetailsCard.style.display = 'none';
             if (soloRadio) soloRadio.checked = true;
         } else if (allowsTeam && !allowsSolo) {
-            // Strictly Team only (e.g. Reverse Coding Duo-Squad of 2-4, E-Sports Squad of 4)
+            // Strictly Team only (e.g. Reverse Coding Duo of 2, Web Creation Duo of 2, E-Sports Squad of 4)
             if (soloOnlyCard) soloOnlyCard.style.display = 'none';
             if (teamChoiceContainer) teamChoiceContainer.style.display = 'block';
             if (choiceSoloCard) choiceSoloCard.style.display = 'none';

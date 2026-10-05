@@ -223,9 +223,9 @@ All 8 events are faithfully preserved from the department's syllabus:
 1. **PPT Presentation:** 10 mins presentation + 10 mins Q&A before expert panel. (Team 1-3)
 2. **Tech Quiz:** 3 rounds covering CS, Cyber Security, and AI lore. (Solo / Duo)
 3. **AI Prompt Battle:** Craft precise generative prompts to reproduce target media. (Individual)
-4. **Reverse Coding:** 3-round Python challenge (Scrambled Code → Debug Race → Black Box Challenge). (Team 2-4 / Duo to Squad)
+4. **Reverse Coding:** 3-round Python challenge (Scrambled Code → Debug Race → Black Box Challenge). (Team Duo / 2 Members)
 5. **CTF (Capture The Flag):** Web Exploitation, Cryptography, Steganography & Forensics flags. (Team 1-2)
-6. **Web Creation Without Using AI:** Build pure HTML/CSS/JS responsive webpage without AI tools. (Individual)
+6. **Web Creation Without Using AI:** Build pure HTML/CSS/JS responsive webpage without AI tools in 4 hours. (Team Duo / 2 Members)
 7. **Data Grid:** Data analysis & logical thinking across 3 rounds (Data Hunt, Data Quiz, Data Dashboard). (Solo / Duo)
 
 ### Non-Technical Showcase (1 Event)

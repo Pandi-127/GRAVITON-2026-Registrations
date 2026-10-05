@@ -1933,6 +1933,77 @@ img, svg, video {
 }
 
 /* ==========================================================================
+   OFFICIAL TEASER VIDEO SHOWCASE SECTION
+   ========================================================================== */
+.teaser-section {
+    position: relative;
+    padding: 70px 0;
+}
+
+.teaser-frame-wrapper {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: var(--radius-lg, 18px);
+    border: 1px solid var(--border-blue);
+    background: var(--bg-dark-card);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 168, 255, 0.18);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.teaser-frame-wrapper:hover {
+    border-color: var(--electric-blue);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 45px rgba(0, 168, 255, 0.28);
+}
+
+.teaser-video-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9);
+}
+
+.teaser-video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: #000000;
+}
+
+.teaser-frame-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-glass);
+}
+
+.teaser-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-subheading);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.teaser-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ==========================================================================
    EVENTS SECTION
    ========================================================================== */
 .filter-controls {
@@ -3830,7 +3901,9 @@ img, svg, video {
     }
 }
 
-/* Tablets & Small Laptops (769px - 1024px) */
+/* ==========================================================================
+   TABLET & TAB FRAME ADAPTATION (769px - 1024px) [Tap / Tablet Viewport]
+   ========================================================================== */
 @media (max-width: 1024px) {
     .nav-container {
         padding: 10px 20px;
@@ -3875,10 +3948,37 @@ img, svg, video {
         display: block;
     }
 
+    /* Tablet / Tab Hero Frame Adaptation */
     .hero-container {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 40px;
+        gap: 32px;
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+
+    .dept-banner {
+        max-width: 560px;
+        margin: 0 auto 20px;
+        border-radius: var(--radius-md);
+        border-left: 3px solid var(--electric-blue);
+        border-right: 1px solid var(--border-blue);
+        border-top: 1px solid var(--border-blue);
+        border-bottom: 1px solid var(--border-blue);
+    }
+
+    .countdown-card {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 460px;
+    }
+
+    .hero-prize-compact {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 440px;
+        justify-content: center;
     }
 
     .header-stamps, .hero-cta, .motto-pills {
@@ -3889,31 +3989,119 @@ img, svg, video {
         font-size: clamp(2.8rem, 6.5vw, 3.8rem);
     }
 
+    .hero-visual {
+        margin: 10px auto 0;
+        width: 100%;
+    }
+
+    .visual-wrapper {
+        max-width: 360px;
+        margin: 0 auto;
+    }
+
+    .hero-crest-centerpiece {
+        width: 270px;
+        height: 270px;
+    }
+
+    .hero-crest-img {
+        width: 210px;
+        height: 210px;
+    }
+
+    .floating-badge {
+        padding: 7px 12px;
+        gap: 8px;
+    }
+
+    .floating-badge strong {
+        font-size: 0.76rem;
+    }
+
+    .floating-badge span {
+        font-size: 0.68rem;
+    }
+
+    .badge-1 {
+        left: 0;
+        top: 6%;
+    }
+
+    .badge-2 {
+        right: 0;
+        bottom: 4%;
+    }
+
+    .badge-3 {
+        right: -6px;
+        top: 48%;
+    }
+
     .hero-stats {
         max-width: 600px;
         margin: 0 auto;
     }
 
+    /* Grids on Tablet / Tab */
     .events-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
+    }
+
+    .about-grid, .about-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .teaser-frame-wrapper {
+        max-width: 740px;
+        width: 100%;
+        padding: 18px;
+        margin: 0 auto;
     }
 
     .admin-stats-row {
         grid-template-columns: repeat(2, 1fr);
         gap: 16px;
     }
+
+    .modal-card {
+        max-width: 600px;
+        width: 92%;
+        padding: 28px 24px;
+    }
+
+    .portal-container {
+        max-width: 760px;
+        padding: 0 20px;
+    }
+
+    .portal-container.wide {
+        max-width: 960px;
+    }
+
+    .payment-grid {
+        gap: 20px;
+    }
 }
 
-/* Tablets & Large Mobile Devices (481px - 768px) */
+/* ==========================================================================
+   MOBILE FRAME ADAPTATION (< 768px) [Smartphone & Phablet Viewport]
+   ========================================================================== */
 @media (max-width: 768px) {
     .section-container {
-        padding: 60px 20px;
+        padding: 48px 16px;
     }
 
     .hero-section {
         min-height: auto;
-        padding: 30px 0 60px;
+        padding: 20px 0 46px;
+    }
+
+    .hero-container {
+        padding: 0 16px;
+        gap: 24px;
+        max-width: 100%;
     }
 
     .btn-hero-video-sound {
@@ -3924,8 +4112,9 @@ img, svg, video {
     }
 
     .hero-title {
-        font-size: clamp(2.4rem, 8vw, 3.2rem);
-        letter-spacing: 2px;
+        font-size: clamp(2.1rem, 7.8vw, 3rem);
+        letter-spacing: 1.5px;
+        word-break: break-word;
     }
 
     .hero-subtitle {
@@ -3939,7 +4128,54 @@ img, svg, video {
         max-width: 100%;
     }
 
-    .grid-2, .grid-3, .grid-4, .events-grid, .payment-grid, .ticket-body {
+    .visual-wrapper {
+        max-width: min(80vw, 260px);
+        aspect-ratio: 1 / 1;
+        margin: 10px auto 0;
+    }
+
+    .hero-crest-centerpiece {
+        width: 200px;
+        height: 200px;
+    }
+
+    .hero-crest-img {
+        width: 160px;
+        height: 160px;
+    }
+
+    .floating-badge {
+        display: none !important;
+    }
+
+    .countdown-card {
+        padding: 12px 10px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .countdown-timer {
+        gap: 4px;
+    }
+
+    .time-box {
+        min-width: 44px;
+    }
+
+    .time-box span {
+        font-size: clamp(1.3rem, 4.8vw, 1.7rem);
+    }
+
+    .hero-prize-compact {
+        width: 100%;
+        max-width: 380px;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+    }
+
+    .grid-2, .grid-3, .grid-4, .events-grid, .about-grid, .payment-grid, .ticket-body {
         grid-template-columns: 1fr;
     }
 
@@ -3949,6 +4185,67 @@ img, svg, video {
 
     .grid-2-form, .checkbox-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Teaser Video Showcase Mobile Frame */
+    .teaser-section {
+        padding: 45px 0;
+    }
+
+    .teaser-frame-wrapper {
+        padding: 12px;
+        border-radius: 14px;
+        width: 100%;
+    }
+
+    .teaser-frame-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .teaser-actions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .teaser-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mk-intro-content {
+        max-height: 92dvh;
+        overflow-y: auto;
+        padding: 18px 12px;
+    }
+
+    .mk-crest-frame {
+        width: 105px;
+        height: 105px;
+        margin-bottom: 12px;
+    }
+
+    .mk-crest-image {
+        width: 85px;
+        height: 85px;
+    }
+
+    .mk-intro-main-title {
+        font-size: clamp(2.4rem, 8vw, 3.6rem);
+    }
+
+    .mk-intro-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .mk-intro-buttons .btn {
+        width: 100%;
+        justify-content: center;
     }
 
     /* Steps Progress Adaptation */
@@ -4024,20 +4321,17 @@ img, svg, video {
         font-size: 0.9rem;
     }
 
-    .floating-badge {
-        display: none;
-    }
-
     .section-title {
         font-size: clamp(1.6rem, 5vw, 2rem);
     }
 
     .portal-container {
-        padding: 0 16px;
+        padding: 0 14px;
+        width: 100%;
     }
 
     .form-card {
-        padding: clamp(20px, 4vw, 32px);
+        padding: clamp(18px, 4vw, 28px);
     }
 
     .qr-card {
@@ -4045,9 +4339,9 @@ img, svg, video {
     }
 
     .qr-frame {
-        width: min(220px, 68vw);
-        height: min(220px, 68vw);
-        margin: 16px 0;
+        width: min(210px, 65vw);
+        height: min(210px, 65vw);
+        margin: 16px auto;
     }
 
     .upi-id-box code {
@@ -4202,6 +4496,46 @@ img, svg, video {
 
     .stat-label {
         font-size: 0.65rem;
+    }
+
+    /* Smartphone Countdown & Prize Framing */
+    .countdown-card {
+        padding: 10px 8px;
+    }
+
+    .countdown-timer {
+        gap: 2px;
+    }
+
+    .time-box {
+        min-width: 40px;
+    }
+
+    .time-box span {
+        font-size: 1.35rem;
+    }
+
+    .time-separator {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .hero-prize-compact {
+        padding: 6px 12px;
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .teaser-section {
+        padding: 36px 0;
+    }
+
+    .teaser-frame-wrapper {
+        padding: 10px;
+    }
+
+    .modal-card {
+        padding: 18px 12px;
     }
 
     .admin-stats-row {
@@ -4424,6 +4758,8 @@ img, svg, video {
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 0 30px rgba(225, 48, 108, 0.7);
     color: #ffffff !important;
+}
+
 /* ==========================================================================
    OFFICIAL INTRO & TEASER VIDEO PLAYER
    ========================================================================== */
